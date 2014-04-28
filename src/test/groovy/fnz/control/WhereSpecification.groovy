@@ -1,5 +1,6 @@
 package fnz.control
 
+import static fnz.control.Where.check
 import spock.lang.Specification
 
 class WhereSpecificatione extends Specification {
@@ -7,7 +8,7 @@ class WhereSpecificatione extends Specification {
     void 'Build a where expression'() {
         given: 'An expression'
             def values = [weight:60]
-            def result = Where.check(values) {
+            def result = check(values) {
                 when { weight <= underweight } then { "You're underweight" }
                 when { weight <= normal }      then { "You're normal" }
                 when { weight <= fat }         then { "You're fat" }
@@ -18,7 +19,7 @@ class WhereSpecificatione extends Specification {
                     fat         = 90
                 }
             }
-        expect:
+        expect: "The underweight output"
             result == "You're underweight"
     }
 

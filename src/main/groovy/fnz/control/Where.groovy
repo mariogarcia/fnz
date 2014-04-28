@@ -6,6 +6,12 @@ import static org.codehaus.groovy.runtime.DefaultGroovyMethods.collect
 import org.codehaus.groovy.runtime.ComposedClosure
 import groovy.transform.CompileStatic
 
+/**
+ * This control was inspired in Haskell's where clause.
+ *
+ * @marioggar
+ * @since 0.1
+ */
 @CompileStatic
 class Where {
 
