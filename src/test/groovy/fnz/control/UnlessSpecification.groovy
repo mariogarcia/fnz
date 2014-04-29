@@ -1,6 +1,6 @@
 package fnz.control
 
-import static fnz.control.Unless.check
+import static fnz.control.Unless.ret
 import static fnz.control.Unless.unless
 
 import spock.lang.Unroll
@@ -11,7 +11,7 @@ class UnlessSpecification extends Specification {
     @Unroll
     def 'Execute check-block-unless'() {
         when: 'Trying to check a statement unless certain value is less equals than 0'
-            def result = check { return 3 + xparam } unless (xparam <= 0)
+            def result = ret { return 3 + xparam } unless (xparam <= 0)
         then: 'We should be getting the expected value'
             result == expected
         where: 'Possible values are'

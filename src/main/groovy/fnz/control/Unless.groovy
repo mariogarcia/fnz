@@ -13,7 +13,7 @@ class Unless {
 
     private Closure<?> block
 
-    static Object check(Closure<?> executionBlock) {
+    static Object ret(Closure<?> executionBlock) {
         Unless unlessStatement = new Unless()
         unlessStatement.block = executionBlock
         return unlessStatement
@@ -27,7 +27,7 @@ class Unless {
     }
 
     static Object unless(Boolean condition, Closure<?> executionBlock) {
-        return Unless.check(executionBlock).unless(condition)
+        return Unless.ret(executionBlock).unless(condition)
     }
 
 }
