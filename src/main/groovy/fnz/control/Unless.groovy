@@ -1,5 +1,6 @@
 package fnz.control
 
+import fnz.base.Option
 import groovy.transform.CompileStatic
 
 /**
@@ -9,24 +10,26 @@ import groovy.transform.CompileStatic
  * @since 0,1
  */
 @CompileStatic
-class Unless {
+class Unless<T> {
 
-    private Closure<?> block
+    private Closure<T> block
 
-    static Object ret(Closure<?> executionBlock) {
-        Unless unlessStatement = new Unless()
+    static <T> Unless<T> ret(Closure<T> executionBlock) {
+        Unless<T> unlessStatement = (Unless<T>)new Unless()
         unlessStatement.block = executionBlock
+
         return unlessStatement
     }
 
-    Object unless(Boolean condition) {
+    Option<T> unless(Boolean condition) {
         if (!condition) {
-            return block()
+            return Option.of(block.call())
         }
-        return null
+
+        return Option.of(null)
     }
 
-    static Object unless(Boolean condition, Closure<?> executionBlock) {
+    static <T> Option<T> unless(Boolean condition, Closure<Option<T>> executionBlock) {
         return Unless.ret(executionBlock).unless(condition)
     }
 
