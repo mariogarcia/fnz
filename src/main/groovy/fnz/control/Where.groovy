@@ -6,6 +6,8 @@ import static org.codehaus.groovy.runtime.DefaultGroovyMethods.collect
 import org.codehaus.groovy.runtime.ComposedClosure
 import groovy.transform.CompileStatic
 
+import fnz.base.Option
+
 /**
  * This control was inspired in Haskell's where clause.
  *
@@ -80,10 +82,10 @@ class Where {
        return new ComposedClosure(applyDelegateToCondition, applyDelegateToExecution)
     }
 
-    public static Object check(Map values, Closure<Evaluation> evaluation) {
+    public static <T> Option<T> check(Map values, Closure<Evaluation> evaluation) {
         def where = new Where()
         where.parameters = values
-        where.with(evaluation)
+        return Option.of(where.with(evaluation))
     }
 
 }
