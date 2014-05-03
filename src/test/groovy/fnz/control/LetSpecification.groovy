@@ -1,22 +1,23 @@
 package fnz.control
 
 import static fnz.control.Let.let
+import static fnz.control.Unless.unless
 
 import fnz.base.Option
 import spock.lang.Unroll
+import spock.lang.Ignore
 import spock.lang.Specification
 
 class LetSpecification extends Specification {
 
     def 'Simple let expression'() {
-        when:
-            Option<Integer> result =
-                let(x: 10, y: 20) {
-                    return x + y
-                }
-        then:
+        when: 'Initializing expression and executing closure'
+            Option<Integer> result = let(x: 10, y: 20) {
+                return x + y
+            }
+        then: 'There should return a value'
             result.isPresent() == true
-        and:
+        and: 'the value should be...'
             result.get() == 30
     }
 
@@ -37,8 +38,9 @@ class LetSpecification extends Specification {
             0|true
     }
 
+    @Ignore
     def 'Using where within let'() {
-        when:
+        when: 'Having a where clause within a let'
             Option<Integer> result =
                 let(x: xparam, y: yparam) {
                     when { x + y <= MINIMUM } then { MINIMUM }
@@ -50,9 +52,9 @@ class LetSpecification extends Specification {
                         MAXIMUM = 100
                     }
                 }
-        then:
+        then: 'The value should be the expected'
             result.get() == expected
-        where:
+        where: 'Possible values are'
             xparam|yparam|expected
             4|3|10
             20|30|50
