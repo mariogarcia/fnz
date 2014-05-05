@@ -8,7 +8,7 @@ class WhereSpecificatione extends Specification {
 
     void 'Build a where expression'() {
         given: 'An expression'
-            Map<?,?> values = [weight:60]
+            Map<?,?> values = [weight: value]
             Option<String> result = check(values) {
                 when { weight <= underweight } then { "You're underweight" }
                 when { weight <= normal }      then { "You're normal" }
@@ -22,7 +22,12 @@ class WhereSpecificatione extends Specification {
             }
         expect: "The underweight output"
             result.isPresent() == true
-            result.get() == "You're underweight"
+            result.get() == expected
+        where:
+            value | expected
+            45    | "You're underweight"
+            70    | "You're normal"
+            85    | "You're fat"
     }
 
 }

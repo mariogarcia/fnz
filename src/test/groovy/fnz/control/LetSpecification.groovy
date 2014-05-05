@@ -44,10 +44,10 @@ class LetSpecification extends Specification {
         then: "The option result should be the expected"
             result.isPresent() == isValid
         where: "The possible unknown values are"
-            unk|isValid
-            5|false
-            4|true
-            0|true
+            unk | isValid
+            5   | false
+            4   | true
+            0   | true
     }
 
     def 'Using where within let'() {
@@ -56,11 +56,11 @@ class LetSpecification extends Specification {
                 let(x: { xparam }, y: {yparam}, z: { x + y }) {
                     check(measure: z) {
                         when { measure <= MINIMUM } then { MINIMUM }
-                        when { measure <= MEDIUM } then { MEDIUM }
+                        when { measure <= MEDIUM }  then { MEDIUM }
                         when { measure <= MAXIMUM } then { MAXIMUM }
                         where {
                             MINIMUM = 10
-                            MEDIUM = 50
+                            MEDIUM  = 50
                             MAXIMUM = 100
                         }
                     }
@@ -68,10 +68,10 @@ class LetSpecification extends Specification {
         then: 'The value should be the expected'
             result.get() == expected
         where: 'Possible values are'
-            xparam|yparam|expected
-            4|3|10
-            20|30|50
-            60|30|100
+            xparam | yparam | expected
+            4      | 3      | 10
+            20     | 30     | 50
+            60     | 30     | 100
     }
 
 }

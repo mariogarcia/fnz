@@ -11,7 +11,7 @@ import fnz.base.Option
 /**
  * This control was inspired in Haskell's where clause.
  *
- * @marioggar
+ * @author @marioggar
  * @since 0.1
  */
 @CompileStatic
@@ -68,12 +68,13 @@ class Where {
     }
 
     def propertyMissing(String name, value) {
-        parameters[name] = value
+        parameters.get(name,value)
     }
 
     def evaluate() {
         Closure<Evaluation> byApplyingParameters = composedClosure.call(parameters)
-        Closure execution = find(collect(conditions, byApplyingParameters), firstTrue).execution
+        List<Evaluation> evaluatedConditions = collect(conditions, byApplyingParameters)
+        Closure execution = find(evaluatedConditions, firstTrue).execution
 
         return execution.call()
     }
