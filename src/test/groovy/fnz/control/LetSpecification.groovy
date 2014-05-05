@@ -2,10 +2,10 @@ package fnz.control
 
 import static fnz.control.Let.let
 import static fnz.control.Unless.unless
+import static fnz.control.Where.check
 
 import fnz.base.Option
 import spock.lang.Unroll
-import spock.lang.Ignore
 import spock.lang.Specification
 
 class LetSpecification extends Specification {
@@ -24,7 +24,7 @@ class LetSpecification extends Specification {
     def 'Evaluating let expressions'() {
         when: 'Initializing expression and executing closure'
             Option<Integer> result =
-                let(x: { 10 }, y: { 20 }, z: { y + z }) {
+                let(x: { 10 }, y: { 20 }, z: { x + y }) {
                     return z + 1
                 }
         then: 'There should return a value'
@@ -50,7 +50,6 @@ class LetSpecification extends Specification {
             0|true
     }
 
-    @Ignore
     def 'Using where within let'() {
         when: 'Having a where clause within a let'
             Option<Integer> result =
