@@ -21,6 +21,18 @@ class LetSpecification extends Specification {
             result.get() == 30
     }
 
+    def 'Evaluating let expressions'() {
+        when: 'Initializing expression and executing closure'
+            Option<Integer> result =
+                let(x: { 10 }, y: { 20 }, z: { y + z }) {
+                    return z + 1
+                }
+        then: 'There should return a value'
+            result.isPresent() == true
+        and: 'the value should be...'
+            result.get() == 31
+    }
+
     def 'Using unless within let'() {
         when: "Using less inside a let expression"
             Option<Integer> result =
@@ -42,14 +54,16 @@ class LetSpecification extends Specification {
     def 'Using where within let'() {
         when: 'Having a where clause within a let'
             Option<Integer> result =
-                let(x: xparam, y: yparam) {
-                    when { x + y <= MINIMUM } then { MINIMUM }
-                    when { x + y <= MEDIUM } then { MEDIUM }
-                    when { x + y <= MAXIMUM } then { MAXIMUM }
-                    where {
-                        MINIMUM = 10
-                        MEDIUM = 50
-                        MAXIMUM = 100
+                let(x: { xparam }, y: {yparam}, z: { x + y }) {
+                    check(measure: z) {
+                        when { measure <= MINIMUM } then { MINIMUM }
+                        when { measure <= MEDIUM } then { MEDIUM }
+                        when { measure <= MAXIMUM } then { MAXIMUM }
+                        where {
+                            MINIMUM = 10
+                            MEDIUM = 50
+                            MAXIMUM = 100
+                        }
                     }
                 }
         then: 'The value should be the expected'
