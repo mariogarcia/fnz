@@ -12,7 +12,7 @@ class Option<T> {
     }
 
     T get() {
-        return this.value
+        return value instanceof Option ?  value.get() : value
     }
 
     static Option<T> of(T value) {
@@ -20,7 +20,7 @@ class Option<T> {
     }
 
     Boolean isPresent() {
-        return this.value != null
+        return value instanceof Option ?  value.isPresent() : value != null
     }
 
 }
