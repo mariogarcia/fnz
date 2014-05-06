@@ -12,9 +12,11 @@ class LetSpecification extends Specification {
 
     def 'Simple let expression'() {
         when: 'Initializing expression and executing closure'
+            // tag::simpleLet[]
             Option<Integer> result = let(x: 10, y: 20) {
                 return x + y
             }
+            // end::simpleLet[]
         then: 'There should return a value'
             result.isPresent() == true
         and: 'the value should be...'
@@ -23,10 +25,12 @@ class LetSpecification extends Specification {
 
     def 'Evaluating let expressions'() {
         when: 'Initializing expression and executing closure'
+            // tag::computedValues[]
             Option<Integer> result =
                 let(x: { 10 }, y: { 20 }, z: { x + y }) {
                     return z + 1
                 }
+            // end::computedValues[]
         then: 'There should return a value'
             result.isPresent() == true
         and: 'the value should be...'

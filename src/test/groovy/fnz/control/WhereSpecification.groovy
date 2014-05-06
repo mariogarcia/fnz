@@ -8,8 +8,8 @@ class WhereSpecificatione extends Specification {
 
     void 'Build a where expression'() {
         given: 'An expression'
-            Map<?,?> values = [weight: value]
-            Option<String> result = check(values) {
+            // tag::simpleWhere[]
+            Option<String> result = check(weight: value) {
                 when { weight <= underweight } then { "You're underweight" }
                 when { weight <= normal }      then { "You're normal" }
                 when { weight <= fat }         then { "You're fat" }
@@ -20,6 +20,7 @@ class WhereSpecificatione extends Specification {
                     fat         = 90
                 }
             }
+            // end::simpleWhere[]
         expect: "The underweight output"
             result.isPresent() == true
             result.get() == expected

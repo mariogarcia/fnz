@@ -42,9 +42,11 @@ class UnlessSpecification extends Specification {
     @Unroll
     def 'Execute unless-block'() {
         when: 'Trying to do something unless value is less equals than 0'
+            // tag::simpleUnless[]
             Option<Integer> result =  unless (xparam <= 0) {
                 return 3 + xparam
             }
+            // end::simpleUnless[]
         then: 'We should be getting the expected value'
             result.get() == expected
         where: 'Possible values are'
