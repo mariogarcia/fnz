@@ -30,6 +30,7 @@ dependencies {
 asciidoctor {
     options = [
         attributes: [
+        'source-highlighter': 'prettify',
             toc: 'left'
         ]
     ]
