@@ -1,0 +1,20 @@
+= FNZ 
+
+Groovy functional programming experiments
+
+== What is FNZ 
+
+This project collects many functional programming ideas. Some of them are abstract some of them
+taken from other languages such as Haskell, Clojure...etc
+
+The main objectives of this library are:
+
+* Create more control estructures
+* Make use of persistence collections transparent
+* Enforce immutability
+
+:testdir: ../../src/test/groovy
+
+include::src/asciidoc/control.adoc[]
+
+
