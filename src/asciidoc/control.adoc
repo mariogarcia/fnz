@@ -1,55 +1,99 @@
-== Control Estructures
+== Control Flow 
 
-Control estructures are one of the most important parts in a programming language. Some languages
-can create their own control estructures. Although Groovy can't create new control estructures
-in the classical sense, we can create control estructures based on functions and meta-programming.
+[, Wikipedia]
+""
+In computer science, control flow (or alternatively, flow of control) refers to the order in which
+the individual statements, instructions or function calls of an imperative or a declarative program
+are executed or evaluated
+""
 
-Following up there're some control estructures I've found while sneaking in some other programming
-languages that I've found useful and I wish Groovy could have.
+Control flow is one of the most important topics in a programming language. Most languages
+have their own out-of-the-box control structures, and some others can create new ones on-the-fly. 
+Although Groovy can't create new control structures in the classical sense, it can create control 
+structures based on functions and meta-programming.
+
+Following up there're some control flow structures I've been collecting while sneaking 
+in some other programming languages. All of them try to share the same principle, which 
+is different from former control flows in Groovy,
+
+* They don't modify anything outside their domain
+* They always wrap their result with an *Option<T>* instance.
+
+Let's go through them.
 
 === Let
 
-Let clause is really powerful. I think about it like a way of controlling mutability. Variables
-declared inside its scope can only be accessed within that scope.
-
-This is a basic let expression:
+Initializes a group of variables, makes them immutable and available within the scope
+of the closure passed as argument.
 
 [source,groovy]
-.LetSpecification
+----
+    let(Map,Closure)
+----
+
+Let's see some examples.
+
+[source,groovy]
+.Simple values
 ----
 include::{testdir}/fnz/control/LetSpecification.groovy[tags=simpleLet]
 ----
 
-Let's go one step further. What if I wanted to create values depending on previous values ? Let's
+Here values provided by the map are accessible within the scope of the closure block.
+What if I wanted to create values depending on previous values ? Let's
 see the following example:
 
 [source,groovy]
-.LetSpecification
+.Dependant expressions
 ----
 include::{testdir}/fnz/control/LetSpecification.groovy[tags=computedValues]
 ----
 
-In this example value of 'z' depends on the values given to 'x' and 'y'.
+In this example value of *'z'* depends on the values given to *'x'* and *'y'*. Every
 
 === Unless
 
+The rationale behind *Unless* is that sometimes is just a pain to create *negative*
+conditional expressions. 
+
 [source,groovy]
-.UnlessSpecification
+----
+    unless(Boolean,Closure)
+----
+
+NOTE: Unfortunately in its current version altought it also returns 
+an *Option* it's true that it  doesn't enforce good functional practices once it's 
+accessing variables outside its scope (WIP)
+
+[source,groovy]
+.Unless structure
 ----
 include::{testdir}/fnz/control/UnlessSpecification.groovy[tags=simpleUnless]
 ----
 
+This expression will allow the code block to be executed unless the condition
+evaluates to true.
+
 === Where
 
-I first read about the *Where* clause while I was reading about Haskell. I found it really flexible and
-descriptive. I've tried to keep the essence of the expression as much as I could.
+I would say *Where* control belongs to the family of *switch statements* or *multiway branches*.
+I first read about the *Where* clause while I was reading Haskell.
 
 This version of Haskell's Where expressions should follow these rules:
 
-* A where clause it's initialized by a map of values
-* There must be at least one when-then block 
-* Could be one or none otherwise block 
-* There must be at least one where block
+[source,groovy]
+----
+    check(Map) { <1>
+        when { /evaluates to boolean/ } then { /returns a value/ } <2>
+        otherwise { /returns a value/ } <3>
+        where { /some constants/ } <4>
+    }
+----
+
+<1> A where clause it's initialized by a map of values
+<2> There must be at least one when-then block 
+<3> Could be one or none otherwise block 
+<4> There must be at least one where block
 
 [source,groovy]
 .WhereSpecification
