@@ -28,6 +28,7 @@ dependencies {
 }
 
 asciidoctor {
+    outputDir = new File('.')
     options = [
         attributes: [
         'icons': 'font',
