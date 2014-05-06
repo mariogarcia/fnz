@@ -1,5 +1,20 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+maven {
+            url "http://dl.bintray.com/aalmiray/asciidoctor"
+        }
+    }
+    dependencies {
+        classpath 'org.asciidoctor:asciidoctor-gradle-plugin:0.7.0'
+    }
+}
+
 apply plugin: 'java'
 apply plugin: 'groovy'
+apply plugin: 'asciidoctor'
 
 repositories {
     mavenCentral()
@@ -10,4 +25,13 @@ dependencies {
     compile 'org.slf4j:slf4j-api:1.7.5'
     testCompile 'junit:junit:4.11'
     testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
+}
+
+asciidoctor {
+    options = [
+        attributes: [
+            toc: 'left'
+        ]
+    ]
+
 }
