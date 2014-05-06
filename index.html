@@ -359,6 +359,9 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 .literalblock > .content > pre, .listingblock > .content > pre { -webkit-border-radius: 0; border-radius: 0; }
 
 </style>
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', prettyPrint)</script>
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
@@ -486,7 +489,7 @@ of the closure passed as argument.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="groovy language-groovy">    let(Map,Closure)</code></pre>
+<pre class="prettyprint groovy language-groovy"><code>    let(Map,Closure)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -495,7 +498,7 @@ of the closure passed as argument.</p>
 <div class="listingblock">
 <div class="title">Simple values</div>
 <div class="content">
-<pre class="highlight"><code class="groovy language-groovy">            Option&lt;Integer&gt; result = let(x: 10, y: 20) {
+<pre class="prettyprint groovy language-groovy"><code>            Option&lt;Integer&gt; result = let(x: 10, y: 20) {
                 return x + y
             }</code></pre>
 </div>
@@ -508,7 +511,7 @@ see the following example:</p>
 <div class="listingblock">
 <div class="title">Dependant expressions</div>
 <div class="content">
-<pre class="highlight"><code class="groovy language-groovy">            Option&lt;Integer&gt; result =
+<pre class="prettyprint groovy language-groovy"><code>            Option&lt;Integer&gt; result =
                 let(x: { 10 }, y: { 20 }, z: { x + y }) {
                     return z + 1
                 }</code></pre>
@@ -526,7 +529,7 @@ conditional expressions.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="groovy language-groovy">    unless(Boolean,Closure)</code></pre>
+<pre class="prettyprint groovy language-groovy"><code>    unless(Boolean,Closure)</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -546,7 +549,7 @@ accessing variables outside its scope (WIP)
 <div class="listingblock">
 <div class="title">Unless structure</div>
 <div class="content">
-<pre class="highlight"><code class="groovy language-groovy">            Option&lt;Integer&gt; result =  unless (xparam &lt;= 0) {
+<pre class="prettyprint groovy language-groovy"><code>            Option&lt;Integer&gt; result =  unless (xparam &lt;= 0) {
                 return 3 + xparam
             }</code></pre>
 </div>
@@ -567,7 +570,7 @@ I first read about the <strong>Where</strong> clause while I was reading Haskell
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="groovy language-groovy">    check(Map) { <b>(1)</b>
+<pre class="prettyprint groovy language-groovy"><code>    check(Map) { <b>(1)</b>
         when { /evaluates to boolean/ } then { /returns a value/ } <b>(2)</b>
         otherwise { /returns a value/ } <b>(3)</b>
         where { /some constants/ } <b>(4)</b>
@@ -593,7 +596,7 @@ I first read about the <strong>Where</strong> clause while I was reading Haskell
 <div class="listingblock">
 <div class="title">WhereSpecification</div>
 <div class="content">
-<pre class="highlight"><code class="groovy language-groovy">            Option&lt;String&gt; result = check(weight: value) {
+<pre class="prettyprint groovy language-groovy"><code>            Option&lt;String&gt; result = check(weight: value) {
                 when { weight &lt;= underweight } then { "You're underweight" }
                 when { weight &lt;= normal }      then { "You're normal" }
                 when { weight &lt;= fat }         then { "You're fat" }
