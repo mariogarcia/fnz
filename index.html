@@ -366,7 +366,8 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <body class="article toc2 toc-left">
 <div id="header">
 <h1>FNZ</h1>
-<span id="author" class="author">Groovy functional programming experiments</span><br>
+<span id="author" class="author">Mario Garcia</span><br>
+<span id="email" class="email"><a href="https://www.twitter.com/marioggar">@marioggar</a></span><br>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
@@ -391,15 +392,8 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
-<div class="quoteblock">
-<blockquote>
 <div class="paragraph">
-<p>If the facts don&#8217;t fit the theory, change the facts.</p>
-</div>
-</blockquote>
-<div class="attribution">
-&#8212; Albert Einstein
-</div>
+<p>Groovy functional programming experiments</p>
 </div>
 </div>
 </div>
@@ -593,8 +587,12 @@ I first read about the <strong>Where</strong> clause while I was reading Haskell
 </li>
 </ol>
 </div>
+<div class="paragraph">
+<p>There are different ways of using this control depending on the use
+of when-then expressions</p>
+</div>
 <div class="listingblock">
-<div class="title">WhereSpecification</div>
+<div class="title">Simple Where</div>
 <div class="content">
 <pre class="prettyprint groovy language-groovy"><code>            Option&lt;String&gt; result = check(weight: value) {
                 when { weight &lt;= underweight } then { "You're underweight" }
@@ -609,13 +607,39 @@ I first read about the <strong>Where</strong> clause while I was reading Haskell
             }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>This is a simple example about how to use the where expression. The when-then clauses
+use closures to evaluate their content. But thanks to Groovy&#8217;s objects method isCase()
+we can create pattern-like statements</p>
+</div>
+<div class="listingblock">
+<div class="title">Switch-case Where (Class)</div>
+<div class="content">
+<pre class="prettyprint groovy language-groovy"><code>                when String then { stringMessage }
+                when Integer then { bigIntegerMessage }</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Switch-case Where (Collections)</div>
+<div class="content">
+<pre class="prettyprint groovy language-groovy"><code>                when 10..20 then { SMALL }
+                when 20..30 then { MEDIUM }</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Switch-case Where (Number)</div>
+<div class="content">
+<pre class="prettyprint groovy language-groovy"><code>                when 15 then { SMALL }
+                when 25 then { MEDIUM }</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-05-06 19:20:38 CEST
+Last updated 2014-05-07 23:55:41 CEST
 </div>
 </div>
 </body>

@@ -524,10 +524,37 @@ I first read about the <strong>Where</strong> clause while I was reading Haskell
 </li>
 </ol>
 </div>
+<div class="paragraph">
+<p>There are different ways of using this control depending on the use
+of when-then expressions</p>
+</div>
 <div class="listingblock">
-<div class="title">WhereSpecification</div>
+<div class="title">Simple Where</div>
 <div class="content">
 <pre class="prettyprint groovy language-groovy"><code>include::{testdir}/fnz/control/WhereSpecification.groovy[tags=simpleWhere]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is a simple example about how to use the where expression. The when-then clauses
+use closures to evaluate their content. But thanks to Groovy&#8217;s objects method isCase()
+we can create pattern-like statements</p>
+</div>
+<div class="listingblock">
+<div class="title">Switch-case Where (Class)</div>
+<div class="content">
+<pre class="prettyprint groovy language-groovy"><code>include::{testdir}/fnz/control/WhereSpecification.groovy[tags=whereSwitchLike1]</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Switch-case Where (Collections)</div>
+<div class="content">
+<pre class="prettyprint groovy language-groovy"><code>include::{testdir}/fnz/control/WhereSpecification.groovy[tags=whereSwitchLike2]</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Switch-case Where (Number)</div>
+<div class="content">
+<pre class="prettyprint groovy language-groovy"><code>include::{testdir}/fnz/control/WhereSpecification.groovy[tags=whereSwitchLike3]</code></pre>
 </div>
 </div>
 </div>
@@ -536,7 +563,7 @@ I first read about the <strong>Where</strong> clause while I was reading Haskell
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-05-06 19:20:38 CEST
+Last updated 2014-05-07 23:55:41 CEST
 </div>
 </div>
 </body>
