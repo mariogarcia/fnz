@@ -83,10 +83,10 @@ This version of Haskell's Where expressions should follow these rules:
 
 [source,groovy]
 ----
-    check(Map) { <1>
-        when { /evaluates to boolean/ } then { /returns a value/ } <2>
-        otherwise { /returns a value/ } <3>
-        where { /some constants/ } <4>
+    check(Map) { // <1>
+        when { /evaluates to boolean/ } then { /returns a value/ } // <2>
+        otherwise { /returns a value/ } // <3>
+        where { /some constants/ } // <4>
     }
 ----
 
@@ -95,9 +95,22 @@ This version of Haskell's Where expressions should follow these rules:
 <3> Could be one or none otherwise block 
 <4> There must be at least one where block
 
+There are different ways of using this control depending on the use
+of when-then expressions
+
 [source,groovy]
 .WhereSpecification
 ----
 include::{testdir}/fnz/control/WhereSpecification.groovy[tags=simpleWhere]
+----
+
+This is a simple example about how to use the where expression. The when-then clauses
+use closures to evaluate their content. But thanks to Groovy's objects method isCase()
+we can create pattern-like statements
+
+[source,groovy]
+.Pattern-Matching-Like
+----
+include::{testdir}/fnz/control/WhereSpecification.groovy[tags=wherePatternMatching]
 ----
 

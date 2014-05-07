@@ -1,6 +1,7 @@
 package fnz.control
 
 import static org.codehaus.groovy.runtime.DefaultGroovyMethods.find
+import static org.codehaus.groovy.runtime.DefaultGroovyMethods.isCase
 import static org.codehaus.groovy.runtime.DefaultGroovyMethods.collect
 
 import org.codehaus.groovy.runtime.ComposedClosure
@@ -43,26 +44,31 @@ class Where {
         evaluation.condition.call()
     }
 
-    def when(Closure cl) {
+    def when(final Closure cl) {
         def createCondition = { Closure closure -> new Evaluation(condition: closure)}
         conditions << createCondition(cl)
         return this
     }
 
-    def rightShift(Closure value) {
+    def when(final Class clazz) {
+        conditions << new Evaluation(condition: { isCase(clazz, parameters.val) })
+        return this
+    }
+
+    def rightShift(final Closure value) {
         then(value)
     }
 
-    def then(Closure cl) {
+    def then(final Closure cl) {
         conditions.last().execution = cl
         return this
     }
 
-    def otherwise(Closure cl) {
+    def otherwise(final Closure cl) {
         conditions << new Evaluation(condition: {true}, execution: cl)
     }
 
-    def where (Closure whereClause) {
+    def where (final Closure whereClause) {
         this.with(whereClause)
         evaluate()
     }
@@ -84,8 +90,16 @@ class Where {
     }
 
     public static <T> Option<T> check(Map values, Closure<Evaluation> evaluation) {
+        return _check(values ?: [:], evaluation)
+    }
+
+    public static <T> Option<T> check(Object value, Closure<Evaluation> evaluation) {
+        return _check([val:value], evaluation)
+    }
+
+    private static <T> Option<T> _check(Object value, Closure<Evaluation> evaluation) {
         def where = new Where()
-        where.parameters = values
+        where.parameters = (Map) value
         return Option.of(where.with(evaluation))
     }
 
