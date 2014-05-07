@@ -35,12 +35,13 @@ class WhereSpecificatione extends Specification {
     }
 
     @Unroll
-    void 'Build a pattern matcher'() {
+    void 'Build switch-case like statements (Classes)'() {
          given: 'An expression'
-            // tag::wherePatternMatching[]
             Option<String> result = check(value) {
+                // tag::whereSwitchLike1[]
                 when String then { stringMessage }
                 when Integer then { bigIntegerMessage }
+                // end::whereSwitchLike1[]
                 otherwise { otherwiseMessage }
                 where {
                     stringMessage     = "Is a String"
@@ -48,7 +49,6 @@ class WhereSpecificatione extends Specification {
                     otherwiseMessage  = "No Idea"
                 }
             }
-            // end::wherePatternMatching[]
         expect: "The underweight output"
             result.isPresent() == true
             result.get() == expected
@@ -59,4 +59,53 @@ class WhereSpecificatione extends Specification {
             null  | "No Idea"
     }
 
+    @Unroll
+    void 'Build switch-case like statements (Ranges)'() {
+         given: 'An expression'
+            Option<String> result = check(value) {
+                // tag::whereSwitchLike2[]
+                when 10..20 then { SMALL }
+                when 20..30 then { MEDIUM }
+                // end::whereSwitchLike2[]
+                otherwise { BIG }
+                where {
+                    SMALL   = "Small"
+                    MEDIUM  = "Medium"
+                    BIG     = "No Idea"
+                }
+            }
+        expect: "The underweight output"
+            result.isPresent() == true
+            result.get() == expected
+        where:
+            value | expected
+            15    | "Small"
+            25    | "Medium"
+            null  | "No Idea"
+    }
+
+    @Unroll
+    void 'Build switch-case like statements (Number)'() {
+         given: 'An expression'
+            Option<String> result = check(value) {
+                // tag::whereSwitchLike3[]
+                when 15 then { SMALL }
+                when 25 then { MEDIUM }
+                // end::whereSwitchLike3[]
+                otherwise { BIG }
+                where {
+                    SMALL   = "Small"
+                    MEDIUM  = "Medium"
+                    BIG     = "No Idea"
+                }
+            }
+        expect: "The underweight output"
+            result.isPresent() == true
+            result.get() == expected
+        where:
+            value | expected
+            15    | "Small"
+            25    | "Medium"
+            null  | "No Idea"
+    }
 }

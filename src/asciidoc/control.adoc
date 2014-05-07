@@ -109,8 +109,20 @@ use closures to evaluate their content. But thanks to Groovy's objects method is
 we can create pattern-like statements
 
 [source,groovy]
-.Switch-case Where 
+.Switch-case Where (Class)
 ----
-include::{testdir}/fnz/control/WhereSpecification.groovy[tags=wherePatternMatching]
+include::{testdir}/fnz/control/WhereSpecification.groovy[tags=whereSwitchLike1]
+----
+
+[source,groovy]
+.Switch-case Where (Collections)
+----
+include::{testdir}/fnz/control/WhereSpecification.groovy[tags=whereSwitchLike2]
+----
+
+[source,groovy]
+.Switch-case Where (Number)
+----
+include::{testdir}/fnz/control/WhereSpecification.groovy[tags=whereSwitchLike3]
 ----
 

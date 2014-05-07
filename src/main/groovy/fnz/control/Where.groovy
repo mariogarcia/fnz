@@ -26,6 +26,10 @@ class Where {
     private List<Evaluation> conditions = []
     private Map<?, ?> parameters = [:]
 
+    private Where(Map<?,?> parameters) {
+        this.parameters = parameters
+    }
+
     private Closure<Closure<Evaluation>>  applyDelegateToCondition = { final parameters ->
         return { final Evaluation evaluation ->
             evaluation.condition.delegate = parameters
@@ -45,8 +49,7 @@ class Where {
     }
 
     def when(final Closure cl) {
-        def createCondition = { Closure closure -> new Evaluation(condition: closure)}
-        conditions << createCondition(cl)
+        conditions << new Evaluation(condition: cl)
         return this
     }
 
@@ -55,8 +58,19 @@ class Where {
         return this
     }
 
-    def rightShift(final Closure value) {
-        then(value)
+    def when(final Collection collection) {
+        conditions << new Evaluation(condition: { isCase(collection, parameters.val) })
+        return this
+    }
+
+    def when(final Number number) {
+        conditions << new Evaluation(condition: { isCase(number, parameters.val) })
+        return this
+    }
+
+    def when(final Map map) {
+        conditions << new Evaluation(condition: { isCase(map, parameters.val) })
+        return this
     }
 
     def then(final Closure cl) {
@@ -98,8 +112,7 @@ class Where {
     }
 
     private static <T> Option<T> _check(Object value, Closure<Evaluation> evaluation) {
-        def where = new Where()
-        where.parameters = (Map) value
+        def where = new Where((Map) value)
         return Option.of(where.with(evaluation))
     }
 
