@@ -99,7 +99,7 @@ There are different ways of using this control depending on the use
 of when-then expressions
 
 [source,groovy]
-.WhereSpecification
+.Simple Where
 ----
 include::{testdir}/fnz/control/WhereSpecification.groovy[tags=simpleWhere]
 ----
@@ -109,7 +109,7 @@ use closures to evaluate their content. But thanks to Groovy's objects method is
 we can create pattern-like statements
 
 [source,groovy]
-.Pattern-Matching-Like
+.Switch-case Where 
 ----
 include::{testdir}/fnz/control/WhereSpecification.groovy[tags=wherePatternMatching]
 ----

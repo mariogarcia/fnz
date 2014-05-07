@@ -1,10 +1,7 @@
 = FNZ 
-Groovy functional programming experiments
+Mario Garcia <link:https://www.twitter.com/marioggar[@marioggar]>
 
-[,Albert Einstein]
-""
-If the facts don't fit the theory, change the facts.
-""
+Groovy functional programming experiments
 
 == What is FNZ 
 
