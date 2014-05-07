@@ -12,13 +12,10 @@ import groovy.transform.CompileStatic
 @CompileStatic
 class Unless<T> {
 
-    private Closure<T> block
+    private final Closure<T> block
 
-    static <T> Unless<T> ret(Closure<T> executionBlock) {
-        Unless<T> unlessStatement = (Unless<T>)new Unless()
-        unlessStatement.block = executionBlock
-
-        return unlessStatement
+    private Unless(Closure<T> block) {
+       this.block = block
     }
 
     Option<T> unless(Boolean condition) {
@@ -30,7 +27,7 @@ class Unless<T> {
     }
 
     static <T> Option<T> unless(Boolean condition, Closure<Option<T>> executionBlock) {
-        return Unless.ret(executionBlock).unless(condition)
+        return new Unless(executionBlock).unless(condition)
     }
 
 }
