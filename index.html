@@ -606,27 +606,55 @@ of when-then expressions</p>
 <div class="paragraph">
 <p>This is a simple example about how to use the where expression. The when-then clauses
 use closures to evaluate their content. But thanks to Groovy&#8217;s objects method isCase()
-we can create pattern-like statements</p>
+we can create switch-like statements</p>
 </div>
 <div class="listingblock">
 <div class="title">Switch-case Where (Class)</div>
 <div class="content">
-<pre class="prettyprint groovy language-groovy"><code>                when String then { stringMessage }
-                when Integer then { bigIntegerMessage }</code></pre>
+<pre class="prettyprint groovy language-groovy"><code>            Option&lt;String&gt; result = check(value) {
+                when String then { stringMessage }
+                when Integer then { bigIntegerMessage }
+                otherwise { otherwiseMessage }
+                where {
+                    stringMessage     = "Is a String"
+                    bigIntegerMessage = "Is a Integer"
+                    otherwiseMessage  = "No Idea"
+                }
+            }</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Instead of passing a map you can evaluate a single value against some conditions. Those
+conditions are the same you would be using in a switch-case block in Groovy.</p>
 </div>
 <div class="listingblock">
 <div class="title">Switch-case Where (Collections)</div>
 <div class="content">
-<pre class="prettyprint groovy language-groovy"><code>                when 10..20 then { SMALL }
-                when 20..30 then { MEDIUM }</code></pre>
+<pre class="prettyprint groovy language-groovy"><code>            Option&lt;String&gt; result = check(value) {
+                when 10..20 then { SMALL }
+                when 20..30 then { MEDIUM }
+                otherwise { BIG }
+                where {
+                    SMALL   = "Small"
+                    MEDIUM  = "Medium"
+                    BIG     = "No Idea"
+                }
+            }</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">Switch-case Where (Number)</div>
 <div class="content">
-<pre class="prettyprint groovy language-groovy"><code>                when 15 then { SMALL }
-                when 25 then { MEDIUM }</code></pre>
+<pre class="prettyprint groovy language-groovy"><code>            Option&lt;String&gt; result = check(value) {
+                when 15 then { SMALL }
+                when 25 then { MEDIUM }
+                otherwise { BIG }
+                where {
+                    SMALL   = "Small"
+                    MEDIUM  = "Medium"
+                    BIG     = "No Idea"
+                }
+            }</code></pre>
 </div>
 </div>
 </div>
