@@ -403,18 +403,7 @@ structures based on functions and meta-programming.</p>
 </div>
 <div class="paragraph">
 <p>Following up there&#8217;re some control flow structures I&#8217;ve been collecting while sneaking
-in some other programming languages. All of them try to share the same principle, which
-is different from former control flows in Groovy,</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>They don&#8217;t modify anything outside their domain</p>
-</li>
-<li>
-<p>They always wrap their result with an <strong>Option&lt;T&gt;</strong> instance.</p>
-</li>
-</ul>
+in some other programming languages.</p>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s go through them.</p>
@@ -422,7 +411,7 @@ is different from former control flows in Groovy,</p>
 <div class="sect2">
 <h3 id="_let">Let</h3>
 <div class="paragraph">
-<p>Initializes a group of variables, makes them immutable and available within the scope
+<p>Initializes a group of variables, makes them available within the scope
 of the closure passed as argument.</p>
 </div>
 <div class="listingblock">
@@ -453,6 +442,15 @@ see the following example:</p>
 <div class="paragraph">
 <p>In this example value of <strong><em>z</em></strong> depends on the values given to <strong><em>x</em></strong> and <strong><em>y</em></strong>. Every</p>
 </div>
+<div class="listingblock">
+<div class="title">Nested expressions</div>
+<div class="content">
+<pre class="prettyprint groovy language-groovy"><code>include::{testdir}/fnz/control/LetSpecification.groovy[tags=nestedLet]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Previous <a href="https://code.google.com/p/spock">Spock</a> specification shows how let expressions could be nested.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_unless">Unless</h3>
@@ -464,20 +462,6 @@ conditional expressions.</p>
 <div class="content">
 <pre class="prettyprint groovy language-groovy"><code>    unless(Boolean,Closure)</code></pre>
 </div>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-Unfortunately in its current version altought it also returns
-an <strong>Option</strong> it&#8217;s true that it  doesn&#8217;t enforce good functional practices once it&#8217;s
-accessing variables outside its scope (WIP)
-</td>
-</tr>
-</table>
 </div>
 <div class="listingblock">
 <div class="title">Unless structure</div>
@@ -563,7 +547,7 @@ we can create pattern-like statements</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-05-07 23:55:41 CEST
+Last updated 2014-05-08 22:27:55 CEST
 </div>
 </div>
 </body>
