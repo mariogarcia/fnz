@@ -13,17 +13,13 @@ Although Groovy can't create new control structures in the classical sense, it c
 structures based on functions and meta-programming.
 
 Following up there're some control flow structures I've been collecting while sneaking 
-in some other programming languages. All of them try to share the same principle, which 
-is different from former control flows in Groovy,
-
-* They don't modify anything outside their domain
-* They always wrap their result with an *Option<T>* instance.
+in some other programming languages. 
 
 Let's go through them.
 
 === Let
 
-Initializes a group of variables, makes them immutable and available within the scope
+Initializes a group of variables, makes them available within the scope
 of the closure passed as argument.
 
 [source,groovy]
@@ -51,6 +47,14 @@ include::{testdir}/fnz/control/LetSpecification.groovy[tags=computedValues]
 
 In this example value of *'z'* depends on the values given to *'x'* and *'y'*. Every
 
+[source,groovy]
+.Nested expressions
+----
+include::{testdir}/fnz/control/LetSpecification.groovy[tags=nestedLet]
+----
+
+Previous link:https://code.google.com/p/spock[Spock] specification shows how let expressions could be nested.
+
 === Unless
 
 The rationale behind *Unless* is that sometimes is just a pain to create *negative*
@@ -60,10 +64,6 @@ conditional expressions.
 ----
     unless(Boolean,Closure)
 ----
-
-NOTE: Unfortunately in its current version altought it also returns 
-an *Option* it's true that it  doesn't enforce good functional practices once it's 
-accessing variables outside its scope (WIP)
 
 [source,groovy]
 .Unless structure
