@@ -106,13 +106,16 @@ include::{testdir}/fnz/control/WhereSpecification.groovy[tags=simpleWhere]
 
 This is a simple example about how to use the where expression. The when-then clauses
 use closures to evaluate their content. But thanks to Groovy's objects method isCase()
-we can create pattern-like statements
+we can create switch-like statements
 
 [source,groovy]
 .Switch-case Where (Class)
 ----
 include::{testdir}/fnz/control/WhereSpecification.groovy[tags=whereSwitchLike1]
 ----
+
+Instead of passing a map you can evaluate a single value against some conditions. Those
+conditions are the same you would be using in a switch-case block in Groovy.
 
 [source,groovy]
 .Switch-case Where (Collections)
