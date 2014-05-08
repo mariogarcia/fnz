@@ -23,6 +23,22 @@ class LetSpecification extends Specification {
             result.get() == 30
     }
 
+    // tag::nestedLet[]
+    def 'Nesting lets'() {
+        when: 'Initializing expression and executing closure'
+            Option<Integer> result = let(x: 10, y: 20) {
+                def z = x + y
+                let(x:6, y: 4) {
+                    return x + y + z
+                }
+            }
+        then: 'There should be a value'
+            result.isPresent()
+        and: 'The value should be built from the deeper values'
+            result.get() == 40
+    }
+    // end::nestedLet[]
+
     def 'Evaluating let expressions'() {
         when: 'Initializing expression and executing closure'
             // tag::computedValues[]
