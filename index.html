@@ -359,6 +359,7 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 .literalblock > .content > pre, .listingblock > .content > pre { -webkit-border-radius: 0; border-radius: 0; }
 
 </style>
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.min.css">
 <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
 <script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
 <script>document.addEventListener('DOMContentLoaded', prettyPrint)</script>
@@ -560,28 +561,32 @@ I first read about the <strong>Where</strong> clause while I was reading Haskell
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint groovy language-groovy"><code>    check(Map) { <b>(1)</b>
-        when { /evaluates to boolean/ } then { /returns a value/ } <b>(2)</b>
-        otherwise { /returns a value/ } <b>(3)</b>
-        where { /some constants/ } <b>(4)</b>
+<pre class="prettyprint groovy language-groovy"><code>    check(Map) { <i class="conum" data-value="1"></i><b>(1)</b>
+        when { /evaluates to boolean/ } then { /returns a value/ } <i class="conum" data-value="2"></i><b>(2)</b>
+        otherwise { /returns a value/ } <i class="conum" data-value="3"></i><b>(3)</b>
+        where { /some constants/ } <i class="conum" data-value="4"></i><b>(4)</b>
     }</code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>A where clause it&#8217;s initialized by a map of values</p>
-</li>
-<li>
-<p>There must be at least one when-then block</p>
-</li>
-<li>
-<p>Could be one or none otherwise block</p>
-</li>
-<li>
-<p>There must be at least one where block</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>A where clause it&#8217;s initialized by a map of values</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>There must be at least one when-then block</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Could be one or none otherwise block</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>There must be at least one where block</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>There are different ways of using this control depending on the use
