@@ -80,11 +80,12 @@ class Where {
 
     def otherwise(final Closure cl) {
         conditions << new Evaluation(condition: {true}, execution: cl)
+        return this
     }
 
     def where (final Closure whereClause) {
         this.with(whereClause)
-        evaluate()
+        return this
     }
 
     def propertyMissing(String name, value) {
@@ -113,7 +114,8 @@ class Where {
 
     private static <T> Option<T> _check(Object value, Closure<Evaluation> evaluation) {
         def where = new Where((Map) value)
-        return Option.of(where.with(evaluation))
+        where.with(evaluation)
+        return Option.of(where.evaluate())
     }
 
 }

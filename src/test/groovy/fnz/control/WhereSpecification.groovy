@@ -35,7 +35,6 @@ class WhereSpecificatione extends Specification {
             90    | "You're fat"
     }
 
-    @Unroll
     void 'Throwing an exception'() {
         when: 'An expression'
             Option<String> result = check(weight: 70) {
@@ -51,6 +50,42 @@ class WhereSpecificatione extends Specification {
             }
         then: 'An exception has been thrown'
             thrown(Exception)
+    }
+
+    @Unroll
+    void 'Shortening expressions [Only when-then]'() {
+        when: 'There are only when-then expressions'
+            // tag::whereOnlyWithWhenThen[]
+            Option<String> result = check(weight: value) {
+                when { weight <= 51 } then { "You're underweight" }
+                when { weight <= 90 } then { "You're fat" }
+            }
+            // end::whereOnlyWithWhenThen[]
+        then: 'I should be able to get the rigth result'
+            result.get() == expected
+        where: 'The test value is'
+            value | expected
+             51   | "You're underweight"
+             90   | "You're fat"
+    }
+
+    @Unroll
+    void 'Shortening expressions [when-then with otherwise]'() {
+        when: 'There are only when-then expressions'
+            // tag::whereWithNoWhere[]
+            Option<String> result = check(weight: value) {
+                when { weight <= 51 } then { "You're underweight" }
+                when { weight <= 90 } then { "You're fat" }
+                otherwise { "Default" }
+            }
+            // end::whereWithNoWhere[]
+        then: 'I should be able to get the rigth result'
+            result.get() == expected
+        where: 'The test value is'
+            value | expected
+             51   | "You're underweight"
+             90   | "You're fat"
+             200  | "Default"
     }
 
     @Unroll

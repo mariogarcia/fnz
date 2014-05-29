@@ -24,7 +24,7 @@ of the closure passed as argument.
 
 [source,groovy]
 ----
-    let(Map,Closure)
+let(Map,Closure)
 ----
 
 Let's see some examples.
@@ -62,7 +62,7 @@ conditional expressions.
 
 [source,groovy]
 ----
-    unless(Boolean,Closure)
+unless(Boolean,Closure)
 ----
 
 [source,groovy]
@@ -79,21 +79,24 @@ evaluates to true.
 I would say *Where* control belongs to the family of *switch statements* or *multiway branches*.
 I first read about the *Where* clause while I was reading Haskell.
 
-This version of Haskell's Where expressions should follow these rules:
+This version of Haskell's Where expressions has:
 
 [source,groovy]
 ----
-    check(Map) { // <1>
-        when { /evaluates to boolean/ } then { /returns a value/ } // <2>
-        otherwise { /returns a value/ } // <3>
-        where { /some constants/ } // <4>
-    }
+check(Map) { // <1>
+    when { /evaluates to boolean/ } then { /returns a value/ } // <2>
+    otherwise { /returns a value/ } // <3>
+    where { /some constants/ } // <4>
+}
 ----
 
-<1> A where clause it's initialized by a map of values
-<2> There must be at least one when-then block 
-<3> Could be one or none otherwise block 
-<4> There must be at least one where block
+<1> A *check* method is the entry point to this expression 
+<2> *When-Then* are evaluated in two different phases. First all when clauses are evaluated
+until one of them is evaluated to true. Then the related then clause is evaluated.
+<3> The *otherwise* block is executed only if no when-then block has been evaluated successfully
+before. 
+<4> The *where* block is a perfect place to initializate constants used in any of the other mentioned
+blocks.
 
 There are different ways of using this control depending on the use
 of when-then expressions
@@ -104,9 +107,23 @@ of when-then expressions
 include::{testdir}/fnz/control/WhereSpecification.groovy[tags=simpleWhere]
 ----
 
-This is a simple example about how to use the where expression. The when-then clauses
-use closures to evaluate their content. But thanks to Groovy's objects method isCase()
-we can create switch-like statements
+This is a simple example about how to use the where expression. You can also omit
+some of the parts mentioned before
+
+[source,groovy]
+.Ommiting Where
+----
+include::{testdir}/fnz/control/WhereSpecification.groovy[tags=whereWithNoWhere]
+----
+
+[source,groovy]
+.Only When-Then clauses
+----
+include::{testdir}/fnz/control/WhereSpecification.groovy[tags=whereOnlyWithWhenThen]
+----
+
+The when-then clauses use closures to evaluate their content. 
+But thanks to Groovy's objects method isCase() we can create switch-like statements
 
 [source,groovy]
 .Switch-case Where (Class)
