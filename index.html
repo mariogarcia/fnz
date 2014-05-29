@@ -473,7 +473,7 @@ of the closure passed as argument.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint groovy language-groovy"><code>    let(Map,Closure)</code></pre>
+<pre class="prettyprint groovy language-groovy"><code>let(Map,Closure)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -534,7 +534,7 @@ conditional expressions.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint groovy language-groovy"><code>    unless(Boolean,Closure)</code></pre>
+<pre class="prettyprint groovy language-groovy"><code>unless(Boolean,Closure)</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -557,34 +557,37 @@ evaluates to true.</p>
 I first read about the <strong>Where</strong> clause while I was reading Haskell.</p>
 </div>
 <div class="paragraph">
-<p>This version of Haskell&#8217;s Where expressions should follow these rules:</p>
+<p>This version of Haskell&#8217;s Where expressions has:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint groovy language-groovy"><code>    check(Map) { <i class="conum" data-value="1"></i><b>(1)</b>
-        when { /evaluates to boolean/ } then { /returns a value/ } <i class="conum" data-value="2"></i><b>(2)</b>
-        otherwise { /returns a value/ } <i class="conum" data-value="3"></i><b>(3)</b>
-        where { /some constants/ } <i class="conum" data-value="4"></i><b>(4)</b>
-    }</code></pre>
+<pre class="prettyprint groovy language-groovy"><code>check(Map) { <i class="conum" data-value="1"></i><b>(1)</b>
+    when { /evaluates to boolean/ } then { /returns a value/ } <i class="conum" data-value="2"></i><b>(2)</b>
+    otherwise { /returns a value/ } <i class="conum" data-value="3"></i><b>(3)</b>
+    where { /some constants/ } <i class="conum" data-value="4"></i><b>(4)</b>
+}</code></pre>
 </div>
 </div>
 <div class="colist arabic">
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>A where clause it&#8217;s initialized by a map of values</td>
+<td>A <strong>check</strong> method is the entry point to this expression</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>There must be at least one when-then block</td>
+<td><strong>When-Then</strong> are evaluated in two different phases. First all when clauses are evaluated
+until one of them is evaluated to true. Then the related then clause is evaluated.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>Could be one or none otherwise block</td>
+<td>The <strong>otherwise</strong> block is executed only if no when-then block has been evaluated successfully
+before.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>There must be at least one where block</td>
+<td>The <strong>where</strong> block is a perfect place to initializate constants used in any of the other mentioned
+blocks.</td>
 </tr>
 </table>
 </div>
@@ -597,7 +600,7 @@ of when-then expressions</p>
 <div class="content">
 <pre class="prettyprint groovy language-groovy"><code>            Option&lt;String&gt; result = check(weight: value) {
                 when { weight &lt;= underweight } then { "You're underweight" }
-                when { weight &lt;= normal }      then { "You're normal" }
+                when { weight &lt;= normal }      then { throw new Exception("You're normal") }
                 when { weight &lt;= fat }         then { "You're fat" }
                 otherwise { "You have a strange composition" }
                 where {
@@ -609,9 +612,31 @@ of when-then expressions</p>
 </div>
 </div>
 <div class="paragraph">
-<p>This is a simple example about how to use the where expression. The when-then clauses
-use closures to evaluate their content. But thanks to Groovy&#8217;s objects method isCase()
-we can create switch-like statements</p>
+<p>This is a simple example about how to use the where expression. You can also omit
+some of the parts mentioned before</p>
+</div>
+<div class="listingblock">
+<div class="title">Ommiting Where</div>
+<div class="content">
+<pre class="prettyprint groovy language-groovy"><code>            Option&lt;String&gt; result = check(weight: value) {
+                when { weight &lt;= 51 } then { "You're underweight" }
+                when { weight &lt;= 90 } then { "You're fat" }
+                otherwise { "Default" }
+            }</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Only When-Then clauses</div>
+<div class="content">
+<pre class="prettyprint groovy language-groovy"><code>            Option&lt;String&gt; result = check(weight: value) {
+                when { weight &lt;= 51 } then { "You're underweight" }
+                when { weight &lt;= 90 } then { "You're fat" }
+            }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The when-then clauses use closures to evaluate their content.
+But thanks to Groovy&#8217;s objects method isCase() we can create switch-like statements</p>
 </div>
 <div class="listingblock">
 <div class="title">Switch-case Where (Class)</div>
@@ -668,7 +693,7 @@ conditions are the same you would be using in a switch-case block in Groovy.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-05-07 23:55:41 CEST
+Last updated 2014-05-30 00:04:39 CEST
 </div>
 </div>
 </body>
