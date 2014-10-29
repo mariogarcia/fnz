@@ -1,5 +1,10 @@
 = FNZ 
 Mario Garcia <link:https://www.twitter.com/marioggar[@marioggar]>
+:numbered:                                                                                                         
+:testDir: ../../src/test/groovy
+:sourceDir: ../../src/main/groovy
+:sourceDirJava: ../../src/main/java
+:stem:
 
 Groovy functional programming experiments
 
@@ -14,10 +19,11 @@ The main objectives of this library are:
 * Understand persistent collections
 * Ways of enforce immutability
 
-:testdir: ../../src/test/groovy
 
-include::src/asciidoc/basics.adoc[]
+include::data_theory.ad[]
 
-include::src/asciidoc/control.adoc[]
+include::data.ad[]
+
+include::control.ad[]
 
 

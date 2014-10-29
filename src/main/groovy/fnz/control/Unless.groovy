@@ -1,6 +1,9 @@
 package fnz.control
 
-import fnz.base.Option
+import static fnz.data.Fn.Just
+import static fnz.data.Fn.Nothing
+
+import fnz.data.Maybe
 import groovy.transform.CompileStatic
 
 /**
@@ -18,15 +21,11 @@ class Unless<T> {
        this.block = block
     }
 
-    Option<T> unless(Boolean condition) {
-        if (!condition) {
-            return Option.of(block.call())
-        }
-
-        return Option.of(null)
+    Maybe<T> unless(Boolean condition) {
+        return !condition ? Just(block.call()) : Nothing()
     }
 
-    static <T> Option<T> unless(Boolean condition, Closure<Option<T>> executionBlock) {
+    static <T> Maybe<T> unless(Boolean condition, Closure<Maybe<T>> executionBlock) {
         return new Unless(executionBlock).unless(condition)
     }
 

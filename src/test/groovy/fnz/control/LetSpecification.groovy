@@ -1,10 +1,12 @@
 package fnz.control
 
+import static fnz.data.Fn.val
+import static fnz.data.Fn.Just
 import static fnz.control.Let.let
 import static fnz.control.Unless.unless
 import static fnz.control.Where.check
 
-import fnz.base.Option
+import fnz.data.Maybe
 import spock.lang.Unroll
 import spock.lang.Specification
 
@@ -13,52 +15,52 @@ class LetSpecification extends Specification {
     def 'Simple let expression'() {
         when: 'Initializing expression and executing closure'
             // tag::simpleLet[]
-            Option<Integer> result = let(x: 10, y: 20) {
-                return x + y
+            Maybe<Integer> result = let(x: 10, y: 20) {
+                return Just(x + y)
             }
             // end::simpleLet[]
         then: 'There should return a value'
             result.isPresent() == true
         and: 'the value should be...'
-            result.get() == 30
+            val(result) == 30
     }
 
     // tag::nestedLet[]
     def 'Nesting lets'() {
         when: 'Initializing expression and executing closure'
-            Option<Integer> result = let(x: 10, y: 20) {
+            Maybe<Integer> result = let(x: 10, y: 20) {
                 def z = x + y
                 let(x:6, y: 4) {
-                    return x + y + z
+                    return Just(x + y + z)
                 }
             }
         then: 'There should be a value'
             result.isPresent()
         and: 'The value should be built from the deeper values'
-            result.get() == 40
+            val(result) == 40
     }
     // end::nestedLet[]
 
     def 'Evaluating let expressions'() {
         when: 'Initializing expression and executing closure'
             // tag::computedValues[]
-            Option<Integer> result =
+            Maybe<Integer> result =
                 let(x: { 10 }, y: { 20 }, z: { x + y }) {
-                    return z + 1
+                    return Just(z + 1)
                 }
             // end::computedValues[]
         then: 'There should return a value'
             result.isPresent() == true
         and: 'the value should be...'
-            result.get() == 31
+            val(result) == 31
     }
 
     def 'Using unless within let'() {
         when: "Using less inside a let expression"
-            Option<Integer> result =
+            Maybe<Integer> result =
                 let(x: 10, y: 5, z: unk) {
                     unless((x + y + z ) == 20) {
-                       return z
+                       return Just(z)
                     }
                 }
         then: "The option result should be the expected"
@@ -72,7 +74,7 @@ class LetSpecification extends Specification {
 
     def 'Using where within let'() {
         when: 'Having a where clause within a let'
-            Option<Integer> result =
+            Maybe<Integer> result =
                 let(x: { xparam }, y: {yparam}, z: { x + y }) {
                     check(measure: z) {
                         when { measure <= MINIMUM } then { MINIMUM }
@@ -86,7 +88,7 @@ class LetSpecification extends Specification {
                     }
                 }
         then: 'The value should be the expected'
-            result.get() == expected
+            val(result) == expected
         where: 'Possible values are'
             xparam | yparam | expected
             4      | 3      | 10

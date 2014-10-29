@@ -1,9 +1,11 @@
 package fnz.control
 
 import static org.codehaus.groovy.runtime.DefaultGroovyMethods.with
-import static org.codehaus.groovy.runtime.DefaultGroovyMethods.inject
 
-import fnz.base.Option
+import static fnz.data.Fn.Just
+import static fnz.data.Fn.bind
+
+import fnz.data.Maybe
 import groovy.transform.CompileStatic
 
 /**
@@ -25,8 +27,10 @@ class Let<T> {
         return acc
     }
 
-    static <T> Option<T> let(final Map<?,?> initValues, final Closure<T> execution) {
-        return Option.of(with(inject(initValues, [:], aggregator), execution))
+    static <T> Maybe<T> let(final Map<?,?> initValues, final Closure<Maybe<T>> execution) {
+        bind(Just(initValues.inject([:], aggregator))) { map ->
+            map.with(execution)
+        }
     }
 
 }

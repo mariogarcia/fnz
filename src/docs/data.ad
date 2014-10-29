@@ -1,0 +1,209 @@
+== Data
+
+=== Maybe
+
+The +Maybe+ is normally used to avoid asking whether the value is null or it
+can contain any value. That's why the +Maybe+ object has two children: 
++Maybe.Just+ and +Maybe.Nothing+. 
+
+NOTE: In the JDK 8 you can find the +Optional+ type. Sometimes is also called
++Option+.
+
+As we'll be seeing along this chapter is that monads like +Maybe+, +Either+ or
++ListMonad+ will allow to apply functions over the wrapped value, only if the
+wrapped value is considered *valid*. Otherwise the wrapped value will be 
+returned.
+
+To see how to use +Maybe+ lets use it in a simple exercise:
+
+""
+Given a number, I want to divide it by half two times, and then if still
+not decimal, multiplied by three.
+""
+
+Because all even numbers will become decimals as soon as I try to dividing them
+by half I want to stop the process as soon as the process detects that number
+is no longer eligible to success.
+
+[source,groovy]
+----
+include::{testDir}/fnz/data/MaybeSpec.groovy[tags=maybebind,indent=0]
+----
+
+<1> tries to divide, if not even returns nothing otherwise returns division result.
+<2> tries again to divide the number under the same premises.
+<3> If division ended successfully only then applies multiplication.
+
+The nice thing about this plan is that if any of the previous steps ended with
+a +Maybe.Nothing+ instance the process won't go any further.
+
+In order to understand what happens underneath, why process doesn't continue, 
+I would like to show you both implementation of +Maybe.Just+ and +Maybe.Nothing+.
+
+While +Maybe.Just+ applies the function:
+
+[source,java]
+----
+include::{sourceDirJava}/fnz/data/Maybe.java[tags=justbind,indent=0]
+----
+
++Maybe.Nothing+ like its name, *does nothing* but to return the current value :P
+
+[source,java]
+----
+include::{sourceDirJava}/fnz/data/Maybe.java[tags=nothingbind,indent=0]
+----
+
+Sometimes it would be useful to have an alternative when there's no value. That's
+what the method +or+ does. It makes the monad to return the alternative value in
+case there was no value. Otherwise the current value is returned.
+
+[source,groovy]
+----
+include::{testDir}/fnz/data/MaybeSpec.groovy[tags=maybeor1,indent=0]
+----
+
+It's pretty clear in the previous example, but it is even clearer when you do
+something ( a transformation for example) with the current inner value.
+
+[source,groovy]
+----
+include::{testDir}/fnz/data/MaybeSpec.groovy[tags=maybeor2,indent=0]
+----
+
+=== Either
+
+Either monad is also one of the classics. The +Either+ monad instance can 
+represent correct or error.
+
+As imperative programmer I'm used to choose between branches in my code using
+conditional structures such as +if+. As Groovy programmer I've gone one step
+further and I've met the +Groovy Truth+ that helps me a lot classifying
+instances between those which could be seen as a false statement and those 
+which can be taken as a true statement.
+
+But what if we go beyond ? What if we had a type saying it could be right or
+wrong depending on its own but still having content ?.
+
+The following example tries to search certain type of people from a given list.
+The search will stop once a person has been found with any of the given rules.
+
+[source,java]
+----
+include::{testDir}/fnz/data/EitherSpec.groovy[tags=eithermonadsearch,indent=0]
+----
+
+First of all, I need to apologise because in this example It seems I've used Either just
+to do the opposite. This time think +Either.Left+ as something telling us to 
+stop looking because we've found what we were looking for.
+
+<1> +baseSearch+ is a function that returns another function. 
+That inner function returns an +Either.Left+ instance with the result inside 
+if the +search+ function passed as parameter succeeded. I want the function to
+return +Either.Left+ because I know when an +Either.Left+ is returned no further
+action is done. And because I've found what I was looking for, I don't want the
+search to go any further.
+<2> I've created three different functions valid to be used in an +fmap+ function. That
+means they receive an unwrapped value but they will return a wrapped value.
+<3> Given the source we will try to apply three types of search in order to find
+someone. Because the rules of the monad, I know if the first search fails the
+second will be triggered, and so on. In case any of them succeed the value will be
+return immediately.
+
+=== ListMonad
+
+Collections in general are one of the most used data structures ever. 
+Some languages use collections only as data structures and some others make 
+them implement monadic semantics in order to be able to do things like
++list comprehensions+.
+
+According to **Wikipedia** a +list comprehension+ is:
+
+[,Wikipedia]
+""
+A list comprehension is a syntactic construct available in some programming 
+languages for creating a list based on existing lists
+""
+
+I would add that implementations differ in which are capable of handling
+streams and those which don't. 
+
+First of all I'm would like to start with a basic finite example. Like we
+did before, lets sneak a little bit on how *Haskell* does it ;)
+
+(TODO)
+
+=== Try
+
+Nowadays JVM languages deal with exceptions using *try-catch* blocks. The
+problem is that these constructions force programmers to build their code in
+a certain way.
+
+*Try* monad wraps the result of a given computation. That computation could 
+either end on a desired value, having an instance of *Success*, 
+or could throw an exception, having an instance of *Failure* instead. 
+
+Like *Either*, composition has a special importance here, due to
+the fact that when having a *Failure* instance all possible actions
+applied over it will always return the same failure.
+
+This first example tries to parse an invalid number and add one to it. 
+
+[source,groovy]
+.Parse a possible number
+----
+include::{testDir}/fnz/data/TrySpec.groovy[tags=basic1,indent=0]
+----
+
+Here we can see both behaviors. 
+
+<1> First of all the given function fails and
+the instance returned is an instance of *Failure* we know that because only
+*Failure* instances return *true* when calling to *isFailure()* method.
+<2> Besides that we can also notice that using a failure instance to create 
+further function composition will end returning the same failure, which is the
+same as saying that no further function will ever succeed using that failure.
+
+When having a *Failure* instance, the exception that caused it is also wrapped
+within the instance, and you could whether get it to inspect it, or throw it
+like any other exception.
+
+[source,groovy]
+.throwException
+----
+include::{testDir}/fnz/data/TrySpec.groovy[tags=exception1,indent=0]
+----
+
+<1> You can get the wrapped exception
+<2> Or throw the exception instead
+
+Normally when having an exception we would like to react somehow. Sometimes
+we may want to set, for example a default value in case something went wrong.
+
+In our example I would like to get zero in case the number was not valid. 
+Then I would like to add one to that given number.
+
+[source,groovy]
+.TryOrElse
+----
+include::{testDir}/fnz/data/TrySpec.groovy[tags=tryorelse,indent=0]
+----
+
+<1> You can notice how we use *TryOrElse* to react when the main action
+failed. Then the second action will be executed instead. I think this
+is a very common scenario and this way of coding could be very useful
+and descriptive.
+
+Of course, if the alternative function fails the *TryOrElse* execution
+will return a *Failure* instance anyway. So, the next question could be:
+Is there any way of recovering from a failure instance once we've executed
+both main and alternative actions ?
+
+Well there is the *recover()* method. This method has two arguments the
+possible *Failure* instance, and the *Success* instance to use instead.
+
+[source,groovy]
+.recover()
+----
+include::{testDir}/fnz/data/TrySpec.groovy[tags=recover,indent=0]
+----

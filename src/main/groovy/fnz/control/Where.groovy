@@ -1,11 +1,12 @@
 package fnz.control
 
 import static org.codehaus.groovy.runtime.DefaultGroovyMethods.isCase
+import static fnz.data.Fn.Just
 
 import org.codehaus.groovy.runtime.ComposedClosure
 import groovy.transform.CompileStatic
 
-import fnz.base.Option
+import fnz.data.Maybe
 
 /**
  * This control was inspired in Haskell's where clause.
@@ -104,18 +105,18 @@ class Where {
        return new ComposedClosure(applyDelegateToCondition, applyDelegateToExecution)
     }
 
-    public static <T> Option<T> check(final Map values, final Closure<Evaluation> evaluation) {
+    public static <T> Maybe<T> check(final Map values, final Closure<Evaluation> evaluation) {
         return _check(values ?: [:], evaluation)
     }
 
-    public static <T> Option<T> check(final Object value, final Closure<Evaluation> evaluation) {
+    public static <T> Maybe<T> check(final Object value, final Closure<Evaluation> evaluation) {
         return _check([val:value], evaluation)
     }
 
-    private static <T> Option<T> _check(final Object value, final Closure<Evaluation> evaluation) {
+    private static <T> Maybe<T> _check(final Object value, final Closure<Evaluation> evaluation) {
         def where = new Where((Map) value)
         where.with(evaluation)
-        return Option.of(where.evaluate())
+        return Just(where.evaluate())
     }
 
 }

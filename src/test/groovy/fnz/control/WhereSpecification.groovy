@@ -1,7 +1,9 @@
 package fnz.control
 
 import static fnz.control.Where.check
-import fnz.base.Option
+import static fnz.data.Fn.val
+
+import fnz.data.Maybe
 
 import spock.lang.Unroll
 import spock.lang.Specification
@@ -12,7 +14,7 @@ class WhereSpecificatione extends Specification {
     void 'Build a where expression'() {
         when: 'An expression'
             // tag::simpleWhere[]
-            Option<String> result = check(weight: value) {
+            Maybe<String> result = check(weight: value) {
                 when { weight <= underweight } then { "You're underweight" }
                 when { weight <= normal }      then { throw new Exception("You're normal") }
                 when { weight <= fat }         then { "You're fat" }
@@ -28,7 +30,7 @@ class WhereSpecificatione extends Specification {
             notThrown(Exception)
         and: "The underweight output"
             result.isPresent() == true
-            result.get() == expected
+            val(result) == expected
         where:
             value | expected
             50    | "You're underweight"
@@ -37,7 +39,7 @@ class WhereSpecificatione extends Specification {
 
     void 'Throwing an exception'() {
         when: 'An expression'
-            Option<String> result = check(weight: 70) {
+            Maybe<String> result = check(weight: 70) {
                 when { weight <= underweight } then { "You're underweight" }
                 when { weight <= normal }      then { throw new Exception("You're normal") }
                 when { weight <= fat }         then { "You're fat" }
@@ -56,13 +58,13 @@ class WhereSpecificatione extends Specification {
     void 'Shortening expressions [Only when-then]'() {
         when: 'There are only when-then expressions'
             // tag::whereOnlyWithWhenThen[]
-            Option<String> result = check(weight: value) {
+            Maybe<String> result = check(weight: value) {
                 when { weight <= 51 } then { "You're underweight" }
                 when { weight <= 90 } then { "You're fat" }
             }
             // end::whereOnlyWithWhenThen[]
         then: 'I should be able to get the rigth result'
-            result.get() == expected
+            val(result) == expected
         where: 'The test value is'
             value | expected
              51   | "You're underweight"
@@ -73,14 +75,14 @@ class WhereSpecificatione extends Specification {
     void 'Shortening expressions [when-then with otherwise]'() {
         when: 'There are only when-then expressions'
             // tag::whereWithNoWhere[]
-            Option<String> result = check(weight: value) {
+            Maybe<String> result = check(weight: value) {
                 when { weight <= 51 } then { "You're underweight" }
                 when { weight <= 90 } then { "You're fat" }
                 otherwise { "Default" }
             }
             // end::whereWithNoWhere[]
         then: 'I should be able to get the rigth result'
-            result.get() == expected
+            val(result) == expected
         where: 'The test value is'
             value | expected
              51   | "You're underweight"
@@ -92,7 +94,7 @@ class WhereSpecificatione extends Specification {
     void 'Build switch-case like statements (Classes)'() {
          given: 'An expression'
             // tag::whereSwitchLike1[]
-            Option<String> result = check(value) {
+            Maybe<String> result = check(value) {
                 when String then { stringMessage }
                 when Integer then { bigIntegerMessage }
                 otherwise { otherwiseMessage }
@@ -105,7 +107,7 @@ class WhereSpecificatione extends Specification {
             // end::whereSwitchLike1[]
         expect: "The underweight output"
             result.isPresent() == true
-            result.get() == expected
+            val(result) == expected
         where:
             value | expected
             "hi"  | "Is a String"
@@ -117,7 +119,7 @@ class WhereSpecificatione extends Specification {
     void 'Build switch-case like statements (Ranges)'() {
          given: 'An expression'
             // tag::whereSwitchLike2[]
-            Option<String> result = check(value) {
+            Maybe<String> result = check(value) {
                 when 10..20 then { SMALL }
                 when 20..30 then { MEDIUM }
                 otherwise { BIG }
@@ -130,7 +132,7 @@ class WhereSpecificatione extends Specification {
             // end::whereSwitchLike2[]
         expect: "The underweight output"
             result.isPresent() == true
-            result.get() == expected
+            val(result) == expected
         where:
             value | expected
             15    | "Small"
@@ -142,7 +144,7 @@ class WhereSpecificatione extends Specification {
     void 'Build switch-case like statements (Number)'() {
          given: 'An expression'
             // tag::whereSwitchLike3[]
-            Option<String> result = check(value) {
+            Maybe<String> result = check(value) {
                 when 15 then { SMALL }
                 when 25 then { MEDIUM }
                 otherwise { BIG }
@@ -155,7 +157,7 @@ class WhereSpecificatione extends Specification {
             // end::whereSwitchLike3[]
         expect: "The underweight output"
             result.isPresent() == true
-            result.get() == expected
+            val(result) == expected
         where:
             value | expected
             15    | "Small"

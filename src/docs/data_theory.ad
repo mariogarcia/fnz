@@ -1,0 +1,326 @@
+== Functional Abstractions 
+
+=== Introduction
+
++Category Theory+ is a huge topic not related *per se* to programming, but 
+nowadays is the basis of what functional programming has become today.
+
+In this chapter I'll try to explain and give examples of some terms
+taken from Category Theory and why they could be useful to us as programmers
+in our daily work.
+
+Many of the examples are based on +Haskell+ programming language. 
+As a pure functional language is the best place if you want to learn
+the basis of functional programming, and also because there aren't
+much documentation out there other than Haskell. Here you have
+my two cents :)
+
+I'm aware that terms like +Functor+, +Monad+...etc seem to be something
+strange, odd, difficult for most of the programmers born in the OOP era 
+(including myself by the way).
+
+I know it's difficult... bad news: it becomes harder along the way, good news
+... there is no good news. I'm jocking good news is that the more you
+learn about +Category Theory+ applied to functional programming the more
+you understand how to use functional programming at work... but stop! 
+it's about time... *LETS DO THIS* 
+
+=== Functor
+
+In +Category Theory+ a +Functor+ is a mapping between categories...WHaAaAAAaaTT?? O_o
+
+A +Functor+ represents a container/wrapper of some sort, along with the ability 
+to apply a function to elements wrapped in the container. 
+
+Ok, so a +Functor+ is like a +container+, like a +box+. It contains a value. 
+That value can be transformed by functions applied to the container,
+not to the value directly.
+
+The formal definition of a Functor in Haskell is:
+
+[source, haskell]
+.Functor definition
+----
+class Functor f where
+    fmap :: (a -> b) -> f a -> f b
+----
+
+What does it mean ? Well it means that in order to build a new instance of a 
++Functor+ type the type should implement a +fmap+ method.
+
+The +fmap+ method receives a function +(a -> b)+ which transforms an object
+of type +a+ in another object of type +b+, it also receives a +Functor+ of type +a+ 
+and finally returns a functor of type +b+.
+
+How could we implement this ?
+
+==== Example
+
+[source, java]
+.Functor (Java)
+----
+include::{sourceDirJava}/fnz/data/Functor.java[indent=0] 
+----
+
+NOTE: Some of the interfaces or classes shown here are implemented in plain
+Java(TM). I'm planning to migrate them to Groovy 2.3+ with +@CompileStatic+ any time
+soon.
+
+So basically a functor allows us to transform the contained value applying a function. 
+There're some differences between the Java(TM) implementation and the Haskell one.
+
+* +(a->b)+ becomes +Function<A,B>+
+* +fa+ parameter will be the instance of the functor itself
+* +fb+ becomes +Functor<B>+
+
+Now imagine we had a function adding 3 to any number. In Haskell we would be seeing this:
+
+[source,haskell]
+.Haskell example
+----
+fmap (+3) (Just 1)
+----
+
+I'll try to reproduce the same behavior, this time with Groovy :) We will be following
+these steps:
+
+* We need a function receiving a number and returning a number +(a->b)+
+* Then the functor will receive the function and will know how to unwrap the
+value and after applying the function how to wrap it again.
+
+==== Function (a->b)
+
+A function represents a transformation applied to a given input, giving
+a certain result.
+
+We need a function adding 3 to any given number. Here is a simple java interface
+defining a function:
+
+[source,java]
+.Function (Java)
+----
+include::{sourceDirJava}/fnz/data/Function.java[indent=0] 
+----
+
+Because this interface is in fact a functional interface, it could be
+substituted by a Closure expression. So instead of building a new class or
+building a verbose inner class implementation we will be using a closure
+to define a new implementation of the *Function* interface.
+
+[source,groovy]
+.Function<Integer,Integer>
+----
+include::{testDir}/fnz/data/FunctionSpec.groovy[tags=function1,indent=0] 
+----
+
+NOTE: Be aware that because closures only declare the return type you should add 
+the type to the closure parameter if you care about input type.
+
+==== Functor<A>
+
+Well now we need an instance of a functor of type *A*, pass to the functor
+our previously created function and expect to receive a certain value with
+a certain type.
+
+[source,groovy]
+.Functor<Integer>
+----
+include::{testDir}/fnz/data/FunctorSpec.groovy[tags=functorspec1,indent=0] 
+----
+
+Ok but how +Maybe.Just+ gets something and transform it to another functor. Lets see
+what the +fmap+ implementation does:
+
+[source,java]
+.Maybe Functor#fmap implementation
+----
+include::{sourceDirJava}/fnz/data/Maybe.java[tags=functorspec2,indent=0]
+----
+
+First I'll try to describe which types are involved:
+
+* +JUST+ is the value contained by the Maybe instance (which among other things is a functor).
+* +<B>+ is the type of the function applied. Then
+the Maybe implementation wraps that value into another instance of a functor
+(this time another Just instance).
+
+Basically here the +fmap+ method takes as an argument a function transforming
+the contained value in the source functor and then wraps it again in another
+functor instance. 
+
+By the way, althought *fmap* is implemented in *Functor* in languages
+like Haskell, you won't see *fmap* being invoked like "myObject.fmap(...)" but instead 
+you will find something like *fmap(functor, function)*
+
+In the source code you will see that there're several methods adding
+some syntactic sugar to inner functors/applicative/monads methods mimicking the way
+Haskell does it.
+
+[source,groovy]
+.Public API
+----
+include::{testDir}/fnz/data/FunctorSpec.groovy[tags=publicapimethods,indent=0] 
+----
+
+[source,groovy]
+.Functor<Integer>
+----
+include::{testDir}/fnz/data/FunctorSpec.groovy[tags=functorspec3,indent=0] 
+----
+
+==== Plain Groovy 
+
+Well under the hood many of the methods added to the Groovy API (api, gapi, gdk) resemble
+monadic behaviors. For example there is the *with* method all Groovy objects have. Although
+it could be seen more like a *bind* action (we'll cover it later on) we can create a lighter
+version of *fmap* with this *with*.
+
+[source,groovy]
+.Groovy map
+----
+include::{testDir}/fnz/data/FunctorSpec.groovy[tags=groovyfunctormockery,indent=0] 
+----
+
+As we'll see later on, many monadic estructures don't execute functions when they detect
+something went wrong, or the type at a hand means nothing can be executed (a Maybe.Nothing , 
+Either.Left value, or a Try.Failure values could be an example for that)
+
+This *with* on steroids executes the closure (function) passed as parameter when
+the value exists (and represents a Groovy truth of couse ;) ). Notice was achieved
+by using the *safe* operator from Groovy (foo?.unsafeMethod()).
+
+[source,groovy]
+.Groovy map
+----
+include::{testDir}/fnz/data/FunctorSpec.groovy[tags=groovyfunctor,indent=0] 
+----
+
+And I can't finish this section without talking about *collect*. 
+http://groovy.codehaus.org/groovy-jdk/java/util/Collection.html#collect(groovy.lang.Closure)[*Collect*] 
+is the closest version of fmap I can think about within Groovy. Collect transforms each item in a collection
+into something else.
+
+Same way our *map* method was safe so is *collect*.
+
+[source,groovy]
+.Groovy collect 
+----
+include::{testDir}/fnz/data/FunctorSpec.groovy[tags=collect,indent=0] 
+----
+
+So... why don't we make a better world and use both ideas combined ?
+
+[source,groovy]
+.Groovy collect 
+----
+include::{testDir}/fnz/data/FunctorSpec.groovy[tags=collectandmap,indent=0] 
+----
+
+=== Applicative Functor
+
+Remember I was saying a +Functor+ is a container, a box if you like, containing
+a simple value ? You can think about +Applicative+ like a +Functor+ containing
+a +Function+. This time the +box+ contains a +Function+.
+
+Why then the name of +Applicative+ ? I'm not quite sure, but
+I think it came from the idea that a function *can be applied* 
+to some other values.
+
+In Haskell:
+
+[source,haskell]
+----
+(<*>) :: Applicative f => f (a->b) -> (f a -> f b)
+----
+
+This time instead of containing a plain value the functor has a function. So
+we can read the Haskell function as a function receiving an applicative +f (a->b)+ (a 
+functor containing a function transforming from a to b) and returns the
+transformation from a functor containing a to a functor containing b +(f a -> f b)+. 
+
+==== Example
+
+[source,java]
+----
+include::{sourceDirJava}/fnz/data/Applicative.java[indent=0]
+----
+
+We have included in our Java(TM) version a way of accessing the inner value 
+forcing any +Applicative+ to implement the +getValue()+ method.
+
+NOTE: Instead of +getValue+ returning a raw value I've implemented +getTypedRef+ which
+returns a wrapper having the raw instance.
+I did it becauseI didn't found a solution to resolve the problem of having the ListMonad sharing
+the same interface with Monads sharing single values and still respecting the
++fmap+, +fapply+ and +bind+ methods. I'm not perfect so I will be very happy if
+someone gives me a better solution :)
+
+But the  most important method is +fapply+ which in in charge of receiving another
+applicative and use the value of that applicative and apply it to the inner value
+of the instance of the source applicative.
+
+Lets take a look to the implementation of the +fapply+ method in the 
++Maybe.Right+ class we can see how it works.
+
+[source,java]
+----
+include::{sourceDirJava}/fnz/data/Maybe.java[tags=fapply,indent=0]
+----
+
+How can we use it ?
+
+In this example I'm using implementations of +Maybe+. This implementation is not 
+only an +Applicative+ but a +Functor+ (which is implied) and a +Monad+. Instead
+of creating object with +new+ operator every object has a static method to do it.
+
+[source,groovy]
+----
+include::{testDir}/fnz/data/MaybeSpec.groovy[tags=imports,indent=0]
+----
+
+This is the example:
+
+[source,groovy]
+----
+include::{testDir}/fnz/data/MaybeSpec.groovy[tags=fapplyspec,indent=0]
+----
+
+<1> The implementation of the +Maybe.Nothing+ +fapply+ method doesn't apply the 
+function to the current instance and returns  an instance of +new Nothing(null)+
+<2> The implementation of +the Maybe.Just+ +fapply+ method applies current value 
+to the function contained within the +Applicative+ passed as parameter.
+
+=== Monad
+
+What is a Monad ?
+
+While +Functor+ applied a function to a wrapped value, and an +Applicative+ 
+applied a wrapped function to a wrapped value, a +Monad+ applies a function
+to a wrapped value and returns a wrapped value.
+
+Because +Monad+ is an +Applicative+ and an +Applicative+ is a +Functor+, likewise 
+a +Monad+ has some inherit methods such as +fmap+ or  +fapply+. But the method
+that makes a +Monad+ a +Monad+ is the +bind+ method (or +>>=+ which is its alias
+in Haskell).
+
+How does +bind+ looks like ? Like always , first step, Haskell syntax:
+
+[source,haskell]
+----
+class Monad m where    
+    (>>=) :: m a -> (a -> m b) -> m b
+----
+
+A bind method receives a wrapped value +m a+ then a function +(a -> m b)+ which
+transforms the wrapped value to another wrapped value, and finally returns the
+transformation result +m b+.
+
+In my humble representation of a Monad type in Java(TM) I came up with the 
+following code:
+
+[source,java]
+----
+include::{sourceDirJava}/fnz/data/Monad.java[indent=0]
+----
+
+
