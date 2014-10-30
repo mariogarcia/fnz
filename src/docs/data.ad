@@ -71,6 +71,39 @@ something ( a transformation for example) with the current inner value.
 include::{testDir}/fnz/data/MaybeSpec.groovy[tags=maybeor2,indent=0]
 ----
 
+=== Fn 
+
+*fnz.data.Fn* is a class that can be used as a shorcut for all data structures
+explained in this chapter. Depending on the style of your code you could be 
+either chaining actions over a monad using method-chaining or using the
+Haskell-like public methods in an in-out style.
+
+Lets compare the Maybe monad using the Haskell-like style with *Fn*
+
+[source,groovy]
+.fapply (method-chain) imports
+----
+include::{testDir}/fnz/data/MaybeSpec.groovy[tags=imports,indent=0]
+----
+
+[source,groovy]
+.fapply (method-chain)
+----
+include::{testDir}/fnz/data/MaybeSpec.groovy[tags=fapplyspec,indent=0]
+----
+
+[source,groovy]
+.fapply (Fn) imports
+----
+include::{testDir}/fnz/data/MaybeSpec.groovy[tags=fnimports,indent=0]
+----
+
+[source,groovy]
+.fapply (Fn)
+----
+include::{testDir}/fnz/data/MaybeSpec.groovy[tags=fapplyspechaskell,indent=0]
+----
+
 === Either
 
 Either monad is also one of the classics. The +Either+ monad instance can 

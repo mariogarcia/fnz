@@ -5,6 +5,14 @@ import static Fn.val
 import static Maybe.just
 import static Maybe.nothing
 // end::imports[]
+
+// tag::fnimports[]
+import static Fn.Just
+import static Fn.Nothing
+import static Fn.fapply
+import static Fn.bind
+// end::fnimports[]
+
 import spock.lang.Specification
 
 /**
@@ -25,6 +33,21 @@ class MaybeSpec extends Specification {
             val(just(1).fapply(just(combination))) == 4 // <2>
     }
     // end::fapplyspec[]
+
+    // tag::fapplyspechaskell[]
+    void 'Applicative: Maybe applicative implementation (Fn)'() {
+        when: 'combining two closures'
+            def inc = { Integer v -> v + 1 }
+            def byTwo = { Integer v -> v * 2 }
+        and: 'using the combination as a Function'
+            def combination = (inc >> byTwo) as Function
+        then: 'if the value is nothing the function shouldnt be applied'
+            val(fapply(Nothing(), Just(combination))) == null
+        and: 'otherwise if the initial value is correct the function will work'
+            val(fapply(Just(1), Just(combination))) == 4
+    }
+    // end::fapplyspechaskell[]
+
 
     // tag::maybebind[]
     void 'Monad: using maybe to shortcircuit a process'() {
@@ -53,6 +76,52 @@ class MaybeSpec extends Specification {
                  50      |   null
     }
     // end::maybebind[]
+
+    // tag::maybebindhaskell[]
+    void 'Monad: using maybe to shortcircuit a process (Fn)'() {
+        given: 'a function dividing only even numbers'
+            def half = { BigDecimal possible ->
+                return possible.intValue() % 2 == 0 ?
+                    Just(possible.div(2)) :
+                    Nothing()
+            }
+        and: 'another function multiplying by three'
+            def threeTimes = { BigDecimal possible ->
+                return Just(possible * 3)
+            }
+        when: 'starting the process'
+            Maybe<Integer> result1 =
+                bind(Just(sampleNumber)) { x ->
+                    bind(half(x)) { y ->
+                        bind(half(y)) { z ->
+                            threeTimes(z)
+                        }
+                    }
+                }
+        and:
+            Maybe<Integer> result2 =
+                bind(
+                    bind(
+                        bind(
+                            Just(sampleNumber),
+                            half
+                        ),
+                        half
+                    ),
+                    threeTimes
+                )
+        then: 'checking the result'
+            val(result1) == expected
+            val(result2) == expected
+        where: 'sample numbers and expectations are'
+            sampleNumber | expected
+                100      |    75
+                200      |   150
+                 50      |   null
+    }
+    // end::maybebindhaskell[]
+
+
 
     // tag::maybeor1[]
     void 'testing maybe alternatives (I)'() {

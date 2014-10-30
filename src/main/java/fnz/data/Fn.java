@@ -60,6 +60,10 @@ public final class Fn {
        return ma.bind(fn);
     }
 
+    public static <A,B, AA extends Applicative<A>, AB extends Applicative<B>> AB fapply(AA fa, Applicative<Function<A,B>> fn) {
+        return (AB) fa.fapply(fn);
+    }
+
     // tag::fmap[]
     public static <A,B, FA extends Functor<A>, FB extends Functor<B>> FB fmap(FA fa, Function<A,B> fn) {
         return fa.fmap(fn);
