@@ -3,17 +3,21 @@ buildscript {
         mavenLocal()
         mavenCentral()
         jcenter()
-maven {
+        maven {
             url "http://dl.bintray.com/aalmiray/asciidoctor"
         }
     }
     dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.5'
         classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.0'
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'groovy'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
 apply plugin: 'org.asciidoctor.gradle.asciidoctor'
 
 repositories {
@@ -22,8 +26,9 @@ repositories {
 
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.3.0'
-    compile 'org.codehaus.gpars:gpars:1.2.0'
     compile 'org.slf4j:slf4j-api:1.7.5'
+
+    testCompile 'org.codehaus.gpars:gpars:1.2.0'
     testCompile 'junit:junit:4.11'
     testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
 }
@@ -37,5 +42,31 @@ asciidoctor {
             toc: 'left'
         ]
     ]
+}
+
+publishing {
+    publications {
+        mavenCustom(MavenPublication) {
+            groupId 'fnz'
+            artifactId 'fnz'
+            version '1.0.0'
+
+            from components.java
+        }
+    }
+}
+
+bintray {
+    user = "marioggar"
+
+    publish = true
+    publications = ['mavenCustom']
+    pkg {
+        name = "fnz"
+        repo = "maven"
+        version {
+            name = "1.0.0"
+        }
+    }
 
 }
