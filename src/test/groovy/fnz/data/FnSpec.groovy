@@ -5,7 +5,7 @@ import static Fn.fmap
 import static Fn.Just
 import static Fn.List
 import static Fn.Right
-import static Fn.Try
+import static Fn.wrap
 import static Fn.val
 import static Fn.maybe
 
@@ -61,10 +61,7 @@ class FnSpec extends Specification {
             def inc = { x ->  x + 1 }
         when: 'trying to apply the computation'
             def tryResult =
-                fmap(
-                    fmap(Try { inc(value) }, inc),
-                    inc
-                )
+                val(fmap(Just(value),wrap(inc)))
         then: 'there could be a result or not'
             maybe(tryResult).isPresent() == isPresent
         and: 'possible final value should be'
@@ -72,8 +69,8 @@ class FnSpec extends Specification {
         where: 'possible values are'
             value | isPresent | finalValue
             null  | false| null
-            2     | true | 5
+            2     | true | 3
     }
 
-}
 
+}

@@ -5,8 +5,7 @@ import static Fn.Just
 import static Fn.bind
 import static Fn.fmap
 import static Fn.val
-import static Fn.Try
-import static Fn.TryOrElse
+import static Fn.wrap
 import static Fn.recover
 
 import spock.lang.Specification
@@ -16,9 +15,10 @@ class TrySpec extends Specification {
     // tag::basic1[]
     def 'parsing a non valid number: Try'() {
         when: 'trying to parse a non valid number'
-            Function inc = { x -> x + 1 }
-            Try result1 = Try { Integer.parseInt("2a")} // <1>
-            Try result2 = fmap(result1, inc) // <2>
+            Function unwrapped = { x -> x + 1 }
+            Function wrappedfn = wrap { v -> Integer.parseInt(v) } // <1>
+            Try result1 = bind(Just('2a'), wrappedfn) // <2>
+            Try result2 = bind(result1, unwrapped)
         then: 'computation failed'
             result1.isFailure()
         and: 'any possible composition will return the same failure'
@@ -29,53 +29,29 @@ class TrySpec extends Specification {
     // tag::exception1[]
     def 'throwing an exception'() {
         when: 'doing something wrong'
-            Try.Failure failure = Try { 0.div(0) }
+            Function failure = wrap { 0.div(0) }
             // <1>
-            assert failure.exception instanceof ArithmeticException
+            Try<Integer> result = bind(Just(1), failure)
+
+            assert result.exception instanceof ArithmeticException
         and: 'wants to propagate the exception'
-            failure.throwException() // <2>
+            result.throwException() // <2>
         then:'the exception will be thrown as usual'
             thrown(ArithmeticException)
     }
     // end::exception1[]
 
-    // tag::tryorelse[]
-    def 'reacting with TryElse'() {
-        given: 'the functions used in this example'
-            def returnZero = { 0 }
-            def increment = { Integer x -> x + 1 }
-            def parseInt = { String number ->
-                return {
-                   Integer.parseInt(number)
-                }
-            }
-        when: 'trying to parse any type of value'
-            Try result =
-                fmap(
-                    TryOrElse( // <1>
-                        parseInt(next),
-                        returnZero
-                    ),
-                    increment)
-        then:'the value should always be greater than 0'
-            val(result) >= 1
-        where: 'values can be valid or invalid'
-            next << ["1","2a","3"]
-    }
-    // end::tryorelse[]
-
     // tag::recover[]
     def 'using recover()'() {
         when: 'you cant always get what you want'
-            Try something =
-                TryOrElse(
+            def someFnChain =
+                recover (
                     { 0.div(0) }, // WRONG
-                    { new Date() + "1" } // WORST
+                    recover({ new Date() + "1" }, { 0 }) // WORST
                 )
-            Try anything = recover(something, Try { 0 })
+            def anything = bind(Just(1), someFnChain)
         then: 'you can always get what you need :P'
-            val(anything) == 0
-
+            val(val(anything)) == 0 // TODO recover(Function... nFunctions)
     }
     // end::recover[]
 
@@ -101,7 +77,7 @@ class TrySpec extends Specification {
     def 'classic try catch example RELOADED'() {
         given: 'a list of numbers as strings'
             def numbers = ["1","2a","11","24","4A"]
-            def parse = { item -> return { Integer.parseInt(item) } }
+            def parse = { item -> Integer.parseInt(item) }
             def ZERO = { 0 }
             def addToList = { x -> x ? List(x) : List() }
             def AVG = { list -> list.sum().div(list.size()) }
@@ -110,7 +86,12 @@ class TrySpec extends Specification {
                 val(fmap(
                     Just(
                         numbers.collectMany { n ->
-                            val(bind(recover(Try(parse(n)),Try(ZERO)), addToList))
+                            val(
+                                bind(
+                                    bind(Just(n), recover(parse, ZERO)),
+                                    addToList
+                                )
+                            )
                         }
                     ),
                     AVG
@@ -124,18 +105,16 @@ class TrySpec extends Specification {
             def numbers = ["1","2a","11","24","4A"]
             def ZERO = { 0 }
             def AVG = { list -> list.sum().div(list.size()) }
-            def parse = { item -> return { Integer.parseInt(item) } }
+            def parse = { item -> Integer.parseInt(item) }
             def addToList = { x -> x ? List(x) : List() }
         when: 'trying to get the average'
-            def average =
-                val(
-                    fmap(
-                        Just(
-                            val(bind(List(numbers)) { n ->
-                                bind(recover(Try(parse(n)),Try(ZERO)), addToList)
-                            })
-                        ),
-                        AVG))
+            def numberList  =
+                 bind(List(numbers)) { n ->
+                     bind(bind(Just(n), recover(parse, ZERO)), addToList)
+                 }
+            assert numberList instanceof ListMonad
+            assert val(numberList).size() == 3
+            def average = val(fmap(Just(val(numberList)), AVG))
         then: 'the average should be 12'
             average == 12
     }
@@ -146,8 +125,8 @@ class TrySpec extends Specification {
             def okDivision = { 1.div(2) }
             def addOne = { x -> x + 1 }
         when: 'trying to execute it'
-            def failure = fmap(Try(koDivision), addOne) // it failed
-            def success = fmap(Try(okDivision), addOne) // it succeed
+            def failure = bind(bind(Just(1), wrap(koDivision)), wrap(addOne)) // it failed
+            def success = bind(bind(Just(1), wrap(okDivision)), wrap(addOne)) // it succeed
         then: 'checking both results'
             failure instanceof Try.Failure
             success instanceof Try.Success
@@ -157,14 +136,14 @@ class TrySpec extends Specification {
 
     def 'once we have a success we want to make it fail'() {
         given: 'an action'
-            def getWordLength = { String word ->
-                return { word.length() }
-            }
+            def wordLength = { String word -> word.length() }
             def multiplyByTwo = { x -> x * 2 }
             def divByZero = { x -> x.div(0) }
         when: 'we use it wisely'
             Try successSoFar =
-                fmap(Try(getWordLength("John")), multiplyByTwo)
+                bind(
+                    Just("John"),
+                    wrap(wordLength >> multiplyByTwo))
         and: 'checking so far so good'
             assert successSoFar.isSuccess()
             assert val(successSoFar) == 8
@@ -180,7 +159,7 @@ class TrySpec extends Specification {
         when: 'we use it wisely'
             Function action = { 0.div(0) }
             Try successSoFar =
-                fmap(Try(action)){ undefined ->
+                fmap(bind(Just(1), wrap(action))) { undefined ->
                     undefined + 1 // wont be executed
                 }
         and: 'once we know it ended wrong'
