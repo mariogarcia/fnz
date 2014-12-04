@@ -27,8 +27,6 @@ repositories {
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.3.0'
     compile 'org.slf4j:slf4j-api:1.7.5'
-
-    testCompile 'org.codehaus.gpars:gpars:1.2.0'
     testCompile 'junit:junit:4.11'
     testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
 }
@@ -37,9 +35,9 @@ asciidoctor {
     sourceDir = 'src/docs' as  File
     options = [
         attributes: [
-        'icons': 'font',
-        'source-highlighter': 'prettify',
-            toc: 'left'
+            'icons': 'font',
+            'source-highlighter': 'prettify',
+            'toc': 'left'
         ]
     ]
 }
