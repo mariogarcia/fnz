@@ -176,6 +176,10 @@ a certain way.
 either end on a desired value, having an instance of *Success*, 
 or could throw an exception, having an instance of *Failure* instead. 
 
+In order to get a *Try* result we should *wrap* the computation we think
+could fail within a function which returns a *Try* instance with the
+result of the computation (Try.Success or Try.Failure).
+
 Like *Either*, composition has a special importance here, due to
 the fact that when having a *Failure* instance all possible actions
 applied over it will always return the same failure.
@@ -216,21 +220,7 @@ we may want to set, for example a default value in case something went wrong.
 In our example I would like to get zero in case the number was not valid. 
 Then I would like to add one to that given number.
 
-[source,groovy]
-.TryOrElse
-----
-include::{testDir}/fnz/data/TrySpec.groovy[tags=tryorelse,indent=0]
-----
-
-<1> You can notice how we use *TryOrElse* to react when the main action
-failed. Then the second action will be executed instead. I think this
-is a very common scenario and this way of coding could be very useful
-and descriptive.
-
-Of course, if the alternative function fails the *TryOrElse* execution
-will return a *Failure* instance anyway. So, the next question could be:
-Is there any way of recovering from a failure instance once we've executed
-both main and alternative actions ?
+What if we want a fallback behavior when something went wrong ?
 
 Well there is the *recover()* method. This method has two arguments the
 possible *Failure* instance, and the *Success* instance to use instead.
@@ -240,3 +230,8 @@ possible *Failure* instance, and the *Success* instance to use instead.
 ----
 include::{testDir}/fnz/data/TrySpec.groovy[tags=recover,indent=0]
 ----
+
+NOTE: Maybe in the future *recover* will receive any number of possible
+alternatives.
+
+

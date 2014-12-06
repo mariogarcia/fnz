@@ -28,7 +28,7 @@ class TrySpec extends Specification {
 
     // tag::exception1[]
     def 'throwing an exception'() {
-        when: 'doing something wrong'
+        when: 'wrapping something that "could" fail :P'
             Function failure = wrap { 0.div(0) }
             // <1>
             Try<Integer> result = bind(Just(1), failure)
@@ -50,7 +50,7 @@ class TrySpec extends Specification {
                     recover({ new Date() + "1" }, { 0 }) // WORST
                 )
             def anything = bind(Just(1), someFnChain)
-        then: 'you can always get what you need :P'
+        then: 'you might find you get what you need :P'
             val(val(anything)) == 0 // TODO recover(Function... nFunctions)
     }
     // end::recover[]
