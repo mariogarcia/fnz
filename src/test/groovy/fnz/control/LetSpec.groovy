@@ -10,7 +10,7 @@ import fnz.data.Maybe
 import spock.lang.Unroll
 import spock.lang.Specification
 
-class LetSpecification extends Specification {
+class LetSpec extends Specification {
 
     def 'Simple let expression'() {
         when: 'Initializing expression and executing closure'
@@ -97,4 +97,3 @@ class LetSpecification extends Specification {
     }
 
 }
-

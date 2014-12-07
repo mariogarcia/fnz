@@ -8,7 +8,7 @@ import fnz.data.Maybe
 import spock.lang.Unroll
 import spock.lang.Specification
 
-class WhereSpecificatione extends Specification {
+class WhereSpec extends Specification {
 
     @Unroll
     void 'Build a where expression'() {
