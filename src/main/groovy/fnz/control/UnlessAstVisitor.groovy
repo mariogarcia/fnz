@@ -10,7 +10,6 @@ import org.codehaus.groovy.ast.expr.ArgumentListExpression
 import org.codehaus.groovy.ast.expr.StaticMethodCallExpression
 
 import org.codehaus.groovy.control.SourceUnit
-import org.codehaus.groovy.classgen.VariableScopeVisitor
 
 import groovy.transform.InheritConstructors
 import fnz.ast.DefaultClassCodeExpressionTransformer
@@ -18,18 +17,25 @@ import fnz.ast.DefaultClassCodeExpressionTransformer
 @InheritConstructors
 class UnlessAstVisitor extends DefaultClassCodeExpressionTransformer {
 
+    static final String UNLESS = 'unless'
+
+    @Override
     Expression transform(Expression expression) {
-         if (expression instanceof MethodCallExpression && expression.methodAsString == 'unless') {
+         if (expression instanceof MethodCallExpression && expression.methodAsString == UNLESS) {
 
              MethodCallExpression unlessExpression = (MethodCallExpression) expression
              ArgumentListExpression argsExpression = (ArgumentListExpression) unlessExpression.arguments
              Expression booleanExpression = argsExpression.expressions.first()
              ClosureExpression bodyExpression = (ClosureExpression) argsExpression.expressions.last()
 
+             // This introspects closure structure and applies
+             // transform(...) on all nodes
+             this.visitClosureExpression(bodyExpression)
+
              StaticMethodCallExpression finalExpression =
                  new StaticMethodCallExpression(
                      make(Unless, false),
-                     'unless',
+                     UNLESS,
                      new ArgumentListExpression(
                          booleanExpression,
                          bodyExpression))

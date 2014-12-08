@@ -17,10 +17,12 @@ class UnlessSpecExample {
 
     Integer nestedUnlessExample(Integer xparam) {
         Maybe<Integer> result =
-            unless(xparam <= 2) {
-               unless(xparam >= 1) {
-                   return 3 + xparam
-               }
+            unless(xparam == 2) {
+               def nested =
+                   unless(xparam == 1) {
+                      3 + xparam
+                   }
+               val(nested)
             }
 
         return val(result)

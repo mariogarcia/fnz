@@ -36,12 +36,8 @@ class UnlessSpec extends AstBaseSpec {
          result == expected
          where:
          sample | expected
-         1|4
-         2|5
-         0|null
-         -1|null
-         3|null
-
+         1|null
+         2|null
     }
 
 }
