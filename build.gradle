@@ -23,7 +23,7 @@ repositories {
 }
 
 dependencies {
-    compile 'org.codehaus.groovy:groovy-all:2.3.0'
+    compile 'org.codehaus.groovy:groovy-all:2.3.7'
     compile 'org.slf4j:slf4j-api:1.7.5'
     testCompile 'junit:junit:4.11'
     testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
@@ -74,6 +74,6 @@ bintray {
 
 task('playground', dependsOn:'classes', type: JavaExec) {
     main='groovy.ui.Console'
-    project.dependencies.add("compile", 'org.codehaus.groovy:groovy-console:2.3.2')
+    project.dependencies.add("compile", 'org.codehaus.groovy:groovy-console:2.3.7')
     classpath = sourceSets.main.runtimeClasspath
 }
