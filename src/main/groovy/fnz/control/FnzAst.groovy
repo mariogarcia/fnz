@@ -17,11 +17,12 @@ import org.codehaus.groovy.transform.AbstractASTTransformation
  *
  */
 @GroovyASTTransformation(phase = CompilePhase.CANONICALIZATION)
-class UnlessAst extends AbstractASTTransformation {
+class FnzAst extends AbstractASTTransformation {
 
     void visit(ASTNode[] nodes, SourceUnit sourceUnit) {
          sourceUnit.AST.classes.each { ClassNode clazzNode ->
-             new UnlessAstVisitor(sourceUnit).visitClass(clazzNode)
+             new UnlessAstTransformer(sourceUnit).visitClass(clazzNode)
+             new LetAstTransformer(sourceUnit).visitClass(clazzNode)
          }
     }
 

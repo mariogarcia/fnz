@@ -9,7 +9,7 @@ class UnlessSpec extends AstBaseSpec {
     void 'simple unless example'() {
          given: 'an instance of the example'
          def instance =
-             getClassToTestForPhase(UnlessAst, CompilePhase.CANONICALIZATION)
+             getClassToTestForPhase(FnzAst, CompilePhase.CANONICALIZATION)
                .newInstance()
          when: 'executing a unless statement'
          Integer result = instance.basicUnlessExample(sample)
@@ -28,7 +28,7 @@ class UnlessSpec extends AstBaseSpec {
     void 'nested unless expressions'() {
      given: 'an instance of the example'
          def instance =
-             getClassToTestForPhase(UnlessAst, CompilePhase.CANONICALIZATION)
+             getClassToTestForPhase(FnzAst, CompilePhase.CANONICALIZATION)
                .newInstance()
          when: 'executing a unless statement'
          Integer result = instance.nestedUnlessExample(sample)

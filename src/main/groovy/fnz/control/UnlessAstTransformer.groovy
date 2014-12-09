@@ -13,9 +13,9 @@ import org.codehaus.groovy.ast.expr.StaticMethodCallExpression
 import org.codehaus.groovy.control.SourceUnit
 import fnz.ast.MethodCallExpressionTransformer
 
-class UnlessAstVisitor extends MethodCallExpressionTransformer {
+class UnlessAstTransformer extends MethodCallExpressionTransformer {
 
-    UnlessAstVisitor(SourceUnit sourceUnit) {
+    UnlessAstTransformer(SourceUnit sourceUnit) {
         super(sourceUnit, 'unless')
     }
 
