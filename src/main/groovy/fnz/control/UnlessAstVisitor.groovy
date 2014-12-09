@@ -1,6 +1,7 @@
 package fnz.control
 
 import static org.codehaus.groovy.ast.ClassHelper.make
+import static org.codehaus.groovy.ast.tools.GeneralUtils.args
 
 import org.codehaus.groovy.ast.expr.Expression
 import org.codehaus.groovy.ast.expr.VariableExpression
@@ -10,40 +11,32 @@ import org.codehaus.groovy.ast.expr.ArgumentListExpression
 import org.codehaus.groovy.ast.expr.StaticMethodCallExpression
 
 import org.codehaus.groovy.control.SourceUnit
+import fnz.ast.MethodCallExpressionTransformer
 
-import groovy.transform.InheritConstructors
-import fnz.ast.DefaultClassCodeExpressionTransformer
+class UnlessAstVisitor extends MethodCallExpressionTransformer {
 
-@InheritConstructors
-class UnlessAstVisitor extends DefaultClassCodeExpressionTransformer {
-
-    static final String UNLESS = 'unless'
+    UnlessAstVisitor(SourceUnit sourceUnit) {
+        super(sourceUnit, 'unless')
+    }
 
     @Override
-    Expression transform(Expression expression) {
-         if (expression instanceof MethodCallExpression && expression.methodAsString == UNLESS) {
+    Expression transformMethodCall(MethodCallExpression unlessExpression) {
+        ArgumentListExpression argsExpression = (ArgumentListExpression) unlessExpression.arguments
+        Expression booleanExpression = argsExpression.expressions.first()
 
-             MethodCallExpression unlessExpression = (MethodCallExpression) expression
-             ArgumentListExpression argsExpression = (ArgumentListExpression) unlessExpression.arguments
-             Expression booleanExpression = argsExpression.expressions.first()
-             ClosureExpression bodyExpression = (ClosureExpression) argsExpression.expressions.last()
+        ClosureExpression bodyExpression = (ClosureExpression) argsExpression.expressions.last()
+        // This introspects closure structure and applies
+        // transform(...) on all nodes
+        this.visitClosureExpression(bodyExpression)
 
-             // This introspects closure structure and applies
-             // transform(...) on all nodes
-             this.visitClosureExpression(bodyExpression)
+        StaticMethodCallExpression finalExpression =
+            new StaticMethodCallExpression(
+                make(Unless, false),
+                     methodCallName,
+                     args(booleanExpression,bodyExpression))
 
-             StaticMethodCallExpression finalExpression =
-                 new StaticMethodCallExpression(
-                     make(Unless, false),
-                     UNLESS,
-                     new ArgumentListExpression(
-                         booleanExpression,
-                         bodyExpression))
+        return finalExpression
 
-             return finalExpression
-         }
-
-         return expression.transformExpression(this)
     }
 
 }
