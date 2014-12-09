@@ -23,8 +23,8 @@ class UnlessAstVisitor extends MethodCallExpressionTransformer {
     Expression transformMethodCall(MethodCallExpression unlessExpression) {
         ArgumentListExpression argsExpression = (ArgumentListExpression) unlessExpression.arguments
         Expression booleanExpression = argsExpression.expressions.first()
-
         ClosureExpression bodyExpression = (ClosureExpression) argsExpression.expressions.last()
+
         // This introspects closure structure and applies
         // transform(...) on all nodes
         this.visitClosureExpression(bodyExpression)
