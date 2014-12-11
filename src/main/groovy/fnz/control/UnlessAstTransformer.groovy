@@ -2,6 +2,9 @@ package fnz.control
 
 import static org.codehaus.groovy.ast.ClassHelper.make
 import static org.codehaus.groovy.ast.tools.GeneralUtils.args
+import static org.codehaus.groovy.ast.tools.GeneralUtils.notX
+import static org.codehaus.groovy.ast.tools.GeneralUtils.ternaryX
+import static org.codehaus.groovy.ast.tools.GeneralUtils.callX
 
 import org.codehaus.groovy.ast.expr.Expression
 import org.codehaus.groovy.ast.expr.VariableExpression
@@ -11,9 +14,15 @@ import org.codehaus.groovy.ast.expr.ArgumentListExpression
 import org.codehaus.groovy.ast.expr.StaticMethodCallExpression
 
 import org.codehaus.groovy.control.SourceUnit
+
+import fnz.data.Fn
 import fnz.ast.MethodCallExpressionTransformer
 
 class UnlessAstTransformer extends MethodCallExpressionTransformer {
+
+    static final String JUST = 'Just'
+    static final String NOTHING = 'Nothing'
+    static final String DO_CALL = 'doCall'
 
     UnlessAstTransformer(SourceUnit sourceUnit) {
         super(sourceUnit, 'unless')
@@ -29,13 +38,11 @@ class UnlessAstTransformer extends MethodCallExpressionTransformer {
         // transform(...) on all nodes
         this.visitClosureExpression(bodyExpression)
 
-        StaticMethodCallExpression finalExpression =
-            new StaticMethodCallExpression(
-                make(Unless, false),
-                     methodCallName,
-                     args(booleanExpression,bodyExpression))
-
-        return finalExpression
+        return ternaryX(
+            notX(booleanExpression),
+            callX(make(Fn, false), JUST, callX(bodyExpression, DO_CALL)),
+            callX(make(Fn, false), NOTHING)
+        )
 
     }
 
