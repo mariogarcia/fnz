@@ -6,22 +6,12 @@ import fnz.data.Maybe
 
 class LetSpecExample {
 
-    Maybe<Integer> simpleLetExpression() {
-        return let(x: 10, y: 20) { Just(x + y) }
-    }
-
     Maybe<Integer> nestingLets() {
-        return let(x: 10, y: 20) {
-                def z = x + y
-                let(x:6, y: 4) {
-                    return Just(x + y + z)
-                }
+        let(a: 10, b: 20) {
+            let(d: 6, e: 4) {
+                def result = a + b + d + e
+                Just(result)
             }
-    }
-
-    Maybe<Integer> evaluatingLetExpressions() {
-        return let(x: { 10 }, y: { 20 }, z: { x + y }) {
-            Just(z + 1)
         }
     }
 

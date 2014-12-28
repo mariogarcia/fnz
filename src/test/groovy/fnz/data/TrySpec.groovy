@@ -154,8 +154,6 @@ class TrySpec extends Specification {
     }
 
     def 'making a failure to throw an exception'() {
-        given: 'an action'
-            def getWordLength = { String word -> word.length() }
         when: 'we use it wisely'
             Function action = { 0.div(0) }
             Try successSoFar =
