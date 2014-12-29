@@ -21,7 +21,7 @@ class LetSpec extends AstBaseSpec {
         then: 'There should be a value'
             result.isPresent()
         and: 'The value should be built from the deeper values'
-            val(result) == 40
+            val(result) == 43
     }
     // end::nestedLet[]
 

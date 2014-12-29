@@ -9,8 +9,8 @@ import static fnz.data.Fn.Just
 class LetSimpleSpecExample {
 
     Maybe<Integer> simpleLetExpression() {
-        return let(a: 10, b: 20) {
-            Just(a + b)
+        return let(a: 10, b: 20, c: { a + b }) {
+            Just(c)
         }
     }
 

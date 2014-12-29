@@ -62,12 +62,10 @@ class LetAstTransformer extends MethodCallExpressionTransformer {
         return buildBindExpression(nextValue, closureExpression)
     }
 
-    StaticMethodCallExpression buildBindExpression(final ClosureExpression value, final ClosureExpression closureWithKey) {
-        return buildBindExpression(callX(value, DO_CALL_METHOD_NAME), closureWithKey)
-    }
-
     StaticMethodCallExpression buildBindExpression(final Expression value, final ClosureExpression closureWithKey) {
-        return callX(make(Fn), BIND_METHOD_NAME, args(getJustFrom(value), closureWithKey))
+        return value instanceof ClosureExpression ?
+        callX(make(Fn), BIND_METHOD_NAME, args(getJustFrom(callX(value, DO_CALL_METHOD_NAME)), closureWithKey)) :
+        callX(make(Fn), BIND_METHOD_NAME, args(getJustFrom(value), closureWithKey))
     }
 
     StaticMethodCallExpression getJustFrom(final Expression value) {

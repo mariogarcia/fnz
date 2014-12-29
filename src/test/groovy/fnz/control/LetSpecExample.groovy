@@ -8,7 +8,7 @@ class LetSpecExample {
 
     Maybe<Integer> nestingLets() {
         let(a: 10, b: 20) {
-            let(d: 6, e: 4) {
+            let(d: 6, e: { d + 1 }) {
                 def result = a + b + d + e
                 Just(result)
             }
