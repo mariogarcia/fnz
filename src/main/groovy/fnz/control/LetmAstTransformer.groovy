@@ -13,14 +13,14 @@ import static org.codehaus.groovy.ast.ClassHelper.make
 import static org.codehaus.groovy.ast.tools.GeneralUtils.*
 
 @CompileStatic
-class LetAstTransformer extends MethodCallExpressionTransformer {
+class LetmAstTransformer extends MethodCallExpressionTransformer {
 
-    static final String LET_METHOD_NAME = 'let'
+    static final String LET_METHOD_NAME = 'letm'
     static final String BIND_METHOD_NAME = 'bind'
     static final String JUST_METHOD_NAME = 'Just'
     static final String DO_CALL_METHOD_NAME = 'doCall'
 
-    LetAstTransformer(SourceUnit sourceUnit) {
+    LetmAstTransformer(SourceUnit sourceUnit) {
         super(sourceUnit, LET_METHOD_NAME)
     }
 

@@ -22,7 +22,7 @@ class FnzAst extends AbstractASTTransformation {
     void visit(ASTNode[] nodes, SourceUnit sourceUnit) {
          sourceUnit.AST.classes.each { ClassNode clazzNode ->
              new UnlessAstTransformer(sourceUnit).visitClass(clazzNode)
-             new LetAstTransformer(sourceUnit).visitClass(clazzNode)
+             new LetmAstTransformer(sourceUnit).visitClass(clazzNode)
          }
     }
 
