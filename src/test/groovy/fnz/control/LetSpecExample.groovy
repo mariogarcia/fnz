@@ -8,4 +8,12 @@ class LetSpecExample {
         }
     }
 
+    Integer nestedLetExample() {
+        let(a: 5, b: 15) {
+            let(c: 15, d: { a + 25 }) {
+                b + c + d
+            }
+        }
+    }
+
 }

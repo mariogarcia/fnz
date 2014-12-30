@@ -19,4 +19,16 @@ class LetSpec extends AstBaseSpec {
     }
     // end::simpleLet[]
 
+    def 'nested let'() {
+        given: 'an instance of the sample class'
+            def instance =
+                getClassToTestForPhase(
+                FnzAst,
+                CompilePhase.CANONICALIZATION).newInstance()
+        when: 'Initializing expression and executing closure'
+            Integer result = instance.nestedLetExample()
+        then: 'The value should be the expected'
+            result == 60
+    }
+
 }

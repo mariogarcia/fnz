@@ -29,8 +29,8 @@ class LetAstTransformer extends MethodCallExpressionTransformer {
         List<MapEntryExpression> mapEntryExpressions = mapExpression.mapEntryExpressions.reverse()
         ClosureExpression fn = (ClosureExpression) argumentListExpression.expressions.last()
 
+        this.visitClosureExpression(fn)
         MethodCallExpression result = (MethodCallExpression) mapEntryExpressions.inject(fn, this.&evaluateMapEntryExpression)
-        this.visitMethodCallExpression(result)
         this.applyScopeVisitor(result)
 
         return result
