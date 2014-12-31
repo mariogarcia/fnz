@@ -1,11 +1,11 @@
 package fnz.control
 
-import fnz.data.Either
-
 import static fnz.data.Fn.val
+import static fnz.data.Fn.Right
 
 import fnz.data.Try
 import fnz.data.Maybe
+import fnz.data.Either
 import fnz.test.AstBaseSpec
 import org.codehaus.groovy.control.CompilePhase
 
@@ -40,14 +40,25 @@ class LetmSpec extends AstBaseSpec {
             val(result) == 43
     }
 
-    def 'either monad'() {
-        when: 'executing a possible dangerous method'
+    def 'combine with either monad'() {
+        when: 'executing'
         Either<Integer> result =
             exampleInstance.workingWithOtherMonads(1, 2)
-        then:'we can handle exceptions as data'
-        result instanceof Either
+        then:'we should get the '
+        result instanceof Either.Right
         and: 'Result is the expected'
         val(result) == 3
+    }
+
+    def 'combine with try monad'() {
+        when: 'executing a possible dangerous method'
+        Try result = exampleInstance.combineWithTry(a,b)
+        then: 'we should get a failure instance'
+        result.class.isAssignableFrom(expected)
+        where: 'possible values and expectations are'
+          a | b | expected
+          1|0|Try.Failure
+          1|1|Try.Success
     }
 
 }
