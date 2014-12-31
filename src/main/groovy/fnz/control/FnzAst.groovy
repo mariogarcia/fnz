@@ -10,8 +10,7 @@ import org.codehaus.groovy.transform.GroovyASTTransformation
 import org.codehaus.groovy.transform.AbstractASTTransformation
 
 /**
- * This transformation makes possible to use the unless(boolean) expression
- * globally in your code.
+ * This AST applies all transformations available in FNZ.
  *
  * @since 1.0.1
  *

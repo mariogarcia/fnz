@@ -13,11 +13,30 @@ import org.codehaus.groovy.ast.expr.MethodCallExpression
 import org.codehaus.groovy.ast.expr.ArgumentListExpression
 import org.codehaus.groovy.ast.expr.StaticMethodCallExpression
 
+import groovy.transform.CompileStatic
 import org.codehaus.groovy.control.SourceUnit
 
 import fnz.data.Fn
 import fnz.ast.MethodCallExpressionTransformer
 
+/**
+ * This transformer transforms expressions like this:
+ * <pre>
+ * unless(something == 2) {
+ *    executeSomethingElse()
+ * }
+ * </pre>
+ * into this:
+ * <pre>
+ * if (!(something == 2)) {
+ *    executeSomethingElse()
+ * }
+ * </pre>
+ *
+ * @author Mario Garcia
+ *
+ */
+@CompileStatic
 class UnlessAstTransformer extends MethodCallExpressionTransformer {
 
     static final String JUST = 'Just'
