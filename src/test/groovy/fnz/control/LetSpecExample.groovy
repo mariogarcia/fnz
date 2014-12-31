@@ -16,7 +16,7 @@ class LetSpecExample {
             x + y + z
         }
     }
-    // end:computedValues[]
+    // end::computedValues[]
 
     // tag::nestedLet[]
     Integer nestedLetExample() {

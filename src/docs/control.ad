@@ -108,7 +108,7 @@ of when-then expressions
 [source,groovy]
 .Simple Where
 ----
-include::{testdir}/fnz/control/WhereSpecification.groovy[tags=simpleWhere]
+include::{testdir}/fnz/control/WhereSpec.groovy[tags=simpleWhere]
 ----
 
 This is a simple example about how to use the where expression. You can also omit
@@ -117,13 +117,13 @@ some of the parts mentioned before
 [source,groovy]
 .Ommiting Where
 ----
-include::{testdir}/fnz/control/WhereSpecification.groovy[tags=whereWithNoWhere]
+include::{testdir}/fnz/control/WhereSpec.groovy[tags=whereWithNoWhere]
 ----
 
 [source,groovy]
 .Only When-Then clauses
 ----
-include::{testdir}/fnz/control/WhereSpecification.groovy[tags=whereOnlyWithWhenThen]
+include::{testdir}/fnz/control/WhereSpec.groovy[tags=whereOnlyWithWhenThen]
 ----
 
 The when-then clauses use closures to evaluate their content. 
@@ -132,7 +132,7 @@ But thanks to Groovy's objects method isCase() we can create switch-like stateme
 [source,groovy]
 .Switch-case Where (Class)
 ----
-include::{testdir}/fnz/control/WhereSpecification.groovy[tags=whereSwitchLike1]
+include::{testdir}/fnz/control/WhereSpec.groovy[tags=whereSwitchLike1]
 ----
 
 Instead of passing a map you can evaluate a single value against some conditions. Those
@@ -141,12 +141,12 @@ conditions are the same you would be using in a switch-case block in Groovy.
 [source,groovy]
 .Switch-case Where (Collections)
 ----
-include::{testdir}/fnz/control/WhereSpecification.groovy[tags=whereSwitchLike2]
+include::{testdir}/fnz/control/WhereSpec.groovy[tags=whereSwitchLike2]
 ----
 
 [source,groovy]
 .Switch-case Where (Number)
 ----
-include::{testdir}/fnz/control/WhereSpecification.groovy[tags=whereSwitchLike3]
+include::{testdir}/fnz/control/WhereSpec.groovy[tags=whereSwitchLike3]
 ----
 
