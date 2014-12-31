@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.0">
-<title>Control Flow</title>
+<title>Data</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic|Noto+Serif:400,400italic,700,700italic|Droid+Sans+Mono:400">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -418,12 +418,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_control_flow">Control Flow</a>
+<li><a href="#_data">Data</a>
 <ul class="sectlevel2">
-<li><a href="#_let">Let</a></li>
-<li><a href="#_letm">Letm</a></li>
-<li><a href="#_unless">Unless</a></li>
-<li><a href="#_where">Where</a></li>
+<li><a href="#_maybe">Maybe</a></li>
+<li><a href="#_fn">Fn</a></li>
+<li><a href="#_either">Either</a></li>
+<li><a href="#_listmonad">ListMonad</a></li>
+<li><a href="#_try">Try</a></li>
 </ul>
 </li>
 </ul>
@@ -431,14 +432,224 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_control_flow">Control Flow</h2>
+<h2 id="_data">Data</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_maybe">Maybe</h3>
+<div class="paragraph">
+<p>The Maybe is normally used to avoid asking whether the value is null or it
+can contain any value. That&#8217;s why the Maybe object has two children:
+Maybe.Just and Maybe.Nothing.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+In the JDK 8 you can find the Optional type. Sometimes is also called
+Option.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>As we&#8217;ll be seeing along this chapter is that monads like Maybe, Either or
+ListMonad will allow to apply functions over the wrapped value, only if the
+wrapped value is considered <strong>valid</strong>. Otherwise the wrapped value will be
+returned.</p>
+</div>
+<div class="paragraph">
+<p>To see how to use Maybe lets use it in a simple exercise:</p>
+</div>
 <div class="quoteblock">
 <blockquote>
 <div class="paragraph">
-<p>In computer science, control flow (or alternatively, flow of control) refers to the order in which
-the individual statements, instructions or function calls of an imperative or a declarative program
-are executed or evaluated</p>
+<p>Given a number, I want to divide it by half two times, and then if still
+not decimal, multiplied by three.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>Because all even numbers will become decimals as soon as I try to dividing them
+by half I want to stop the process as soon as the process detects that number
+is no longer eligible to success.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/MaybeSpec.groovy[tags=maybebind,indent=0]</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>tries to divide, if not even returns nothing otherwise returns division result.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>tries again to divide the number under the same premises.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>If division ended successfully only then applies multiplication.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The nice thing about this plan is that if any of the previous steps ended with
+a Maybe.Nothing instance the process won&#8217;t go any further.</p>
+</div>
+<div class="paragraph">
+<p>In order to understand what happens underneath, why process doesn&#8217;t continue,
+I would like to show you both implementation of Maybe.Just and Maybe.Nothing.</p>
+</div>
+<div class="paragraph">
+<p>While Maybe.Just applies the function:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Unresolved directive in data.ad - include::{sourceDirJava}/fnz/data/Maybe.java[tags=justbind,indent=0]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Maybe.Nothing like its name, <strong>does nothing</strong> but to return the current value :P</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Unresolved directive in data.ad - include::{sourceDirJava}/fnz/data/Maybe.java[tags=nothingbind,indent=0]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Sometimes it would be useful to have an alternative when there&#8217;s no value. That&#8217;s
+what the method or does. It makes the monad to return the alternative value in
+case there was no value. Otherwise the current value is returned.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/MaybeSpec.groovy[tags=maybeor1,indent=0]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It&#8217;s pretty clear in the previous example, but it is even clearer when you do
+something ( a transformation for example) with the current inner value.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/MaybeSpec.groovy[tags=maybeor2,indent=0]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_fn">Fn</h3>
+<div class="paragraph">
+<p><strong>fnz.data.Fn</strong> is a class that can be used as a shorcut for all data structures
+explained in this chapter. Depending on the style of your code you could be
+either chaining actions over a monad using method-chaining or using the
+Haskell-like public methods in an in-out style.</p>
+</div>
+<div class="paragraph">
+<p>Lets compare the Maybe monad using the Haskell-like style with <strong>Fn</strong></p>
+</div>
+<div class="listingblock">
+<div class="title">fapply (method-chain) imports</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/MaybeSpec.groovy[tags=imports,indent=0]</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">fapply (method-chain)</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/MaybeSpec.groovy[tags=fapplyspec,indent=0]</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">fapply (Fn) imports</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/MaybeSpec.groovy[tags=fnimports,indent=0]</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">fapply (Fn)</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/MaybeSpec.groovy[tags=fapplyspechaskell,indent=0]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_either">Either</h3>
+<div class="paragraph">
+<p>Either monad is also one of the classics. The Either monad instance can
+represent correct or error.</p>
+</div>
+<div class="paragraph">
+<p>As imperative programmer I&#8217;m used to choose between branches in my code using
+conditional structures such as if. As Groovy programmer I&#8217;ve gone one step
+further and I&#8217;ve met the Groovy Truth that helps me a lot classifying
+instances between those which could be seen as a false statement and those
+which can be taken as a true statement.</p>
+</div>
+<div class="paragraph">
+<p>But what if we go beyond ? What if we had a type saying it could be right or
+wrong depending on its own but still having content ?.</p>
+</div>
+<div class="paragraph">
+<p>The following example tries to search certain type of people from a given list.
+The search will stop once a person has been found with any of the given rules.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Unresolved directive in data.ad - include::{testDir}/fnz/data/EitherSpec.groovy[tags=eithermonadsearch,indent=0]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>First of all, I need to apologise because in this example It seems I&#8217;ve used Either just
+to do the opposite. This time think Either.Left as something telling us to
+stop looking because we&#8217;ve found what we were looking for.</p>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>baseSearch is a function that returns another function.
+That inner function returns an Either.Left instance with the result inside
+if the search function passed as parameter succeeded. I want the function to
+return Either.Left because I know when an Either.Left is returned no further
+action is done. And because I&#8217;ve found what I was looking for, I don&#8217;t want the
+search to go any further.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>I&#8217;ve created three different functions valid to be used in an fmap function. That
+means they receive an unwrapped value but they will return a wrapped value.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Given the source we will try to apply three types of search in order to find
+someone. Because the rules of the monad, I know if the first search fails the
+second will be triggered, and so on. In case any of them succeed the value will be
+return immediately.</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_listmonad">ListMonad</h3>
+<div class="paragraph">
+<p>Collections in general are one of the most used data structures ever.
+Some languages use collections only as data structures and some others make
+them implement monadic semantics in order to be able to do things like
+list comprehensions.</p>
+</div>
+<div class="paragraph">
+<p>According to <strong>Wikipedia</strong> a list comprehension is:</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>A list comprehension is a syntactic construct available in some programming
+languages for creating a list based on existing lists</p>
 </div>
 </blockquote>
 <div class="attribution">
@@ -446,224 +657,123 @@ are executed or evaluated</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Control flow is one of the most important topics in a programming language. Most languages
-have their own out-of-the-box control structures, and some others can create new ones on-the-fly.
-Although Groovy can&#8217;t create new control structures in the classical sense, it can create control
-structures based on functions and meta-programming.</p>
+<p>I would add that implementations differ in which are capable of handling
+streams and those which don&#8217;t.</p>
 </div>
 <div class="paragraph">
-<p>Following up there&#8217;re some control flow structures I&#8217;ve been collecting while sneaking
-in some other programming languages.</p>
+<p>First of all I&#8217;m would like to start with a basic finite example. Like we
+did before, lets sneak a little bit on how <strong>Haskell</strong> does it ;)</p>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s go through them.</p>
-</div>
-<div class="sect2">
-<h3 id="_let">Let</h3>
-<div class="paragraph">
-<p>Initializes a group of variables, makes them available within the scope
-of the closure passed as argument.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">let(Map,Closure)</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Let&#8217;s see some examples.</p>
-</div>
-<div class="listingblock">
-<div class="title">Simple values</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/control/LetSpecExample.groovy[tags=simpleLet]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Here values provided by the map are accessible within the scope of the closure block.
-What if I wanted to create values depending on previous values ? Let&#8217;s
-see the following example:</p>
-</div>
-<div class="listingblock">
-<div class="title">Dependant expressions</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/control/LetSpecExample.groovy[tags=computedValues]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>In this example value of <strong>'z'</strong> depends on the values given to <strong>'x'</strong> and <strong>'y'</strong>. Every</p>
-</div>
-<div class="listingblock">
-<div class="title">Nested expressions</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/control/LetSpecExample.groovy[tags=nestedLet]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Previous <a href="https://code.google.com/p/spock">Spock</a> specification shows how let expressions could be nested.</p>
+<p>(TODO)</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_letm">Letm</h3>
+<h3 id="_try">Try</h3>
 <div class="paragraph">
-<p><strong>letm</strong> works the same way <strong>let</strong> does but it has one constraint, the deepest expression should always
-return an instance of a <strong>fnz.data.Monad</strong>. Why is that ?</p>
+<p>Nowadays JVM languages deal with exceptions using <strong>try-catch</strong> blocks. The
+problem is that these constructions force programmers to build their code in
+a certain way.</p>
 </div>
 <div class="paragraph">
-<p>Well <strong>letm</strong> is meant to work with monad expressions. So when you&#8217;re seeing this:</p>
+<p><strong>Try</strong> monad wraps the result of a given computation. That computation could
+either end on a desired value, having an instance of <strong>Success</strong>,
+or could throw an exception, having an instance of <strong>Failure</strong> instead.</p>
+</div>
+<div class="paragraph">
+<p>In order to get a <strong>Try</strong> result we should <strong>wrap</strong> the computation we think
+could fail within a function which returns a <strong>Try</strong> instance with the
+result of the computation (Try.Success or Try.Failure).</p>
+</div>
+<div class="paragraph">
+<p>Like <strong>Either</strong>, composition has a special importance here, due to
+the fact that when having a <strong>Failure</strong> instance all possible actions
+applied over it will always return the same failure.</p>
+</div>
+<div class="paragraph">
+<p>This first example tries to parse an invalid number and add one to it.</p>
 </div>
 <div class="listingblock">
+<div class="title">Parse a possible number</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">letm(x:1, y: { x + 1}) {
-    Just(y)
-}</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/TrySpec.groovy[tags=basic1,indent=0]</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Underneath the expression is transformed to:</p>
+<p>Here we can see both behaviors.</p>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>First of all the given function fails and
+the instance returned is an instance of <strong>Failure</strong> we know that because only
+<strong>Failure</strong> instances return <strong>true</strong> when calling to <strong>isFailure()</strong> method.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Besides that we can also notice that using a failure instance to create
+further function composition will end returning the same failure, which is the
+same as saying that no further function will ever succeed using that failure.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>When having a <strong>Failure</strong> instance, the exception that caused it is also wrapped
+within the instance, and you could whether get it to inspect it, or throw it
+like any other exception.</p>
 </div>
 <div class="listingblock">
+<div class="title">throwException</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">bind(Just(1)) { x -&gt;
-  bind(Just({x +1}())) { y -&gt;
-     Just(y)
-  }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This way you can play with other flavors of monads. Imagine you want to combine
-let with the <strong>Either</strong> monad.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/control/LetmSpecExample.groovy[tags=workingWithOtherMonads]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>You can also combine it with the <strong>Try</strong> monad. This time there&#8217;s a method you
-want to use, but it could throw some exceptions, you want to handle that possibility
-using <strong>Try</strong>.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/control/LetmSpecExample.groovy[tags=combineWithTry]</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_unless">Unless</h3>
-<div class="paragraph">
-<p>The rationale behind <strong>Unless</strong> is that sometimes is just a pain to create <strong>negative</strong>
-conditional expressions.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">unless(Boolean,Closure)</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">Unless structure</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/control/UnlessSpecExample.groovy[tags=simpleUnless]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This expression will allow the code block to be executed unless the condition
-evaluates to true.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_where">Where</h3>
-<div class="paragraph">
-<p>I would say <strong>Where</strong> control belongs to the family of <strong>switch statements</strong> or <strong>multiway branches</strong>.
-I first read about the <strong>Where</strong> clause while I was reading Haskell.</p>
-</div>
-<div class="paragraph">
-<p>This version of Haskell&#8217;s Where expressions has:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">check(Map) { <i class="conum" data-value="1"></i><b>(1)</b>
-    when { /evaluates to boolean/ } then { /returns a value/ } <i class="conum" data-value="2"></i><b>(2)</b>
-    otherwise { /returns a value/ } <i class="conum" data-value="3"></i><b>(3)</b>
-    where { /some constants/ } <i class="conum" data-value="4"></i><b>(4)</b>
-}</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/TrySpec.groovy[tags=exception1,indent=0]</code></pre>
 </div>
 </div>
 <div class="colist arabic">
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>A <strong>check</strong> method is the entry point to this expression</td>
+<td>You can get the wrapped exception</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td><strong>When-Then</strong> are evaluated in two different phases. First all when clauses are evaluated
-until one of them is evaluated to true. Then the related then clause is evaluated.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>The <strong>otherwise</strong> block is executed only if no when-then block has been evaluated successfully
-before.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>The <strong>where</strong> block is a perfect place to initializate constants used in any of the other mentioned
-blocks.</td>
+<td>Or throw the exception instead</td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>There are different ways of using this control depending on the use
-of when-then expressions</p>
-</div>
-<div class="listingblock">
-<div class="title">Simple Where</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/control/WhereSpec.groovy[tags=simpleWhere]</code></pre>
-</div>
+<p>Normally when having an exception we would like to react somehow. Sometimes
+we may want to set, for example a default value in case something went wrong.</p>
 </div>
 <div class="paragraph">
-<p>This is a simple example about how to use the where expression. You can also omit
-some of the parts mentioned before</p>
-</div>
-<div class="listingblock">
-<div class="title">Ommiting Where</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/control/WhereSpec.groovy[tags=whereWithNoWhere]</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">Only When-Then clauses</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/control/WhereSpec.groovy[tags=whereOnlyWithWhenThen]</code></pre>
-</div>
+<p>In our example I would like to get zero in case the number was not valid.
+Then I would like to add one to that given number.</p>
 </div>
 <div class="paragraph">
-<p>The when-then clauses use closures to evaluate their content.
-But thanks to Groovy&#8217;s objects method isCase() we can create switch-like statements</p>
-</div>
-<div class="listingblock">
-<div class="title">Switch-case Where (Class)</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/control/WhereSpec.groovy[tags=whereSwitchLike1]</code></pre>
-</div>
+<p>What if we want a fallback behavior when something went wrong ?</p>
 </div>
 <div class="paragraph">
-<p>Instead of passing a map you can evaluate a single value against some conditions. Those
-conditions are the same you would be using in a switch-case block in Groovy.</p>
+<p>Well there is the <strong>recover()</strong> method. This method has two arguments the
+possible <strong>Failure</strong> instance, and the <strong>Success</strong> instance to use instead.</p>
 </div>
 <div class="listingblock">
-<div class="title">Switch-case Where (Collections)</div>
+<div class="title">recover()</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/control/WhereSpec.groovy[tags=whereSwitchLike2]</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/TrySpec.groovy[tags=recover,indent=0]</code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="title">Switch-case Where (Number)</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/control/WhereSpec.groovy[tags=whereSwitchLike3]</code></pre>
-</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Maybe in the future <strong>recover</strong> will receive any number of possible
+alternatives.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -671,7 +781,7 @@ conditions are the same you would be using in a switch-case block in Groovy.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-12-31 17:56:09 CET
+Last updated 2014-12-25 23:38:34 CET
 </div>
 </div>
 </body>
