@@ -15,7 +15,7 @@ import org.codehaus.groovy.transform.AbstractASTTransformation
  * @since 1.0.1
  *
  */
-@GroovyASTTransformation(phase = CompilePhase.CANONICALIZATION)
+@GroovyASTTransformation(phase = CompilePhase.CONVERSION)
 class FnzAst extends AbstractASTTransformation {
 
     void visit(ASTNode[] nodes, SourceUnit sourceUnit) {

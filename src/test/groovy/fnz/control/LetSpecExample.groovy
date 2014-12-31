@@ -28,4 +28,12 @@ class LetSpecExample {
     }
     // end::nestedLet[]
 
+    // tag::resolveMethodVariables[]
+    Integer sumAndInc(Integer x, Integer y) {
+        let(a: x, b: y) {
+            a + b + 1
+        }
+    }
+    // end::resolveMethodVariables[]
+
 }
