@@ -57,7 +57,41 @@ Previous link:https://code.google.com/p/spock[Spock] specification shows how let
 
 === Letm
 
-(TODO)
+*letm* works the same way *let* does but it has one constraint, the deepest expression should always
+return an instance of a *fnz.data.Monad*. Why is that ?
+
+Well *letm* is meant to work with monad expressions. So when you're seeing this:
+
+[source, groovy]
+----
+letm(x:1, y: { x + 1}) {
+    Just(y)
+}
+----
+
+Underneath the expression is transformed to:
+
+[source, groovy]
+----
+bind(Just(1)) { x ->
+  bind(Just({x +1}())) { y ->
+     Just(y)
+  }
+}
+----
+
+This way you can play with other flavors of monads. Imagine you had a dangerous
+call and you may want to wrap it in a *Try* monad.
+
+[source, groovy]
+----
+Try result =
+   let(x: getXValue(), y: getYValue()) {
+        Closure<Try> safeMethod = wrap { dangerousMethod(x,y) }
+
+        safeMethod()
+   }
+----
 
 === Unless
 
