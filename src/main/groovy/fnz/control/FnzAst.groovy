@@ -10,18 +10,19 @@ import org.codehaus.groovy.transform.GroovyASTTransformation
 import org.codehaus.groovy.transform.AbstractASTTransformation
 
 /**
- * This transformation makes possible to use the unless(boolean) expression
- * globally in your code.
+ * This AST applies all transformations available in FNZ.
  *
  * @since 1.0.1
  *
  */
-@GroovyASTTransformation(phase = CompilePhase.CANONICALIZATION)
-class UnlessAst extends AbstractASTTransformation {
+@GroovyASTTransformation(phase = CompilePhase.CONVERSION)
+class FnzAst extends AbstractASTTransformation {
 
     void visit(ASTNode[] nodes, SourceUnit sourceUnit) {
          sourceUnit.AST.classes.each { ClassNode clazzNode ->
-             new UnlessAstVisitor(sourceUnit).visitClass(clazzNode)
+             new UnlessAstTransformer(sourceUnit).visitClass(clazzNode)
+             new LetmAstTransformer(sourceUnit).visitClass(clazzNode)
+             new LetAstTransformer(sourceUnit).visitClass(clazzNode)
          }
     }
 

@@ -11,7 +11,7 @@ import fnz.data.Maybe
 /**
  * This control was inspired in Haskell's where clause.
  *
- * @author @marioggar
+ * @author Mario Garcia
  * @since 0.1
  */
 @CompileStatic
