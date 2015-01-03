@@ -1,5 +1,7 @@
 package fnz.control
 
+import fnz.data.Function
+
 import static org.codehaus.groovy.ast.tools.GeneralUtils.*
 
 import org.codehaus.groovy.ast.ASTNode
@@ -23,6 +25,7 @@ class FnzAst extends AbstractASTTransformation {
              new UnlessAstTransformer(sourceUnit).visitClass(clazzNode)
              new LetmAstTransformer(sourceUnit).visitClass(clazzNode)
              new LetAstTransformer(sourceUnit).visitClass(clazzNode)
+             new TypeAstTransformer(sourceUnit).visitClass(clazzNode)
          }
     }
 
