@@ -14,15 +14,39 @@ class TypeSpec extends AstBaseSpec {
     def exampleInstance
 
     def setup() {
-        exampleInstance =
-                getClassToTestForPhase(
+        def helper  =
+            getScriptParser(
                 FnzAst,
-                CompilePhase.CONVERSION).newInstance()
+                CompilePhase.CONVERSION
+            )
+
+        exampleInstance =
+            helper.parse(
+               """
+               class A {
+                    static {
+                        ftype Fn >= String >> Integer
+                    }
+
+                    boolean simpleFunctionalInterface() {
+                        Fn function = this.&some as Fn
+                        Boolean result = function.apply('1') == 1
+
+                        return result
+                    }
+
+                    Integer some(String x) {
+                        return 1
+                    }
+
+               }
+               """
+            ).newInstance()
     }
 
     def 'simple type alias'() {
         expect:
-        exampleInstance.executeFirstExample()
+        exampleInstance.simpleFunctionalInterface()
     }
 
 }
