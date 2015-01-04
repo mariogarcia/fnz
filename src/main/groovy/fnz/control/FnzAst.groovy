@@ -21,7 +21,9 @@ import org.codehaus.groovy.transform.AbstractASTTransformation
 class FnzAst extends AbstractASTTransformation {
 
     void visit(ASTNode[] nodes, SourceUnit sourceUnit) {
-         sourceUnit.AST.classes.each { ClassNode clazzNode ->
+         List<ClassNode> classNodeList = sourceUnit.AST.classes.collect()
+
+         classNodeList.each { ClassNode clazzNode ->
              new UnlessAstTransformer(sourceUnit).visitClass(clazzNode)
              new LetmAstTransformer(sourceUnit).visitClass(clazzNode)
              new LetAstTransformer(sourceUnit).visitClass(clazzNode)
