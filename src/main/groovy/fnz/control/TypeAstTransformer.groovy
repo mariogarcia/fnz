@@ -1,28 +1,21 @@
 package fnz.control
 
+import fnz.data.Try
+import fnz.data.Maybe
+import fnz.data.Function
+import fnz.data.ListMonad
 import fnz.ast.MethodCallExpressionTransformer
-import fnz.data.Fn
-import groovy.transform.CompileStatic
+
 import groovy.transform.CompileDynamic
-
-import org.codehaus.groovy.ast.ASTNode
-import org.codehaus.groovy.ast.MixinNode
-import org.codehaus.groovy.ast.MethodNode
-import org.codehaus.groovy.ast.ModuleNode
-import org.codehaus.groovy.ast.Parameter
-import org.codehaus.groovy.ast.GenericsType
-import org.codehaus.groovy.ast.ClassNode
-import org.codehaus.groovy.ast.InnerClassNode
-import org.codehaus.groovy.ast.VariableScope
-
-import org.codehaus.groovy.ast.expr.*
-import org.codehaus.groovy.syntax.SyntaxException
-import org.codehaus.groovy.ast.stmt.Statement
-import org.codehaus.groovy.classgen.VariableScopeVisitor
-import org.codehaus.groovy.control.SourceUnit
-
+import groovy.transform.CompileStatic
 import groovyjarjarasm.asm.Opcodes
+import org.codehaus.groovy.ast.*
+import org.codehaus.groovy.ast.expr.*
+import org.codehaus.groovy.control.SourceUnit
+import org.codehaus.groovy.syntax.SyntaxException
 
+import static fnz.data.Fn.*
+import static org.codehaus.groovy.control.ResolveVisitor.DEFAULT_IMPORTS
 import static org.codehaus.groovy.ast.ClassHelper.make
 import static org.codehaus.groovy.ast.tools.GeneralUtils.*
 
@@ -32,6 +25,8 @@ class TypeAstTransformer extends MethodCallExpressionTransformer implements Opco
     static final String TYPE_METHOD_NAME = 'ftype'
     static final String FI_FUNCTION_NAME = 'apply'
     static final Expression MEANING_OF_LIFE = constX(42)
+
+    private Resolver resolver = new Resolver()
 
     TypeAstTransformer(SourceUnit sourceUnit) {
         super(sourceUnit, TYPE_METHOD_NAME)
@@ -80,7 +75,8 @@ class TypeAstTransformer extends MethodCallExpressionTransformer implements Opco
     }
 
     private InnerClassNode extractInnerClass(MethodCallExpression methodCallExpression) {
-        InnerClassNode innerClassNode = buildInnerClass(methodCallExpression.methodTarget.name)
+        String innerClassName = "${module.packageName}.${methodCallExpression.methodTarget.name}"
+        InnerClassNode innerClassNode = buildInnerClass(innerClassName)
         List<Expression> args = ((ArgumentListExpression) methodCallExpression.arguments).expressions
         Closure<GenericsType> toGeneric = { VariableExpression var -> new GenericsType(make(var.name)) }
 
@@ -103,7 +99,7 @@ class TypeAstTransformer extends MethodCallExpressionTransformer implements Opco
                 innerClassName,
                 innerClassModifiers,
                 make(Object),
-                [make(GroovyObject)] as ClassNode[],
+                [] as ClassNode[],
                 [] as MixinNode[]
             )
 
@@ -111,7 +107,7 @@ class TypeAstTransformer extends MethodCallExpressionTransformer implements Opco
     }
 
     private int getInnerClassModifiers() {
-        return ACC_STATIC + ACC_ABSTRACT + ACC_INTERFACE
+        return ACC_STATIC | ACC_ABSTRACT | ACC_INTERFACE
     }
 
     private Expression firstArgumentExpressionFrom(MethodCallExpression methodCallExpression) {
@@ -143,7 +139,7 @@ class TypeAstTransformer extends MethodCallExpressionTransformer implements Opco
         MethodNode methodNode =
             new MethodNode(
                 FI_FUNCTION_NAME,
-                ACC_PUBLIC + ACC_ABSTRACT,
+                ACC_PUBLIC | ACC_ABSTRACT,
                 returnType,
                 parameters,
                 exceptions,
@@ -153,22 +149,38 @@ class TypeAstTransformer extends MethodCallExpressionTransformer implements Opco
         return methodNode
     }
 
-    ClassNode extractReturnType(MethodCallExpression methodCallExpression) {
+    private ClassNode extractReturnType(MethodCallExpression methodCallExpression) {
         return null
     }
 
-    ClassNode extractReturnType(VariableExpression variableExpression) {
-        return make(variableExpression.name)
+    private ClassNode extractReturnType(VariableExpression variableExpression) {
+        return resolver.resolve(variableExpression.name)
     }
 
-    Parameter[] extractParametersFrom(MethodCallExpression methodCallExpression) {
+    private Parameter[] extractParametersFrom(MethodCallExpression methodCallExpression) {
         return null
     }
 
-    Parameter[] extractParametersFrom(VariableExpression variableExpression) {
+    private Parameter[] extractParametersFrom(VariableExpression variableExpression) {
         return params(
-            param(make(variableExpression.name), 'input')
+            param(resolver.resolve(variableExpression.name), 'input')
         )
+    }
+
+    @CompileDynamic
+    class Resolver {
+
+        Function<String,Try> classFor = recover(
+            { String className -> make(Class.forName(className)) },
+            { String className -> null }
+        )
+
+        ClassNode resolve(final String name) {
+            return DEFAULT_IMPORTS.findResult { pkg ->
+                val(Just("$pkg$name").bind(classFor))
+            }
+        }
+
     }
 
 }

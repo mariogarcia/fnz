@@ -23,20 +23,16 @@ class TypeSpec extends AstBaseSpec {
         exampleInstance =
             helper.parse(
                """
+               package xxx
                class A {
                     static {
                         ftype Fn >= String >> Integer
                     }
 
                     boolean simpleFunctionalInterface() {
-                        Fn function = this.&some as Fn
-                        Boolean result = function.apply('1') == 1
+                        Fn function = { String x -> x.toInteger() } as Fn
 
-                        return result
-                    }
-
-                    Integer some(String x) {
-                        return 1
+                        return function.apply('1') == 1
                     }
 
                }
