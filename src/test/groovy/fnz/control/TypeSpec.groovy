@@ -21,7 +21,7 @@ class TypeSpec extends AstBaseSpec {
             )
     }
 
-    def 'simple type alias'() {
+    void 'simple type alias'() {
         given: 'a simple inner type example with no generics'
         def exampleClass =
             helper.parse(
@@ -51,5 +51,43 @@ class TypeSpec extends AstBaseSpec {
         expect: 'the method to return true'
         exampleClass.newInstance().simpleFunctionalInterface()
     }
+
+    void 'simple type alias: check imported classes'() {
+        given: 'a simple inner type example with no generics'
+        def exampleClass =
+            helper.parse(
+               """
+               package fnz.samples.type
+
+               import fnz.data.Fn
+               import fnz.data.Maybe
+
+               class A {
+
+                    static {
+                        ftype Fx >= String >> Maybe
+                    }
+
+                    Maybe executeFunction(String number, Fx fx) {
+                         return fx.apply(number)
+                    }
+
+                    boolean simpleFunctionalInterface() {
+                         Maybe<Integer> result = executeFunction('1') { String x ->
+                              Fn.Just(Integer.parseInt(x))
+                         }
+
+                         Fn.val(result) == 1
+                    }
+
+               }
+               """
+            )
+        expect: 'the method to return true'
+        exampleClass.newInstance().simpleFunctionalInterface()
+
+    }
+
+
 
 }
