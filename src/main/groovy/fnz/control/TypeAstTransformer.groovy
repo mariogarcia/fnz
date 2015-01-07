@@ -79,12 +79,11 @@ class TypeAstTransformer extends MethodCallExpressionTransformer implements Opco
     }
 
     private InnerClassNode extractInnerClass(MethodCallExpression methodCallExpression) {
-        String innerClassName = "${modulePackageName}${methodCallExpression.methodTarget.name}"
+        String innerClassName = "${modulePackageName}${methodCallExpression.methodAsString}"
         InnerClassNode innerClassNode = buildInnerClass(innerClassName)
-        List<Expression> args = ((ArgumentListExpression) methodCallExpression.arguments).expressions
-        Closure<GenericsType> toGeneric = { VariableExpression var -> new GenericsType(make(var.name)) }
 
-        innerClassNode.setGenericsTypes(args.collect(toGeneric) as GenericsType[])
+        innerClassNode.setGenericsTypes(extractGenericsFrom(methodCallExpression))
+        innerClassNode.genericsPlaceHolder = true
 
         return innerClassNode
     }
@@ -154,7 +153,26 @@ class TypeAstTransformer extends MethodCallExpressionTransformer implements Opco
     }
 
     private ClassNode extractReturnType(MethodCallExpression methodCallExpression) {
-        return null
+        String principalClassName = methodCallExpression.methodAsString
+
+        ClassNode classNode = resolver.resolve(principalClassName) ?: make(principalClassName)
+        classNode.genericsPlaceHolder = true
+        classNode.genericsTypes = extractGenericsFrom(methodCallExpression)
+
+        return classNode
+    }
+
+    private GenericsType[] extractGenericsFrom(MethodCallExpression methodCallExpression) {
+        ArgumentListExpression args = ((ArgumentListExpression) methodCallExpression.arguments)
+        List<Expression> genericTypes = args.expressions
+
+        return genericTypes.collect { Expression expression ->
+            VariableExpression variableExpression = (VariableExpression) expression
+            new GenericsType(
+                    resolver.resolve(variableExpression.name) ?:
+                            make(variableExpression.name)
+            )
+        } as GenericsType[]
     }
 
     private ClassNode extractReturnType(VariableExpression variableExpression) {

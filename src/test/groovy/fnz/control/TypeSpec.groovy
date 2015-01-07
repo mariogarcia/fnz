@@ -85,9 +85,45 @@ class TypeSpec extends AstBaseSpec {
             )
         expect: 'the method to return true'
         exampleClass.newInstance().simpleFunctionalInterface()
-
     }
 
+    void 'simple generic type'() {
+        given: 'a simple inner type example with no generics'
+        def exampleClass =
+            helper.parse(
+               """
+               package fnz.samples.type
+
+               import fnz.data.Fn
+               import fnz.data.Maybe
+
+               import groovy.transform.CompileStatic
+
+               @CompileStatic
+               class A {
+
+                    static {
+                        ftype Fx(A) >= String >> Maybe(A)
+                    }
+
+                    Maybe<Integer> executeFunction(String number, Fx<Integer> fx) {
+                         return fx.apply(number)
+                    }
+
+                    boolean simpleFunctionalInterface() {
+                         Maybe<Integer> result = executeFunction('1') { String x ->
+                              Fn.Just(Integer.parseInt(x))
+                         }
+
+                         Fn.val(result) == 1
+                    }
+
+               }
+               """
+            )
+        expect: 'the method to return true'
+        exampleClass.newInstance().simpleFunctionalInterface()
+    }
 
 
 }
