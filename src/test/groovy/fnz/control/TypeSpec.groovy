@@ -11,38 +11,45 @@ import org.codehaus.groovy.control.CompilePhase
 
 class TypeSpec extends AstBaseSpec {
 
-    def exampleInstance
+    def helper
 
     def setup() {
-        def helper  =
+        helper  =
             getScriptParser(
                 FnzAst,
                 CompilePhase.CONVERSION
             )
+    }
 
-        exampleInstance =
+    def 'simple type alias'() {
+        given: 'a simple inner type example with no generics'
+        def exampleClass =
             helper.parse(
                """
-               package xxx
+               package fnz.samples.type
+
                class A {
                     static {
                         ftype Fn >= String >> Integer
                     }
 
                     boolean simpleFunctionalInterface() {
-                        Fn function = { String x -> x.toInteger() } as Fn
+                        Integer result = executeFunction('1') { String x ->
+                             x.toInteger()
+                        }
 
-                        return function.apply('1') == 1
+                        return (result == 1)
+                    }
+
+                    Integer executeFunction(String number, Fn fn) {
+                        return fn.apply(number)
                     }
 
                }
                """
-            ).newInstance()
-    }
-
-    def 'simple type alias'() {
-        expect:
-        exampleInstance.simpleFunctionalInterface()
+            )
+        expect: 'the method to return true'
+        exampleClass.newInstance().simpleFunctionalInterface()
     }
 
 }

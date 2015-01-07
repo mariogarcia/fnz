@@ -57,6 +57,10 @@ class TypeAstTransformer extends MethodCallExpressionTransformer implements Opco
         return sourceUnit.AST
     }
 
+    private String getModulePackageName() {
+        return module?.packageName?.with { "$it" } ?: ''
+    }
+
     private Boolean byMainClassName(String mainName, ClassNode classNode) {
         return classNode.name == mainName
     }
@@ -75,7 +79,7 @@ class TypeAstTransformer extends MethodCallExpressionTransformer implements Opco
     }
 
     private InnerClassNode extractInnerClass(MethodCallExpression methodCallExpression) {
-        String innerClassName = "${module.packageName}.${methodCallExpression.methodTarget.name}"
+        String innerClassName = "${modulePackageName}${methodCallExpression.methodTarget.name}"
         InnerClassNode innerClassNode = buildInnerClass(innerClassName)
         List<Expression> args = ((ArgumentListExpression) methodCallExpression.arguments).expressions
         Closure<GenericsType> toGeneric = { VariableExpression var -> new GenericsType(make(var.name)) }
@@ -86,7 +90,7 @@ class TypeAstTransformer extends MethodCallExpressionTransformer implements Opco
     }
 
     private InnerClassNode extractInnerClass(VariableExpression typeInfoExpression) {
-        return buildInnerClass(typeInfoExpression.name)
+        return buildInnerClass("${modulePackageName}${typeInfoExpression.name}")
     }
 
     private InnerClassNode buildInnerClass(String innerClassName) {
