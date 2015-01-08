@@ -1,5 +1,7 @@
 == Data
 
+This chapter will go through some monadic types implementations.
+
 === Maybe
 
 The +Maybe+ is normally used to avoid asking whether the value is null or it

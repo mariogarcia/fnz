@@ -26,6 +26,7 @@ class TypeSpec extends AstBaseSpec {
         def exampleClass =
             helper.parse(
                """
+                // tag::simpleTypeAlias[]
                package fnz.samples.type
 
                class A {
@@ -46,6 +47,7 @@ class TypeSpec extends AstBaseSpec {
                     }
 
                }
+               // end::simpleTypeAlias[]
                """
             )
         expect: 'the method to return true'
@@ -92,6 +94,7 @@ class TypeSpec extends AstBaseSpec {
         def exampleClass =
             helper.parse(
                """
+               // tag::genericsBasicReturnType[]
                package fnz.samples.type
 
                import fnz.data.Fn
@@ -119,6 +122,7 @@ class TypeSpec extends AstBaseSpec {
                     }
 
                }
+              // end::genericsBasicReturnType[]
                """
             )
         expect: 'the method to return true'
