@@ -193,8 +193,8 @@ class TypeAstTransformer extends MethodCallExpressionTransformer implements Opco
     class Resolver {
 
         Function<String,Try> classFor = recover(
-            { String className -> make(Class.forName(className)) },
-            { String className -> null }
+            { String className -> make(Class.forName(className)) } as Function,
+            { String className -> null } as Function
         )
 
         ClassNode resolve(final String name) {
