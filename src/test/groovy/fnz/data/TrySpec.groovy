@@ -46,8 +46,12 @@ class TrySpec extends Specification {
         when: 'you cant always get what you want'
             def someFnChain =
                 recover (
-                    { 0.div(0) }, // WRONG
-                    recover({ new Date() + "1" }, { 0 }) // WORST
+                    { 0.div(0) } as Function, // WRONG
+                    recover(
+                        { new Date() + "1" } as Function,
+                        { throw new Exception("Something bad") } as Function,
+                        { 0 } as Function
+                    ) // WORST
                 )
             def anything = bind(Just(1), someFnChain)
         then: 'you might find you get what you need :P'
@@ -77,8 +81,8 @@ class TrySpec extends Specification {
     def 'classic try catch example RELOADED'() {
         given: 'a list of numbers as strings'
             def numbers = ["1","2a","11","24","4A"]
-            def parse = { item -> Integer.parseInt(item) }
-            def ZERO = { 0 }
+            def parse = { item -> Integer.parseInt(item) } as Function
+            def ZERO = { 0 } as Function
             def addToList = { x -> x ? List(x) : List() }
             def AVG = { list -> list.sum().div(list.size()) }
         when: 'calculating average safely'
@@ -103,9 +107,9 @@ class TrySpec extends Specification {
     def 'classic try catch example MONADIC'() {
         given: 'a list of numbers as strings'
             def numbers = ["1","2a","11","24","4A"]
-            def ZERO = { 0 }
+            def ZERO = { 0 } as Function
             def AVG = { list -> list.sum().div(list.size()) }
-            def parse = { item -> Integer.parseInt(item) }
+            def parse = { item -> Integer.parseInt(item) } as Function
             def addToList = { x -> x ? List(x) : List() }
         when: 'trying to get the average'
             def numberList  =

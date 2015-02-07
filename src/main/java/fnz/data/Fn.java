@@ -43,17 +43,21 @@ public final class Fn {
         };
     }
 
-    public static <A,B,F extends Function<A,B>> Function<A,Try<B>> recover(F fn, F alternative) {
+    public static <A,B,F extends Function<A,B>> Function<A,Try<B>> recover(F fn, F... alternatives) {
         return new Function<A, Try<B>>() {
             public Try<B> apply(A a) {
                  try {
                      return new Try.Success<B>(new Type<B>(fn.apply(a)));
                  } catch(Throwable thOuter) {
-                     try {
-                         return new Try.Success<B>(new Type<B>(alternative.apply(a)));
-                     } catch(Throwable thInner) {
-                         return new Try.Failure<B>(thInner);
+                     Try.Failure<B> failure = null;
+                     for (F alternative : alternatives) {
+                         try {
+                             return new Try.Success<B>(new Type<B>(alternative.apply(a)));
+                         } catch(Throwable thInner) {
+                             failure = new Try.Failure<B>(thInner);
+                         }
                      }
+                     return failure;
                  }
             }
         };
