@@ -26,15 +26,21 @@ class AstBaseSpec extends Specification{
 	}
 
     def getClassToTestForPhase(Class transformationClass, CompilePhase compilePhase) {
-        def invoker =
-            new TransformTestHelper(
-                transformationClass.newInstance(),
-                compilePhase
-		    )
-		def qualifiedName = getClass().name.replaceAll("\\.","\\/")
-		def file = new File("${BASE}${qualifiedName}Example.groovy")
-	 /* The class we want to test */
-		invoker.parse(file)
+        TransformTestHelper invoker =
+            getScriptParser(transformationClass,compilePhase)
+
+        def qualifiedName = getClass().name.replaceAll("\\.","\\/")
+        def file = new File("${BASE}${qualifiedName}Example.groovy")
+
+        /* The class we want to test */
+        return invoker.parse(file)
+    }
+
+    TransformTestHelper getScriptParser(Class transformationClass, CompilePhase compilePhase) {
+        return new TransformTestHelper(
+            transformationClass.newInstance(),
+            compilePhase
+        )
     }
 
 }

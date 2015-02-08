@@ -1,13 +1,11 @@
 package fnz.control
 
-import static org.codehaus.groovy.ast.tools.GeneralUtils.*
-
 import org.codehaus.groovy.ast.ASTNode
 import org.codehaus.groovy.ast.ClassNode
-import org.codehaus.groovy.control.SourceUnit
 import org.codehaus.groovy.control.CompilePhase
-import org.codehaus.groovy.transform.GroovyASTTransformation
+import org.codehaus.groovy.control.SourceUnit
 import org.codehaus.groovy.transform.AbstractASTTransformation
+import org.codehaus.groovy.transform.GroovyASTTransformation
 
 /**
  * This AST applies all transformations available in FNZ.
@@ -19,10 +17,13 @@ import org.codehaus.groovy.transform.AbstractASTTransformation
 class FnzAst extends AbstractASTTransformation {
 
     void visit(ASTNode[] nodes, SourceUnit sourceUnit) {
-         sourceUnit.AST.classes.each { ClassNode clazzNode ->
+         List<ClassNode> classNodeList = sourceUnit.AST.classes.collect()
+
+         classNodeList.each { ClassNode clazzNode ->
              new UnlessAstTransformer(sourceUnit).visitClass(clazzNode)
              new LetmAstTransformer(sourceUnit).visitClass(clazzNode)
              new LetAstTransformer(sourceUnit).visitClass(clazzNode)
+             new TypeAstTransformer(sourceUnit).visitClass(clazzNode)
          }
     }
 
