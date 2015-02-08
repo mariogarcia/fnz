@@ -42,14 +42,14 @@ asciidoctor {
 
 
 group = 'fnz'
-version = '1.0.1'
+version = '1.0.2'
 
 publishing {
     publications {
         mavenCustom(MavenPublication) {
             groupId 'fnz'
             artifactId 'fnz'
-            version '1.0.1'
+            version '1.0.2'
 
             from components.java
         }
@@ -66,7 +66,7 @@ bintray {
         name = "fnz"
         repo = "maven"
         version {
-            name = "1.0.0"
+            name = "1.0.2"
         }
     }
 
