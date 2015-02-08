@@ -133,6 +133,7 @@ class TypeSpec extends AstBaseSpec {
         given: 'a simple FI with more than one generic involved'
         def exampleClass =
             helper.parse("""
+                // tag::fullGenericsExample[]
                 package fnz.samples.type
 
                 class A {
@@ -160,7 +161,7 @@ class TypeSpec extends AstBaseSpec {
                         result1 == 1 && result2 == '1'
                     }
                 }
-
+                // end::fullGenericsExample[]
             """)
         expect: 'the method to return true'
         exampleClass.newInstance().complexFunctionalInterface()
@@ -170,6 +171,8 @@ class TypeSpec extends AstBaseSpec {
         given: 'a simple FI with more than one generic involved'
         def exampleClass =
             helper.parse("""
+                // tag::fullGenericsWithType[]
+
                 package fnz.samples.type
 
                 import fnz.data.Fn
@@ -192,7 +195,7 @@ class TypeSpec extends AstBaseSpec {
                         result == 1
                     }
                 }
-
+                // end::fullGenericsWithType[]
             """)
         expect: 'the method to return true'
         exampleClass.newInstance().complexFunctionalInterface()

@@ -76,6 +76,41 @@ class OuterClass {
 }
 ----
 
+You first should to declare the name of the type and maybe generic
+types used in the `Functional Inteface` signature as a parameter or as
+return type.
+
+[source,groovy]
+----
+InterfaceType(A,B)
+----
+
+And then you should declare the signature of the function:
+
+[source,groovy]
+----
+A >> B
+----
+
+In this case it means that we will be having a method like this:
+
+[source,groovy]
+----
+B apply(A a)
+----
+
+So as a whole it will be the same as writing:
+
+[source,groovy]
+----
+interface InterfaceType<A,B> {
+    public B apply(A a)
+}
+----
+
+The parameters and the return type can both use the generic types
+declared by the interface type:
+
 [source, groovy]
 ----
 class OuterClass {
@@ -85,7 +120,23 @@ class OuterClass {
 }
 ----
 
+The following example declares some generic type used at return type:
+
 [source, groovy]
 ----
 include::{testDir}/fnz/control/TypeSpec.groovy[tags=genericsBasicReturnType,indent=0]
+----
+
+Now the example uses generics both as parameter and return type
+
+[source, groovy]
+----
+include::{testDir}/fnz/control/TypeSpec.groovy[tags=fullGenericsExample,indent=0]
+----
+
+And mixing generics with other types:
+
+[source, groovy]
+----
+include::{testDir}/fnz/control/TypeSpec.groovy[tags=fullGenericsWithType,indent=0]
 ----
