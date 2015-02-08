@@ -129,7 +129,7 @@ class TypeSpec extends AstBaseSpec {
         exampleClass.newInstance().simpleFunctionalInterface()
     }
 
-    void 'complex generic type'() {
+    void 'complex generic type 1'() {
         given: 'a simple FI with more than one generic involved'
         def exampleClass =
             helper.parse("""
@@ -158,6 +158,38 @@ class TypeSpec extends AstBaseSpec {
                         }
 
                         result1 == 1 && result2 == '1'
+                    }
+                }
+
+            """)
+        expect: 'the method to return true'
+        exampleClass.newInstance().complexFunctionalInterface()
+    }
+
+        void 'complex generic type 2'() {
+        given: 'a simple FI with more than one generic involved'
+        def exampleClass =
+            helper.parse("""
+                package fnz.samples.type
+
+                import fnz.data.Fn
+                import fnz.data.Maybe
+
+                class A {
+                    static {
+                        ftype Fx(X,Y) >= Maybe(X) >> Y
+                    }
+
+                    Integer executeFunction(String source, Fx<String,Integer> fx) {
+                        fx.apply(Fn.Just(source))
+                    }
+
+                    boolean complexFunctionalInterface() {
+                        Integer result = executeFunction('1') { Maybe<String> x ->
+                            Fn.val(x.fmap { Integer.parseInt(it) })
+                        }
+
+                        result == 1
                     }
                 }
 

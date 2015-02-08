@@ -177,7 +177,14 @@ class TypeAstTransformer extends MethodCallExpressionTransformer implements Opco
     }
 
     private Parameter[] extractParametersFrom(MethodCallExpression methodCallExpression) {
-        return null
+        ClassNode paramType = make(methodCallExpression.methodAsString)
+        GenericsType[] paramGenerics = extractGenericsFrom(methodCallExpression)
+
+        paramType.genericsTypes = paramGenerics
+
+        return params(
+            param(paramType, 'input')
+        )
     }
 
     private Parameter[] extractParametersFrom(VariableExpression variableExpression) {
