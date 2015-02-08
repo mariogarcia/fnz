@@ -26,8 +26,6 @@ class TypeAstTransformer extends MethodCallExpressionTransformer implements Opco
     static final String FI_FUNCTION_NAME = 'apply'
     static final Expression MEANING_OF_LIFE = constX(42)
 
-    private Resolver resolver = new Resolver()
-
     TypeAstTransformer(SourceUnit sourceUnit) {
         super(sourceUnit, TYPE_METHOD_NAME)
     }
@@ -155,7 +153,7 @@ class TypeAstTransformer extends MethodCallExpressionTransformer implements Opco
     private ClassNode extractReturnType(MethodCallExpression methodCallExpression) {
         String principalClassName = methodCallExpression.methodAsString
 
-        ClassNode classNode = resolver.resolve(principalClassName) ?: make(principalClassName)
+        ClassNode classNode = make(principalClassName)
         classNode.genericsPlaceHolder = true
         classNode.genericsTypes = extractGenericsFrom(methodCallExpression)
 
@@ -169,14 +167,13 @@ class TypeAstTransformer extends MethodCallExpressionTransformer implements Opco
         return genericTypes.collect { Expression expression ->
             VariableExpression variableExpression = (VariableExpression) expression
             new GenericsType(
-                    resolver.resolve(variableExpression.name) ?:
-                            make(variableExpression.name)
+                    make(variableExpression.name)
             )
         } as GenericsType[]
     }
 
     private ClassNode extractReturnType(VariableExpression variableExpression) {
-        return resolver.resolve(variableExpression.name)
+        return make(variableExpression.name)
     }
 
     private Parameter[] extractParametersFrom(MethodCallExpression methodCallExpression) {
@@ -185,24 +182,8 @@ class TypeAstTransformer extends MethodCallExpressionTransformer implements Opco
 
     private Parameter[] extractParametersFrom(VariableExpression variableExpression) {
         return params(
-            param(resolver.resolve(variableExpression.name), 'input')
+            param(make(variableExpression.name), 'input')
         )
-    }
-
-    @CompileDynamic
-    class Resolver {
-
-        Function<String,Try> classFor = recover(
-            { String className -> make(Class.forName(className)) } as Function,
-            { String className -> null } as Function
-        )
-
-        ClassNode resolve(final String name) {
-            return DEFAULT_IMPORTS.findResult { pkg ->
-                val(Just("$pkg$name").bind(classFor))
-            }
-        }
-
     }
 
 }

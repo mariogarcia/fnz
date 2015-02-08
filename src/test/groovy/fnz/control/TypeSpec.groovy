@@ -90,7 +90,7 @@ class TypeSpec extends AstBaseSpec {
     }
 
     void 'simple generic type'() {
-        given: 'a simple inner type example with no generics'
+        given: 'a simple inner type example with one generic type'
         def exampleClass =
             helper.parse(
                """
@@ -106,7 +106,7 @@ class TypeSpec extends AstBaseSpec {
                class A {
 
                     static {
-                        ftype Fx(A) >= String >> Maybe(A)
+                        ftype Fx(X) >= String >> Maybe(X)
                     }
 
                     Maybe<Integer> executeFunction(String number, Fx<Integer> fx) {
@@ -129,5 +129,41 @@ class TypeSpec extends AstBaseSpec {
         exampleClass.newInstance().simpleFunctionalInterface()
     }
 
+    void 'complex generic type'() {
+        given: 'a simple FI with more than one generic involved'
+        def exampleClass =
+            helper.parse("""
+                package fnz.samples.type
+
+                class A {
+                    static {
+                        ftype Fx(X,Y) >= X >> Y
+                    }
+
+                    Integer executeFunction(String source, Fx<String,Integer> fx) {
+                        fx.apply(source)
+                    }
+
+                    String executeAnotherFunction(Integer source, Fx<Integer,String> fx) {
+                        fx.apply(source)
+                    }
+
+                    boolean complexFunctionalInterface() {
+                        Integer result1 = executeFunction('1') { String x ->
+                            Integer.parseInt(x)
+                        }
+
+                        String result2 = executeAnotherFunction(1) { Integer x ->
+                            x.toString()
+                        }
+
+                        result1 == 1 && result2 == '1'
+                    }
+                }
+
+            """)
+        expect: 'the method to return true'
+        exampleClass.newInstance().complexFunctionalInterface()
+    }
 
 }
