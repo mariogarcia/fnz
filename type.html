@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.0">
-<title>Functional Abstractions</title>
+<title>Types</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic|Noto+Serif:400,400italic,700,700italic|Droid+Sans+Mono:400">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -418,12 +418,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_functional_abstractions">Functional Abstractions</a>
+<li><a href="#_types">Types</a>
 <ul class="sectlevel2">
-<li><a href="#_introduction">Introduction</a></li>
-<li><a href="#_functor">Functor</a></li>
-<li><a href="#_applicative_functor">Applicative Functor</a></li>
-<li><a href="#_monad">Monad</a></li>
+<li><a href="#_ftype">ftype</a></li>
 </ul>
 </li>
 </ul>
@@ -431,445 +428,169 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_functional_abstractions">Functional Abstractions</h2>
+<h2 id="_types">Types</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="_introduction">Introduction</h3>
 <div class="paragraph">
-<p>Category Theory is a huge topic not related <strong>per se</strong> to programming, but
-nowadays is the basis of what functional programming has become today.</p>
-</div>
-<div class="paragraph">
-<p>In this chapter I&#8217;ll try to explain and give examples of some terms
-taken from Category Theory and why they could be useful to us as programmers
-in our daily work.</p>
-</div>
-<div class="paragraph">
-<p>Many of the examples are based on Haskell programming language.
-As a pure functional language is the best place if you want to learn
-the basis of functional programming, and also because there aren&#8217;t
-much documentation out there other than Haskell. Here you have
-my two cents :)</p>
-</div>
-<div class="paragraph">
-<p>I&#8217;m aware that terms like Functor, Monad&#8230;&#8203;etc seem to be something
-strange, odd, difficult for most of the programmers born in the OOP era
-(including myself by the way).</p>
-</div>
-<div class="paragraph">
-<p>I know it&#8217;s difficult&#8230;&#8203; bad news: it becomes harder along the way, good news
-&#8230;&#8203; there is no good news. I&#8217;m jocking good news is that the more you
-learn about Category Theory applied to functional programming the more
-you understand how to use functional programming at work&#8230;&#8203; but stop!
-it&#8217;s about time&#8230;&#8203; <strong>LETS DO THIS</strong></p>
-</div>
+<p>This chapter has to do with other ways of creating/using/extending types with Groovy.</p>
 </div>
 <div class="sect2">
-<h3 id="_functor">Functor</h3>
+<h3 id="_ftype">ftype</h3>
+<div class="quoteblock">
+<blockquote>
 <div class="paragraph">
-<p>In Category Theory a Functor is a mapping between categories&#8230;&#8203;WHaAaAAAaaTT?? O_o</p>
+<p>A functional interface is an interface that has just one abstract method (aside from the methods of Object), and thus represents a single function contract</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Java(TM) spec
+</div>
 </div>
 <div class="paragraph">
-<p>A Functor represents a container/wrapper of some sort, along with the ability
-to apply a function to elements wrapped in the container.</p>
+<p><strong>ftype</strong> allows you to declare and create a <a href="http://docs.oracle.com/javase/specs/jls/se8/html/jls-9.html#jls-9.8"><strong>functional interface</strong></a>
+in one line without the verbosity of having to write a full Java interface.</p>
 </div>
 <div class="paragraph">
-<p>Ok, so a Functor is like a container, like a box. It contains a value.
-That value can be transformed by functions applied to the container,
-not to the value directly.</p>
-</div>
-<div class="paragraph">
-<p>The formal definition of a Functor in Haskell is:</p>
+<p>Normally if you wanted to create a <strong>functional interface</strong> and use it you should be doing something
+like this:</p>
 </div>
 <div class="listingblock">
-<div class="title">Functor definition</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-haskell" data-lang="haskell">class Functor f where
-    fmap :: (a -&gt; b) -&gt; f a -&gt; f b</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class A {
+
+    interface Fx {
+        Integer apply(String word)
+    }
+
+    Integer applyFunction(String word, Fx function) {
+        return function.apply(word)
+    }
+
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>What does it mean ? Well it means that in order to build a new instance of a
-Functor type the type should implement a fmap method.</p>
+<p>With <strong>ftype</strong> you can create in one line the same interface:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in type.ad - include::{testDir}/fnz/control/TypeSpec.groovy[tags=simpleTypeAlias,indent=0]</code></pre>
+</div>
 </div>
 <div class="paragraph">
-<p>The fmap method receives a function (a -&gt; b) which transforms an object
-of type a in another object of type b, it also receives a Functor of type a
-and finally returns a functor of type b.</p>
-</div>
-<div class="paragraph">
-<p>How could we implement this ?</p>
+<p>In general the use cases are:</p>
 </div>
 <div class="sect3">
-<h4 id="_example">Example</h4>
+<h4 id="_simple_types">Simple types</h4>
 <div class="listingblock">
-<div class="title">Functor (Java)</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Unresolved directive in data_theory.ad - include::{sourceDirJava}/fnz/data/Functor.java[indent=0]</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class OuterClass {
+    static {
+        InterfaceType &gt;= ParameterType &gt;&gt; ReturnType
+    }
+}</code></pre>
 </div>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Some of the interfaces or classes shown here are implemented in plain
-Java&#8482;. I&#8217;m planning to migrate them to Groovy 2.3+ with @CompileStatic any time
-soon.
-</td>
-</tr>
-</table>
 </div>
 <div class="paragraph">
-<p>So basically a functor allows us to transform the contained value applying a function.
-There&#8217;re some differences between the Java&#8482; implementation and the Haskell one.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>(a-&gt;b) becomes Function&lt;A,B&gt;</p>
-</li>
-<li>
-<p>fa parameter will be the instance of the functor itself</p>
-</li>
-<li>
-<p>fb becomes Functor&lt;B&gt;</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Now imagine we had a function adding 3 to any number. In Haskell we would be seeing this:</p>
+<p>Of course you can declare as many interfaces as you want:</p>
 </div>
 <div class="listingblock">
-<div class="title">Haskell example</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-haskell" data-lang="haskell">fmap (+3) (Just 1)</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>I&#8217;ll try to reproduce the same behavior, this time with Groovy :) We will be following
-these steps:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>We need a function receiving a number and returning a number (a-&gt;b)</p>
-</li>
-<li>
-<p>Then the functor will receive the function and will know how to unwrap the
-value and after applying the function how to wrap it again.</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_function_a_b">Function (a&#8594;b)</h4>
-<div class="paragraph">
-<p>A function represents a transformation applied to a given input, giving
-a certain result.</p>
-</div>
-<div class="paragraph">
-<p>We need a function adding 3 to any given number. Here is a simple java interface
-defining a function:</p>
-</div>
-<div class="listingblock">
-<div class="title">Function (Java)</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Unresolved directive in data_theory.ad - include::{sourceDirJava}/fnz/data/Function.java[indent=0]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Because this interface is in fact a functional interface, it could be
-substituted by a Closure expression. So instead of building a new class or
-building a verbose inner class implementation we will be using a closure
-to define a new implementation of the <strong>Function</strong> interface.</p>
-</div>
-<div class="listingblock">
-<div class="title">Function&lt;Integer,Integer&gt;</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data_theory.ad - include::{testDir}/fnz/data/FunctionSpec.groovy[tags=function1,indent=0]</code></pre>
-</div>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Be aware that because closures only declare the return type you should add
-the type to the closure parameter if you care about input type.
-</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_functor_a">Functor&lt;A&gt;</h4>
-<div class="paragraph">
-<p>Well now we need an instance of a functor of type <strong>A</strong>, pass to the functor
-our previously created function and expect to receive a certain value with
-a certain type.</p>
-</div>
-<div class="listingblock">
-<div class="title">Functor&lt;Integer&gt;</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data_theory.ad - include::{testDir}/fnz/data/FunctorSpec.groovy[tags=functorspec1,indent=0]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Ok but how Maybe.Just gets something and transform it to another functor. Lets see
-what the fmap implementation does:</p>
-</div>
-<div class="listingblock">
-<div class="title">Maybe Functor#fmap implementation</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Unresolved directive in data_theory.ad - include::{sourceDirJava}/fnz/data/Maybe.java[tags=functorspec2,indent=0]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>First I&#8217;ll try to describe which types are involved:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>JUST is the value contained by the Maybe instance (which among other things is a functor).</p>
-</li>
-<li>
-<p>&lt;B&gt; is the type of the function applied. Then
-the Maybe implementation wraps that value into another instance of a functor
-(this time another Just instance).</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Basically here the fmap method takes as an argument a function transforming
-the contained value in the source functor and then wraps it again in another
-functor instance.</p>
-</div>
-<div class="paragraph">
-<p>By the way, althought <strong>fmap</strong> is implemented in <strong>Functor</strong> in languages
-like Haskell, you won&#8217;t see <strong>fmap</strong> being invoked like "myObject.fmap(&#8230;&#8203;)" but instead
-you will find something like <strong>fmap(functor, function)</strong></p>
-</div>
-<div class="paragraph">
-<p>In the source code you will see that there&#8217;re several methods adding
-some syntactic sugar to inner functors/applicative/monads methods mimicking the way
-Haskell does it.</p>
-</div>
-<div class="listingblock">
-<div class="title">Public API</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data_theory.ad - include::{testDir}/fnz/data/FunctorSpec.groovy[tags=publicapimethods,indent=0]</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">Functor&lt;Integer&gt;</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data_theory.ad - include::{testDir}/fnz/data/FunctorSpec.groovy[tags=functorspec3,indent=0]</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class A {
+    static {
+        ftype Fa &gt;= String &gt;&gt; Integer
+        ftype Fb &gt;= String &gt;&gt; String
+        ftype Fb &gt;= String &gt;&gt; Date
+    }
+}</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_plain_groovy">Plain Groovy</h4>
+<h4 id="_using_generics">Using generics</h4>
 <div class="paragraph">
-<p>Well under the hood many of the methods added to the Groovy API (api, gapi, gdk) resemble
-monadic behaviors. For example there is the <strong>with</strong> method all Groovy objects have. Although
-it could be seen more like a <strong>bind</strong> action (we&#8217;ll cover it later on) we can create a lighter
-version of <strong>fmap</strong> with this <strong>with</strong>.</p>
-</div>
-<div class="listingblock">
-<div class="title">Groovy map</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data_theory.ad - include::{testDir}/fnz/data/FunctorSpec.groovy[tags=groovyfunctormockery,indent=0]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>As we&#8217;ll see later on, many monadic estructures don&#8217;t execute functions when they detect
-something went wrong, or the type at a hand means nothing can be executed (a Maybe.Nothing ,
-Either.Left value, or a Try.Failure values could be an example for that)</p>
-</div>
-<div class="paragraph">
-<p>This <strong>with</strong> on steroids executes the closure (function) passed as parameter when
-the value exists (and represents a Groovy truth of couse ;) ). Notice was achieved
-by using the <strong>safe</strong> operator from Groovy (foo?.unsafeMethod()).</p>
-</div>
-<div class="listingblock">
-<div class="title">Groovy map</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data_theory.ad - include::{testDir}/fnz/data/FunctorSpec.groovy[tags=groovyfunctor,indent=0]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>And I can&#8217;t finish this section without talking about <strong>collect</strong>.
-<a href="http://groovy.codehaus.org/groovy-jdk/java/util/Collection.html#collect(groovy.lang.Closure)"><strong>Collect</strong></a>
-is the closest version of fmap I can think about within Groovy. Collect transforms each item in a collection
-into something else.</p>
-</div>
-<div class="paragraph">
-<p>Same way our <strong>map</strong> method was safe so is <strong>collect</strong>.</p>
-</div>
-<div class="listingblock">
-<div class="title">Groovy collect</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data_theory.ad - include::{testDir}/fnz/data/FunctorSpec.groovy[tags=collect,indent=0]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>So&#8230;&#8203; why don&#8217;t we make a better world and use both ideas combined ?</p>
-</div>
-<div class="listingblock">
-<div class="title">Groovy collect</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data_theory.ad - include::{testDir}/fnz/data/FunctorSpec.groovy[tags=collectandmap,indent=0]</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_applicative_functor">Applicative Functor</h3>
-<div class="paragraph">
-<p>Remember I was saying a Functor is a container, a box if you like, containing
-a simple value ? You can think about Applicative like a Functor containing
-a Function. This time the box contains a Function.</p>
-</div>
-<div class="paragraph">
-<p>Why then the name of Applicative ? I&#8217;m not quite sure, but
-I think it came from the idea that a function <strong>can be applied</strong>
-to some other values.</p>
-</div>
-<div class="paragraph">
-<p>In Haskell:</p>
+<p>You can also use generics:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-haskell" data-lang="haskell">(&lt;*&gt;) :: Applicative f =&gt; f (a-&gt;b) -&gt; (f a -&gt; f b)</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class OuterClass {
+    static {
+        InterfaceType(A,B) &gt;= A &gt;&gt; B
+    }
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>This time instead of containing a plain value the functor has a function. So
-we can read the Haskell function as a function receiving an applicative f (a-&gt;b) (a
-functor containing a function transforming from a to b) and returns the
-transformation from a functor containing a to a functor containing b (f a -&gt; f b).</p>
-</div>
-<div class="sect3">
-<h4 id="_example_2">Example</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Unresolved directive in data_theory.ad - include::{sourceDirJava}/fnz/data/Applicative.java[indent=0]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>We have included in our Java&#8482; version a way of accessing the inner value
-forcing any Applicative to implement the getValue() method.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Instead of getValue returning a raw value I&#8217;ve implemented getTypedRef which
-returns a wrapper having the raw instance.
-I did it becauseI didn&#8217;t found a solution to resolve the problem of having the ListMonad sharing
-the same interface with Monads sharing single values and still respecting the
-fmap, fapply and bind methods. I&#8217;m not perfect so I will be very happy if
-someone gives me a better solution :)
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>But the  most important method is fapply which in in charge of receiving another
-applicative and use the value of that applicative and apply it to the inner value
-of the instance of the source applicative.</p>
-</div>
-<div class="paragraph">
-<p>Lets take a look to the implementation of the fapply method in the
-Maybe.Right class we can see how it works.</p>
+<p>You first should to declare the name of the type and maybe generic
+types used in the <code>Functional Inteface</code> signature as a parameter or as
+return type.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Unresolved directive in data_theory.ad - include::{sourceDirJava}/fnz/data/Maybe.java[tags=fapply,indent=0]</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">InterfaceType(A,B)</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>How can we use it ?</p>
-</div>
-<div class="paragraph">
-<p>In this example I&#8217;m using implementations of Maybe. This implementation is not
-only an Applicative but a Functor (which is implied) and a Monad. Instead
-of creating object with new operator every object has a static method to do it.</p>
+<p>And then you should declare the signature of the function:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data_theory.ad - include::{testDir}/fnz/data/MaybeSpec.groovy[tags=imports,indent=0]</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">A &gt;&gt; B</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>This is the example:</p>
+<p>In this case it means that we will be having a method like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data_theory.ad - include::{testDir}/fnz/data/MaybeSpec.groovy[tags=fapplyspec,indent=0]</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">B apply(A a)</code></pre>
 </div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>The implementation of the Maybe.Nothing fapply method doesn&#8217;t apply the
-function to the current instance and returns  an instance of new Nothing(null)</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>The implementation of the Maybe.Just fapply method applies current value
-to the function contained within the Applicative passed as parameter.</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_monad">Monad</h3>
-<div class="paragraph">
-<p>What is a Monad ?</p>
 </div>
 <div class="paragraph">
-<p>While Functor applied a function to a wrapped value, and an Applicative
-applied a wrapped function to a wrapped value, a Monad applies a function
-to a wrapped value and returns a wrapped value.</p>
-</div>
-<div class="paragraph">
-<p>Because Monad is an Applicative and an Applicative is a Functor, likewise
-a Monad has some inherit methods such as fmap or  fapply. But the method
-that makes a Monad a Monad is the bind method (or &gt;&gt;= which is its alias
-in Haskell).</p>
-</div>
-<div class="paragraph">
-<p>How does bind looks like ? Like always , first step, Haskell syntax:</p>
+<p>So as a whole it will be the same as writing:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-haskell" data-lang="haskell">class Monad m where
-    (&gt;&gt;=) :: m a -&gt; (a -&gt; m b) -&gt; m b</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">interface InterfaceType&lt;A,B&gt; {
+    public B apply(A a)
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>A bind method receives a wrapped value m a then a function (a -&gt; m b) which
-transforms the wrapped value to another wrapped value, and finally returns the
-transformation result m b.</p>
-</div>
-<div class="paragraph">
-<p>In my humble representation of a Monad type in Java&#8482; I came up with the
-following code:</p>
+<p>The parameters and the return type can both use the generic types
+declared by the interface type:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Unresolved directive in data_theory.ad - include::{sourceDirJava}/fnz/data/Monad.java[indent=0]</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class OuterClass {
+    static {
+        InterfaceType(A,B) &gt;= ParameterType(A) &gt;&gt; ReturnType(B)
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following example declares some generic type used at return type:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in type.ad - include::{testDir}/fnz/control/TypeSpec.groovy[tags=genericsBasicReturnType,indent=0]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now the example uses generics both as parameter and return type</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in type.ad - include::{testDir}/fnz/control/TypeSpec.groovy[tags=fullGenericsExample,indent=0]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And mixing generics with other types:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in type.ad - include::{testDir}/fnz/control/TypeSpec.groovy[tags=fullGenericsWithType,indent=0]</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -878,7 +599,7 @@ following code:</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-02-07 18:27:24 CET
+Last updated 2015-02-08 23:23:34 CET
 </div>
 </div>
 </body>

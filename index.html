@@ -447,21 +447,26 @@ MathJax.Hub.Config({
 <li><a href="#_monad">2.4. Monad</a></li>
 </ul>
 </li>
-<li><a href="#_data">3. Data</a>
+<li><a href="#_types">3. Types</a>
 <ul class="sectlevel2">
-<li><a href="#_maybe">3.1. Maybe</a></li>
-<li><a href="#_fn">3.2. Fn</a></li>
-<li><a href="#_either">3.3. Either</a></li>
-<li><a href="#_listmonad">3.4. ListMonad</a></li>
-<li><a href="#_try">3.5. Try</a></li>
+<li><a href="#_ftype">3.1. ftype</a></li>
 </ul>
 </li>
-<li><a href="#_control_flow">4. Control Flow</a>
+<li><a href="#_data">4. Data</a>
 <ul class="sectlevel2">
-<li><a href="#_let">4.1. Let</a></li>
-<li><a href="#_letm">4.2. Letm</a></li>
-<li><a href="#_unless">4.3. Unless</a></li>
-<li><a href="#_where">4.4. Where</a></li>
+<li><a href="#_maybe">4.1. Maybe</a></li>
+<li><a href="#_fn">4.2. Fn</a></li>
+<li><a href="#_either">4.3. Either</a></li>
+<li><a href="#_listmonad">4.4. ListMonad</a></li>
+<li><a href="#_try">4.5. Try</a></li>
+</ul>
+</li>
+<li><a href="#_control_flow">5. Control Flow</a>
+<ul class="sectlevel2">
+<li><a href="#_let">5.1. Let</a></li>
+<li><a href="#_letm">5.2. Letm</a></li>
+<li><a href="#_unless">5.3. Unless</a></li>
+<li><a href="#_where">5.4. Where</a></li>
 </ul>
 </li>
 </ul>
@@ -1064,10 +1069,274 @@ public interface Monad&lt;A&gt; extends Applicative&lt;A&gt; {
 </div>
 </div>
 <div class="sect1">
-<h2 id="_data">3. Data</h2>
+<h2 id="_types">3. Types</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>This chapter has to do with other ways of creating/using/extending types with Groovy.</p>
+</div>
 <div class="sect2">
-<h3 id="_maybe">3.1. Maybe</h3>
+<h3 id="_ftype">3.1. ftype</h3>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>A functional interface is an interface that has just one abstract method (aside from the methods of Object), and thus represents a single function contract</p>
+</div>
+</blockquote>
+<div class="attribution">
+&#8212; Java(TM) spec
+</div>
+</div>
+<div class="paragraph">
+<p><strong>ftype</strong> allows you to declare and create a <a href="http://docs.oracle.com/javase/specs/jls/se8/html/jls-9.html#jls-9.8"><strong>functional interface</strong></a>
+in one line without the verbosity of having to write a full Java interface.</p>
+</div>
+<div class="paragraph">
+<p>Normally if you wanted to create a <strong>functional interface</strong> and use it you should be doing something
+like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class A {
+
+    interface Fx {
+        Integer apply(String word)
+    }
+
+    Integer applyFunction(String word, Fx function) {
+        return function.apply(word)
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>With <strong>ftype</strong> you can create in one line the same interface:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package fnz.samples.type
+
+class A {
+     static {
+         ftype Fn &gt;= String &gt;&gt; Integer
+     }
+
+     boolean simpleFunctionalInterface() {
+         Integer result = executeFunction('1') { String x -&gt;
+              x.toInteger()
+         }
+
+         return (result == 1)
+     }
+
+     Integer executeFunction(String number, Fn fn) {
+         return fn.apply(number)
+     }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In general the use cases are:</p>
+</div>
+<div class="sect3">
+<h4 id="_simple_types">3.1.1. Simple types</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class OuterClass {
+    static {
+        InterfaceType &gt;= ParameterType &gt;&gt; ReturnType
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Of course you can declare as many interfaces as you want:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class A {
+    static {
+        ftype Fa &gt;= String &gt;&gt; Integer
+        ftype Fb &gt;= String &gt;&gt; String
+        ftype Fb &gt;= String &gt;&gt; Date
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_using_generics">3.1.2. Using generics</h4>
+<div class="paragraph">
+<p>You can also use generics:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class OuterClass {
+    static {
+        InterfaceType(A,B) &gt;= A &gt;&gt; B
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You first should to declare the name of the type and maybe generic
+types used in the <code>Functional Inteface</code> signature as a parameter or as
+return type.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">InterfaceType(A,B)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And then you should declare the signature of the function:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">A &gt;&gt; B</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this case it means that we will be having a method like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">B apply(A a)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>So as a whole it will be the same as writing:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">interface InterfaceType&lt;A,B&gt; {
+    public B apply(A a)
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The parameters and the return type can both use the generic types
+declared by the interface type:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class OuterClass {
+    static {
+        InterfaceType(A,B) &gt;= ParameterType(A) &gt;&gt; ReturnType(B)
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following example declares some generic type used at return type:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package fnz.samples.type
+
+import fnz.data.Fn
+import fnz.data.Maybe
+
+import groovy.transform.CompileStatic
+
+@CompileStatic
+class A {
+
+     static {
+         ftype Fx(X) &gt;= String &gt;&gt; Maybe(X)
+     }
+
+     Maybe&lt;Integer&gt; executeFunction(String number, Fx&lt;Integer&gt; fx) {
+          return fx.apply(number)
+     }
+
+     boolean simpleFunctionalInterface() {
+          Maybe&lt;Integer&gt; result = executeFunction('1') { String x -&gt;
+               Fn.Just(Integer.parseInt(x))
+          }
+
+          Fn.val(result) == 1
+     }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now the example uses generics both as parameter and return type</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package fnz.samples.type
+
+class A {
+    static {
+        ftype Fx(X,Y) &gt;= X &gt;&gt; Y
+    }
+
+    Integer executeFunction(String source, Fx&lt;String,Integer&gt; fx) {
+        fx.apply(source)
+    }
+
+    String executeAnotherFunction(Integer source, Fx&lt;Integer,String&gt; fx) {
+        fx.apply(source)
+    }
+
+    boolean complexFunctionalInterface() {
+        Integer result1 = executeFunction('1') { String x -&gt;
+            Integer.parseInt(x)
+        }
+
+        String result2 = executeAnotherFunction(1) { Integer x -&gt;
+            x.toString()
+        }
+
+        result1 == 1 &amp;&amp; result2 == '1'
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And mixing generics with other types:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package fnz.samples.type
+
+import fnz.data.Fn
+import fnz.data.Maybe
+
+class A {
+    static {
+        ftype Fx(X,Y) &gt;= Maybe(X) &gt;&gt; Y
+    }
+
+    Integer executeFunction(String source, Fx&lt;String,Integer&gt; fx) {
+        fx.apply(Fn.Just(source))
+    }
+
+    boolean complexFunctionalInterface() {
+        Integer result = executeFunction('1') { Maybe&lt;String&gt; x -&gt;
+            Fn.val(x.fmap { Integer.parseInt(it) })
+        }
+
+        result == 1
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_data">4. Data</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This chapter will go through some monadic types implementations.</p>
+</div>
+<div class="sect2">
+<h3 id="_maybe">4.1. Maybe</h3>
 <div class="paragraph">
 <p>The Maybe is normally used to avoid asking whether the value is null or it
 can contain any value. That&#8217;s why the Maybe object has two children:
@@ -1217,7 +1486,7 @@ something ( a transformation for example) with the current inner value.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_fn">3.2. Fn</h3>
+<h3 id="_fn">4.2. Fn</h3>
 <div class="paragraph">
 <p><strong>fnz.data.Fn</strong> is a class that can be used as a shorcut for all data structures
 explained in this chapter. Depending on the style of your code you could be
@@ -1278,7 +1547,7 @@ import static Fn.bind</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_either">3.3. Either</h3>
+<h3 id="_either">4.3. Either</h3>
 <div class="paragraph">
 <p>Either monad is also one of the classics. The Either monad instance can
 represent correct or error.</p>
@@ -1364,7 +1633,7 @@ return immediately.</td>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_listmonad">3.4. ListMonad</h3>
+<h3 id="_listmonad">4.4. ListMonad</h3>
 <div class="paragraph">
 <p>Collections in general are one of the most used data structures ever.
 Some languages use collections only as data structures and some others make
@@ -1398,7 +1667,7 @@ did before, lets sneak a little bit on how <strong>Haskell</strong> does it ;)</
 </div>
 </div>
 <div class="sect2">
-<h3 id="_try">3.5. Try</h3>
+<h3 id="_try">4.5. Try</h3>
 <div class="paragraph">
 <p>Nowadays JVM languages deal with exceptions using <strong>try-catch</strong> blocks. The
 problem is that these constructions force programmers to build their code in
@@ -1513,8 +1782,12 @@ possible <strong>Failure</strong> instance, and the <strong>Success</strong> ins
     when: 'you cant always get what you want'
         def someFnChain =
             recover (
-                { 0.div(0) }, // WRONG
-                recover({ new Date() + "1" }, { 0 }) // WORST
+                { 0.div(0) } as Function, // WRONG
+                recover(
+                    { new Date() + "1" } as Function,
+                    { throw new Exception("Something bad") } as Function,
+                    { 0 } as Function
+                ) // WORST
             )
         def anything = bind(Just(1), someFnChain)
     then: 'you might find you get what you need :P'
@@ -1539,7 +1812,7 @@ alternatives.
 </div>
 </div>
 <div class="sect1">
-<h2 id="_control_flow">4. Control Flow</h2>
+<h2 id="_control_flow">5. Control Flow</h2>
 <div class="sectionbody">
 <div class="quoteblock">
 <blockquote>
@@ -1567,7 +1840,7 @@ in some other programming languages.</p>
 <p>Let&#8217;s go through them.</p>
 </div>
 <div class="sect2">
-<h3 id="_let">4.1. Let</h3>
+<h3 id="_let">5.1. Let</h3>
 <div class="paragraph">
 <p>Initializes a group of variables, makes them available within the scope
 of the closure passed as argument.</p>
@@ -1625,7 +1898,7 @@ see the following example:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_letm">4.2. Letm</h3>
+<h3 id="_letm">5.2. Letm</h3>
 <div class="paragraph">
 <p><strong>letm</strong> works the same way <strong>let</strong> does but it has one constraint, the deepest expression should always
 return an instance of a <strong>fnz.data.Monad</strong>. Why is that ?</p>
@@ -1687,7 +1960,7 @@ using <strong>Try</strong>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_unless">4.3. Unless</h3>
+<h3 id="_unless">5.3. Unless</h3>
 <div class="paragraph">
 <p>The rationale behind <strong>Unless</strong> is that sometimes is just a pain to create <strong>negative</strong>
 conditional expressions.</p>
@@ -1712,7 +1985,7 @@ evaluates to true.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_where">4.4. Where</h3>
+<h3 id="_where">5.4. Where</h3>
 <div class="paragraph">
 <p>I would say <strong>Where</strong> control belongs to the family of <strong>switch statements</strong> or <strong>multiway branches</strong>.
 I first read about the <strong>Where</strong> clause while I was reading Haskell.</p>
@@ -1854,7 +2127,7 @@ conditions are the same you would be using in a switch-case block in Groovy.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-12-31 12:58:02 CET
+Last updated 2015-02-08 23:23:34 CET
 </div>
 </div>
 </body>
