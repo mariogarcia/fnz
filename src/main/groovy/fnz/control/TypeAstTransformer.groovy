@@ -24,6 +24,7 @@ class TypeAstTransformer extends MethodCallExpressionTransformer implements Opco
 
     static final String TYPE_METHOD_NAME = 'ftype'
     static final String FI_FUNCTION_NAME = 'apply'
+    static final String FI_FUNCTION_PARAM_NAME = 'input'
     static final Expression MEANING_OF_LIFE = constX(42)
 
     TypeAstTransformer(SourceUnit sourceUnit) {
@@ -151,6 +152,26 @@ class TypeAstTransformer extends MethodCallExpressionTransformer implements Opco
     }
 
     private ClassNode extractReturnType(MethodCallExpression methodCallExpression) {
+        return extractTypeFrom(methodCallExpression)
+    }
+
+    private ClassNode extractReturnType(VariableExpression variableExpression) {
+        return make(variableExpression.name)
+    }
+
+    private Parameter[] extractParametersFrom(MethodCallExpression methodCallExpression) {
+        return params(
+            param(extractTypeFrom(methodCallExpression), FI_FUNCTION_PARAM_NAME)
+        )
+    }
+
+    private Parameter[] extractParametersFrom(VariableExpression variableExpression) {
+        return params(
+            param(make(variableExpression.name), FI_FUNCTION_PARAM_NAME)
+        )
+    }
+
+    private ClassNode extractTypeFrom(MethodCallExpression methodCallExpression) {
         String principalClassName = methodCallExpression.methodAsString
 
         ClassNode classNode = make(principalClassName)
@@ -163,34 +184,14 @@ class TypeAstTransformer extends MethodCallExpressionTransformer implements Opco
     private GenericsType[] extractGenericsFrom(MethodCallExpression methodCallExpression) {
         ArgumentListExpression args = ((ArgumentListExpression) methodCallExpression.arguments)
         List<Expression> genericTypes = args.expressions
+        GenericsType[] genericsArray =
+            genericTypes.collect(this.&extractGenericsTypeFrom) as GenericsType[]
 
-        return genericTypes.collect { Expression expression ->
-            VariableExpression variableExpression = (VariableExpression) expression
-            new GenericsType(
-                    make(variableExpression.name)
-            )
-        } as GenericsType[]
+        return genericsArray
     }
 
-    private ClassNode extractReturnType(VariableExpression variableExpression) {
-        return make(variableExpression.name)
-    }
-
-    private Parameter[] extractParametersFrom(MethodCallExpression methodCallExpression) {
-        ClassNode paramType = make(methodCallExpression.methodAsString)
-        GenericsType[] paramGenerics = extractGenericsFrom(methodCallExpression)
-
-        paramType.genericsTypes = paramGenerics
-
-        return params(
-            param(paramType, 'input')
-        )
-    }
-
-    private Parameter[] extractParametersFrom(VariableExpression variableExpression) {
-        return params(
-            param(make(variableExpression.name), 'input')
-        )
+    private GenericsType extractGenericsTypeFrom(VariableExpression variableExpression) {
+        return new GenericsType(make(variableExpression.name))
     }
 
 }
