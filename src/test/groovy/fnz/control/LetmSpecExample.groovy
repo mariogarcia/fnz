@@ -13,14 +13,14 @@ import static fnz.data.Fn.bind
 class LetmSpecExample {
 
     Maybe<Integer> simpleLetmExpression() {
-        return letm(a: 10, b: 20, c: { a + b }) {
+        return letm(a: Just(10), b: Just(20), c: { Just(a + b) }) {
             Just(c)
         }
     }
 
     Maybe<Integer> nestingLetms() {
-        letm(a: 10, b: 20) {
-            letm(d: 6, e: { d + 1 }) {
+        letm(a: Just(10), b: Just(20)) {
+            letm(d: Just(6), e: { Just(d + 1) }) {
                 def result = a + b + d + e
                 Just(result)
             }
@@ -29,17 +29,17 @@ class LetmSpecExample {
 
     // tag::workingWithOtherMonads[]
     Either<Integer> workingWithOtherMonads(final Integer first, final Integer second) {
-        return letm(x: first, y: second) {
-            Integer result = x + y
-
-            result == 3 ? Right(x + y) : Left()
+        return letm(x: Just(first), y: Just(second)) {
+            letm(result: { Just(first + second) }) {
+                result == 3 ? Right(result) : Left()
+            }
         }
     }
     // end::workingWithOtherMonads[]
 
     // tag::combineWithTry[]
     Try<Integer> combineWithTry(Integer first, Integer second) {
-        letm(x: first, y: second) {
+        letm(x: Just(first), y: Just(second)) {
             bind(Just(second), wrap(this.&dangerousMethod.curry(first)))
         }
     }

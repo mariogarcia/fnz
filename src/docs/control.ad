@@ -57,40 +57,42 @@ Previous link:https://code.google.com/p/spock[Spock] specification shows how let
 
 === Letm
 
-*letm* works the same way *let* does but it has one constraint, the deepest expression should always
-return an instance of a *fnz.data.Monad*. Why is that ?
+`letm` works the same way `let` does but instead of handling plain
+values it works with monadic values and eventually will return an
+instance of type `fnz.data.Monad`. Why is that ?
 
-Well *letm* is meant to work with monad expressions. So when you're seeing this:
+Well `letm` is meant to work with monad expressions. So when you're
+seeing this:
 
 [source, groovy]
 ----
-letm(x:1, y: { x + 1}) {
+letm(x: Just(1), y: { Just(x+1) } ) {
     Just(y)
 }
 ----
 
-Underneath the expression is transformed to:
+Under the hood the expression will be transformed to:
 
 [source, groovy]
 ----
 bind(Just(1)) { x ->
-  bind(Just({x +1}())) { y ->
+  bind({ Just(x+1) }())) { y ->
      Just(y)
   }
 }
 ----
 
-This way you can play with other flavors of monads. Imagine you want to combine
-let with the *Either* monad.
+This way you can play with other flavors of monads. Imagine you want
+to combine let with the `Either` monad.
 
 [source, groovy]
 ----
 include::{testdir}/fnz/control/LetmSpecExample.groovy[tags=workingWithOtherMonads]
 ----
 
-You can also combine it with the *Try* monad. This time there's a method you
-want to use, but it could throw some exceptions, you want to handle that possibility
-using *Try*.
+You can also combine it with the `Try` monad. This time there's a
+method you want to use, but it could throw some exceptions, you want
+to handle that possibility using `Try`.
 
 [source, groovy]
 ----
