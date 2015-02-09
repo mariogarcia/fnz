@@ -16,14 +16,14 @@ import static org.codehaus.groovy.ast.tools.GeneralUtils.*
  *
  * This transformer will transform expressions like this one:
  * <pre>
- * letm(x:1, y: { x + 1}) {
+ * letm(x:Just(1), y: { Just(x + 1) } ) {
  *     Just(y + 1)
  * }
  * </pre>
  * into this one:
  * <pre>
  * bind(Just(1)) { x ->
- *    bind(Just({x + 1}())) { y ->
+ *    bind({ Just(x + 1) }()) { y ->
  *        Just(y + 1)
  *    }
  * }
@@ -40,7 +40,6 @@ class LetmAstTransformer extends MethodCallExpressionTransformer {
 
     static final String LET_METHOD_NAME = 'letm'
     static final String BIND_METHOD_NAME = 'bind'
-    static final String JUST_METHOD_NAME = 'Just'
     static final String DO_CALL_METHOD_NAME = 'doCall'
 
     LetmAstTransformer(SourceUnit sourceUnit) {
@@ -87,12 +86,8 @@ class LetmAstTransformer extends MethodCallExpressionTransformer {
 
     private StaticMethodCallExpression buildBindExpression(final Expression value, final ClosureExpression closureWithKey) {
         return value instanceof ClosureExpression ?
-        callX(make(Fn), BIND_METHOD_NAME, args(getJustFrom(callX(value, DO_CALL_METHOD_NAME)), closureWithKey)) :
-        callX(make(Fn), BIND_METHOD_NAME, args(getJustFrom(value), closureWithKey))
-    }
-
-    private StaticMethodCallExpression getJustFrom(final Expression value) {
-        return callX(make(Fn), JUST_METHOD_NAME, args(value))
+        callX(make(Fn), BIND_METHOD_NAME, args(callX(value, DO_CALL_METHOD_NAME), closureWithKey)) :
+        callX(make(Fn), BIND_METHOD_NAME, args(value, closureWithKey))
     }
 
 }
