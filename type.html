@@ -593,13 +593,43 @@ declared by the interface type:</p>
 </div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_multiple_parameters">Multiple parameters</h4>
+<div class="paragraph">
+<p>So far we&#8217;ve been showing functions with just one parameter or at most
+a parameter making use of generics, but wouldn&#8217;t be great to have a
+way of declaring a function with two or more arguments ?</p>
+</div>
+<div class="paragraph">
+<p>It turns out you can. The syntax to acomplish this is to use the
+Groovy syntax for lists.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">ftype SUM(X) &gt;= [X,X] &gt;&gt; X</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here we had a funcion <code>SUM</code> which takes two parameters of the same
+type and returns a value of the same type. It makes sense right ?</p>
+</div>
+<div class="paragraph">
+<p>In the following example we&#8217;re using this feature just to show how
+parameters can be parametrized (use generics) as well.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in type.ad - include::{testDir}/fnz/control/TypeSpec.groovy[tags=multipleParameters,indent=0]</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-02-08 23:23:34 CET
+Last updated 2015-02-12 13:22:13 CET
 </div>
 </div>
 </body>

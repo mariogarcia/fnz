@@ -1326,6 +1326,58 @@ class A {
 </div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_multiple_parameters">3.1.3. Multiple parameters</h4>
+<div class="paragraph">
+<p>So far we&#8217;ve been showing functions with just one parameter or at most
+a parameter making use of generics, but wouldn&#8217;t be great to have a
+way of declaring a function with two or more arguments ?</p>
+</div>
+<div class="paragraph">
+<p>It turns out you can. The syntax to acomplish this is to use the
+Groovy syntax for lists.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">ftype SUM(X) &gt;= [X,X] &gt;&gt; X</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here we had a funcion <code>SUM</code> which takes two parameters of the same
+type and returns a value of the same type. It makes sense right ?</p>
+</div>
+<div class="paragraph">
+<p>In the following example we&#8217;re using this feature just to show how
+parameters can be parametrized (use generics) as well.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package fnz.samples.type
+
+import static fnz.data.Fn.*
+import fnz.data.*
+
+class A {
+    static {
+        ftype Fx(X) &gt;= [Maybe(X),Maybe(X)] &gt;&gt; X
+    }
+
+    Integer executeFunction(Fx&lt;Integer&gt; fx) {
+        return fx.apply(Just(1), Just(2))
+    }
+
+    boolean complexFunctionalInterface() {
+        Integer result =
+            executeFunction { Maybe&lt;Integer&gt; a, Maybe&lt;Integer&gt; b -&gt;
+                return val(a) + val(b)
+            }
+
+        result == 3
+    }
+}</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1900,55 +1952,57 @@ see the following example:</p>
 <div class="sect2">
 <h3 id="_letm">5.2. Letm</h3>
 <div class="paragraph">
-<p><strong>letm</strong> works the same way <strong>let</strong> does but it has one constraint, the deepest expression should always
-return an instance of a <strong>fnz.data.Monad</strong>. Why is that ?</p>
+<p><code>letm</code> works the same way <code>let</code> does but instead of handling plain
+values it works with monadic values and eventually will return an
+instance of type <code>fnz.data.Monad</code>. Why is that ?</p>
 </div>
 <div class="paragraph">
-<p>Well <strong>letm</strong> is meant to work with monad expressions. So when you&#8217;re seeing this:</p>
+<p>Well <code>letm</code> is meant to work with monad expressions. So when you&#8217;re
+seeing this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">letm(x:1, y: { x + 1}) {
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">letm(x: Just(1), y: { Just(x+1) } ) {
     Just(y)
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Underneath the expression is transformed to:</p>
+<p>Under the hood the expression will be transformed to:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">bind(Just(1)) { x -&gt;
-  bind(Just({x +1}())) { y -&gt;
+  bind({ Just(x+1) }())) { y -&gt;
      Just(y)
   }
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>This way you can play with other flavors of monads. Imagine you want to combine
-let with the <strong>Either</strong> monad.</p>
+<p>This way you can play with other flavors of monads. Imagine you want
+to combine let with the <code>Either</code> monad.</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">    Either&lt;Integer&gt; workingWithOtherMonads(final Integer first, final Integer second) {
-        return letm(x: first, y: second) {
-            Integer result = x + y
-
-            result == 3 ? Right(x + y) : Left()
+        return letm(x: Just(first), y: Just(second)) {
+            letm(result: { Just(first + second) }) {
+                result == 3 ? Right(result) : Left()
+            }
         }
     }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>You can also combine it with the <strong>Try</strong> monad. This time there&#8217;s a method you
-want to use, but it could throw some exceptions, you want to handle that possibility
-using <strong>Try</strong>.</p>
+<p>You can also combine it with the <code>Try</code> monad. This time there&#8217;s a
+method you want to use, but it could throw some exceptions, you want
+to handle that possibility using <code>Try</code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">    Try&lt;Integer&gt; combineWithTry(Integer first, Integer second) {
-        letm(x: first, y: second) {
+        letm(x: Just(first), y: Just(second)) {
             bind(Just(second), wrap(this.&amp;dangerousMethod.curry(first)))
         }
     }

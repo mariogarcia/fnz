@@ -505,34 +505,36 @@ see the following example:</p>
 <div class="sect2">
 <h3 id="_letm">Letm</h3>
 <div class="paragraph">
-<p><strong>letm</strong> works the same way <strong>let</strong> does but it has one constraint, the deepest expression should always
-return an instance of a <strong>fnz.data.Monad</strong>. Why is that ?</p>
+<p><code>letm</code> works the same way <code>let</code> does but instead of handling plain
+values it works with monadic values and eventually will return an
+instance of type <code>fnz.data.Monad</code>. Why is that ?</p>
 </div>
 <div class="paragraph">
-<p>Well <strong>letm</strong> is meant to work with monad expressions. So when you&#8217;re seeing this:</p>
+<p>Well <code>letm</code> is meant to work with monad expressions. So when you&#8217;re
+seeing this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">letm(x:1, y: { x + 1}) {
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">letm(x: Just(1), y: { Just(x+1) } ) {
     Just(y)
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Underneath the expression is transformed to:</p>
+<p>Under the hood the expression will be transformed to:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">bind(Just(1)) { x -&gt;
-  bind(Just({x +1}())) { y -&gt;
+  bind({ Just(x+1) }())) { y -&gt;
      Just(y)
   }
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>This way you can play with other flavors of monads. Imagine you want to combine
-let with the <strong>Either</strong> monad.</p>
+<p>This way you can play with other flavors of monads. Imagine you want
+to combine let with the <code>Either</code> monad.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -540,9 +542,9 @@ let with the <strong>Either</strong> monad.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>You can also combine it with the <strong>Try</strong> monad. This time there&#8217;s a method you
-want to use, but it could throw some exceptions, you want to handle that possibility
-using <strong>Try</strong>.</p>
+<p>You can also combine it with the <code>Try</code> monad. This time there&#8217;s a
+method you want to use, but it could throw some exceptions, you want
+to handle that possibility using <code>Try</code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -671,7 +673,7 @@ conditions are the same you would be using in a switch-case block in Groovy.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-02-07 18:27:24 CET
+Last updated 2015-02-09 23:11:54 CET
 </div>
 </div>
 </body>
