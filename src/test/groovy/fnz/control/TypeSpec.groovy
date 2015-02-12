@@ -201,4 +201,98 @@ class TypeSpec extends AstBaseSpec {
         exampleClass.newInstance().complexFunctionalInterface()
     }
 
+    void 'complex generic type 3'() {
+        given: ''
+        def exampleClass =
+            helper.parse('''
+                package fnz.samples.type
+
+                import fnz.data.Fn
+                import fnz.data.Maybe
+
+                class A {
+                    static {
+                        ftype Fx(X,Y,Z) >= [X,Y] >> List(Z)
+                    }
+
+                    List<Double> executeFunction(Fx<Integer,Integer,Double> fx) {
+                        return fx.apply(1,2)
+                    }
+
+                    boolean complexFunctionalInterface() {
+                        List<Double> result = executeFunction { x, y ->
+                            [x.toDouble(), y.toDouble()]
+                        }
+
+                        result instanceof List
+                    }
+                }
+            ''')
+        expect: 'the method to return true'
+        exampleClass.newInstance().complexFunctionalInterface()
+    }
+
+    void 'complex generic type 4'() {
+        given: ''
+        def exampleClass =
+            helper.parse('''
+                package fnz.samples.type
+
+                import static fnz.data.Fn.*
+                import fnz.data.*
+
+                class A {
+                    static {
+                        ftype Fx(X) >= [Maybe(X),Maybe(X)] >> X
+                    }
+
+                    Integer executeFunction(Fx<Integer> fx) {
+                        return fx.apply(Just(1), Just(2))
+                    }
+
+                    boolean complexFunctionalInterface() {
+                        Integer result =
+                            executeFunction { Maybe<Integer> a, Maybe<Integer> b ->
+                                return val(a) + val(b)
+                            }
+
+                        result == 3
+                    }
+                }
+            ''')
+        expect: 'the method to return true'
+        exampleClass.newInstance().complexFunctionalInterface()
+    }
+
+    void 'complex generic type 5'() {
+        given: ''
+        def exampleClass =
+            helper.parse('''
+                package fnz.samples.type
+
+                import static fnz.data.Fn.*
+                import fnz.data.*
+
+                class A {
+                    static {
+                        ftype Fold(X) >= ListMonad(X) >> X
+                    }
+
+                    Integer executeFunction(Fold<Integer> fx) {
+                        return fx.apply(List(1,2))
+                    }
+
+                    boolean complexFunctionalInterface() {
+                        Integer result =
+                            executeFunction { ListMonad<Integer> list ->
+                                val(list).sum()
+                            }
+
+                        result == 3
+                    }
+                }
+            ''')
+        expect: 'the method to return true'
+        exampleClass.newInstance().complexFunctionalInterface()
+    }
 }

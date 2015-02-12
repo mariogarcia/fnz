@@ -160,15 +160,31 @@ class TypeAstTransformer extends MethodCallExpressionTransformer implements Opco
     }
 
     private Parameter[] extractParametersFrom(MethodCallExpression methodCallExpression) {
-        return params(
-            param(extractTypeFrom(methodCallExpression), FI_FUNCTION_PARAM_NAME)
-        )
+        return params(createParameterFrom(methodCallExpression))
     }
 
     private Parameter[] extractParametersFrom(VariableExpression variableExpression) {
-        return params(
-            param(make(variableExpression.name), FI_FUNCTION_PARAM_NAME)
-        )
+        return params(createParameterFrom(variableExpression))
+    }
+
+    private Parameter[] extractParametersFrom(ListExpression listExpression) {
+        return listExpression.expressions.collect(this.&createParameterFrom) as Parameter[]
+    }
+
+    private Parameter createParameterFrom(ClassNode clazz) {
+        return param(clazz, validIdentifier)
+    }
+
+    private Parameter createParameterFrom(VariableExpression variable) {
+        return param(make(variable.name), validIdentifier)
+    }
+
+    private Parameter createParameterFrom(MethodCallExpression methodCallExpression) {
+        return param(extractTypeFrom(methodCallExpression), validIdentifier)
+    }
+
+    private String getValidIdentifier() {
+        return "a${System.nanoTime()}"
     }
 
     private ClassNode extractTypeFrom(MethodCallExpression methodCallExpression) {
