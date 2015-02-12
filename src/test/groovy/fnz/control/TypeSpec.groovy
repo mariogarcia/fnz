@@ -236,6 +236,7 @@ class TypeSpec extends AstBaseSpec {
         given: ''
         def exampleClass =
             helper.parse('''
+                // tag::multipleParameters[]
                 package fnz.samples.type
 
                 import static fnz.data.Fn.*
@@ -259,6 +260,7 @@ class TypeSpec extends AstBaseSpec {
                         result == 3
                     }
                 }
+                // end::multipleParameters[]
             ''')
         expect: 'the method to return true'
         exampleClass.newInstance().complexFunctionalInterface()

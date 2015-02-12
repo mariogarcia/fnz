@@ -140,3 +140,29 @@ And mixing generics with other types:
 ----
 include::{testDir}/fnz/control/TypeSpec.groovy[tags=fullGenericsWithType,indent=0]
 ----
+
+==== Multiple parameters
+
+So far we've been showing functions with just one parameter or at most
+a parameter making use of generics, but wouldn't be great to have a
+way of declaring a function with two or more arguments ?
+
+It turns out you can. The syntax to acomplish this is to use the
+Groovy syntax for lists.
+
+[source, groovy]
+----
+ftype SUM(X) >= [X,X] >> X
+----
+
+Here we had a funcion `SUM` which takes two parameters of the same
+type and returns a value of the same type. It makes sense right ?
+
+In the following example we're using this feature just to show how
+parameters can be parametrized (use generics) as well.
+
+[source,groovy]
+----
+include::{testDir}/fnz/control/TypeSpec.groovy[tags=multipleParameters,indent=0]
+----
+
