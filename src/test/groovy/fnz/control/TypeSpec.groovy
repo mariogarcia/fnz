@@ -263,4 +263,36 @@ class TypeSpec extends AstBaseSpec {
         expect: 'the method to return true'
         exampleClass.newInstance().complexFunctionalInterface()
     }
+
+    void 'complex generic type 5'() {
+        given: ''
+        def exampleClass =
+            helper.parse('''
+                package fnz.samples.type
+
+                import static fnz.data.Fn.*
+                import fnz.data.*
+
+                class A {
+                    static {
+                        ftype Fold(X) >= ListMonad(X) >> X
+                    }
+
+                    Integer executeFunction(Fold<Integer> fx) {
+                        return fx.apply(List(1,2))
+                    }
+
+                    boolean complexFunctionalInterface() {
+                        Integer result =
+                            executeFunction { ListMonad<Integer> list ->
+                                val(list).sum()
+                            }
+
+                        result == 3
+                    }
+                }
+            ''')
+        expect: 'the method to return true'
+        exampleClass.newInstance().complexFunctionalInterface()
+    }
 }
