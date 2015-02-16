@@ -101,6 +101,7 @@ public final class Fn {
         return monad != null ? monad.getTypedRef().getValue() : null;
     }
 
+    @Deprecated
     public static <A> Maybe<A> maybe(Monad<A> monad) {
         if (monad == null) return Nothing();
 
