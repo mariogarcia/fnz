@@ -4,7 +4,7 @@ package fnz.data;
  *
  * @param <A>
  */
-public abstract class Maybe<A> implements Monad<A> {
+public abstract class Maybe<A> implements Monad<A>, Or<Maybe<A>> {
 
     private final Type<A> typedRef;
 
