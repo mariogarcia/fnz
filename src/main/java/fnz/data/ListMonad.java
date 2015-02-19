@@ -10,9 +10,9 @@ import java.util.List;
  */
 public class ListMonad<A> implements Monad<A> {
 
-    private final List<A> value;
+    private final Iterable<A> value;
 
-    public ListMonad(List<A> values) {
+    public ListMonad(Iterable<A> values) {
         this.value = values;
     }
 
@@ -24,14 +24,16 @@ public class ListMonad<A> implements Monad<A> {
         List<B> items = new ArrayList<>();
         for (A a : this.value) {
             ListMonad<B> transformed = (ListMonad<B>) fn.apply(a);
-            items.addAll(transformed.getTypedRef().getValue());
+            for (B aa : transformed.getTypedRef().getValue()) {
+                items.add(aa);
+            }
         }
         return (M) list(items);
     }
 
     @Override
-    public TypeCollection<A> getTypedRef() {
-        return new TypeCollection(this.value);
+    public TypeIterable<A> getTypedRef() {
+        return new TypeIterable(this.value);
     }
 
     @Override
@@ -53,14 +55,14 @@ public class ListMonad<A> implements Monad<A> {
     }
 
     public boolean isNullOrEmpty() {
-        return this.value == null || this.value.isEmpty();
+        return this.value == null;
     }
 
     public static <T> ListMonad<T> list(T... values){
         return list(Arrays.asList(values));
     }
 
-    public static <T> ListMonad <T> list(List<T> values){
+    public static <T> ListMonad <T> list(Iterable<T> values){
         return new ListMonad<>(values);
     }
 

@@ -7,6 +7,7 @@ import static Fn.fmap
 import static Fn.val
 import static Fn.wrap
 import static Fn.recover
+import static Fn.Success
 
 import spock.lang.Specification
 
@@ -170,6 +171,21 @@ class TrySpec extends Specification {
             successSoFar.throwException()
         then: 'and only then we will get the exception'
             thrown(ArithmeticException)
+    }
+
+    def 'using the or semantics'() {
+        given: 'two functions'
+        Function BAD = { it / 0 }
+        Function GOOD =  { it / 2 }
+        and: 'a monadic value'
+        Try<Integer> VALUE  = Success(42)
+        when: 'trying to execute several functions'
+        Try<Integer> resultRight = fmap(VALUE, BAD) | fmap(VALUE, GOOD)
+        Try<Integer> resultLeft = fmap(VALUE,GOOD) | fmap(VALUE, BAD)
+        then: 'we should be getting the one succeeding'
+        val(resultRight) == 21
+        val(resultLeft) == 21
+        val(resultRight) == val(resultLeft)
     }
 
 }

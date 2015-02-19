@@ -15,6 +15,10 @@ public final class Fn {
         return Either.right(source);
     }
 
+    public static <A> Either<A> Either(A source) {
+        return (Either<A>) (source != null ? Right(source) : Left(source));
+    }
+
     public static <A> Maybe.Just<A> Just(A source) {
         return Maybe.just(source);
     }
@@ -23,11 +27,27 @@ public final class Fn {
         return Maybe.nothing();
     }
 
+    public static <A> Maybe<A> Maybe(A source) {
+        return (Maybe<A>) (source != null ? Just(source) : Nothing()) ;
+    }
+
+    public static <A> Try.Success<A> Success(A source) {
+        return Try.success(source);
+    }
+
+    public static <A> Try.Failure<A> Failure() {
+        return Try.failure(null, new NullPointerException());
+    }
+
+    public static <A> Try<A> Try(A source) {
+        return (Try<A>) (source != null ? Success(source) : Failure());
+    }
+
     public static <A> ListMonad<A> List(A... values) {
         return ListMonad.list(values);
     }
 
-    public static <A> ListMonad<A> List(List<A> values) {
+    public static <A> ListMonad<A> List(Iterable<A> values) {
         return ListMonad.list(values);
     }
 
@@ -81,6 +101,7 @@ public final class Fn {
         return monad != null ? monad.getTypedRef().getValue() : null;
     }
 
+    @Deprecated
     public static <A> Maybe<A> maybe(Monad<A> monad) {
         if (monad == null) return Nothing();
 
