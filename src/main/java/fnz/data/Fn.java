@@ -47,7 +47,7 @@ public final class Fn {
         return ListMonad.list(values);
     }
 
-    public static <A> ListMonad<A> List(List<A> values) {
+    public static <A> ListMonad<A> List(Iterable<A> values) {
         return ListMonad.list(values);
     }
 
