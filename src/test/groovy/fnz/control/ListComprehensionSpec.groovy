@@ -22,10 +22,31 @@ class ListComprehensionSpec extends AstBaseSpec {
 
     def 'simple sequence'() {
         when: 'Initializing expression and executing closure'
-        List<Integer> result = exampleInstance.getSimpleSequence()
+        List<Integer> result = exampleInstance.simpleSequence
         then: 'There should be a value'
         result
         and: 'The sequence should have all expected values'
         result == [1,2,3,4,5,6,7,8,9,10]
+    }
+
+    def 'simple tuple'() {
+        when: 'using two iterables'
+        List<List<Integer>> listOfTuples = exampleInstance.simpleTuples
+        then: 'checking the values'
+        listOfTuples == [
+            [1,2],[1,3],[1,4],
+            [2,2],[2,3],[2,4]
+        ]
+    }
+
+    def 'dependent generators'() {
+        when: 'one generator depends on values of another'
+        List<List<Integer>> listOfTuples = exampleInstance.dependentGenerators
+        then: 'we should get the proper progression'
+        listOfTuples == [
+            [2,1],[2,2],
+            [3,1],[3,2],[3,3],
+            [4,1],[4,2],[4,3],[4,4]
+        ]
     }
 }

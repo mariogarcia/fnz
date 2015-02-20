@@ -24,6 +24,7 @@ class FnzAst extends AbstractASTTransformation {
              new LetmAstTransformer(sourceUnit).visitClass(clazzNode)
              new LetAstTransformer(sourceUnit).visitClass(clazzNode)
              new TypeAstTransformer(sourceUnit).visitClass(clazzNode)
+             new ListComprehensionTransformer(sourceUnit).visitClass(clazzNode)
          }
     }
 
