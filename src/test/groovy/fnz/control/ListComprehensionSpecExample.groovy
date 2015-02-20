@@ -14,4 +14,8 @@ class ListComprehensionSpecExample {
         return [ [i, j] | i << (2..4) , j << (1..i)]
     }
 
+    List<Integer> getClosureGeneratedValues() {
+        return [ { i + j } | i << (1..2), j << (2..4)]
+    }
+
 }

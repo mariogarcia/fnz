@@ -49,4 +49,12 @@ class ListComprehensionSpec extends AstBaseSpec {
             [4,1],[4,2],[4,3],[4,4]
         ]
     }
+
+    def 'getting values from a closure expression'() {
+        when: 'one generator creates values using a closure'
+        List<List<Integer>> listOfTuples = exampleInstance.closureGeneratedValues
+        then: 'we should get the proper progression'
+        listOfTuples == [3,4,5,4,5,6]
+    }
+
 }

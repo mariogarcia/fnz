@@ -20,6 +20,7 @@ import org.codehaus.groovy.syntax.Types
 class ListComprehensionTransformer extends ListExpressionTransformer {
 
     static final String METHOD_NAME_COLLECT_MANY = 'collectMany'
+    static final String METHOD_NAME_DO_CALL = 'doCall'
 
     @Override
     Boolean isThisListEligible(ListExpression listExpression) {
@@ -65,13 +66,14 @@ class ListComprehensionTransformer extends ListExpressionTransformer {
         // ------------------- FIRST EXPRESSION --------------------
         BinaryExpression firstExpression = asBinary(expressions.head())
         Expression variables = firstExpression.leftExpression
-        BinaryExpression generator = firstExpression.rightExpression
+        BinaryExpression generator = asBinary(firstExpression.rightExpression)
 
+        // TODO [].plus() is not recognized by @CompileStatic...yet
         List<BinaryExpression> generators =
             [generator] +
             expressions.tail().findAll(this.&isAGeneratorExpression)
 
-
+        // TODO Polymorphism doesn't seem to work with @CompileStatic
         Expression resultList = buildNestedLoops(variables, generators)
 
         // getVariables (only single value or list or closure)
@@ -79,8 +81,6 @@ class ListComprehensionTransformer extends ListExpressionTransformer {
         // getGenerator
         // getTake (OPTIONAL FOR NOW)
         // Generate new code
-
-//
 
         return resultList
     }
@@ -93,18 +93,21 @@ class ListComprehensionTransformer extends ListExpressionTransformer {
             VariableExpression variables,
             List<BinaryExpression> generators) {
 
-        return callX(
-            listX(generators.first().rightExpression),
-            METHOD_NAME_COLLECT_MANY,
-            closureX(
-                params(param(make(Object),variables.name)),
-                block(stmt(varX(variables.name))))
-        )
+        ListExpression generatedItem = listX(varX(variables.name))
+
+        // TODO refactoring the inject expression to a method returning
+        // a MethodCallExpression will make @CompileStatic pass
+        MethodCallExpression expression =
+            generators
+            .reverse()
+            .inject(generatedItem, this.&createInlineLoop)
+
+        return expression
 
     }
 
     ListExpression listX(Expression... expressions) {
-        return new ListExpression(Arrays.asList(expressions))
+        return new ListExpression(expressions as List)
     }
 
     /**
@@ -114,7 +117,19 @@ class ListComprehensionTransformer extends ListExpressionTransformer {
     Expression buildNestedLoops(
             ClosureExpression variables,
             List<BinaryExpression> generators) {
-        return null
+
+        ListExpression generatedItem =
+            listX(callX(variables, METHOD_NAME_DO_CALL,listX()))
+
+        // TODO refactoring the inject expression to a method returning
+        // a MethodCallExpression will make @CompileStatic pass
+        MethodCallExpression expression =
+            generators
+            .reverse()
+            .inject(generatedItem, this.&createInlineLoop)
+
+        return expression
+
     }
 
     /**
@@ -129,20 +144,23 @@ class ListComprehensionTransformer extends ListExpressionTransformer {
 
         MethodCallExpression expression =
             generators
-                .reverse()
-                .inject(generatedItem) { previous, next ->
-                    callX(
-                        next.rightExpression,
-                        METHOD_NAME_COLLECT_MANY,
-                        closureX(
-                            params(param(make(Object),next.leftExpression.name)),
-                            block(stmt(previous))
-                        )
-                    )
-                }
+            .reverse()
+            .inject(generatedItem, this.&createInlineLoop)
 
         return expression
     }
 
+    MethodCallExpression createInlineLoop(
+        Expression previous,
+        BinaryExpression next) {
+        return callX(
+            next.rightExpression,
+            METHOD_NAME_COLLECT_MANY,
+            closureX(
+                params(param(make(Object),next.leftExpression.name)),
+                block(stmt(previous))
+            )
+        )
+    }
 
 }
