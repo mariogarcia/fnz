@@ -52,9 +52,16 @@ class ListComprehensionSpec extends AstBaseSpec {
 
     def 'getting values from a closure expression'() {
         when: 'one generator creates values using a closure'
-        List<List<Integer>> listOfTuples = exampleInstance.closureGeneratedValues
+        List<Integer> listOfTuples = exampleInstance.closureGeneratedValues
         then: 'we should get the proper progression'
         listOfTuples == [3,4,5,4,5,6]
+    }
+
+    def 'getting values from nested lists'() {
+        when: 'having nested list comprehensions'
+        List<Integer> result = exampleInstance.getSimpleNestedListsResult()
+        then:'the result should be the expected'
+        result == [1,2,3,4,5,6,7,8,9,10]
     }
 
 }

@@ -2,12 +2,16 @@ package fnz.control
 
 import org.codehaus.groovy.ast.Variable
 import org.codehaus.groovy.ast.expr.MethodCallExpression
+import org.codehaus.groovy.syntax.Token
 
 import static org.codehaus.groovy.ast.tools.GeneralUtils.*
 import static org.codehaus.groovy.ast.ClassHelper.make
 
 import fnz.ast.ListExpressionTransformer
+
+import groovy.transform.TailRecursive
 import groovy.transform.InheritConstructors
+
 import org.codehaus.groovy.ast.expr.BinaryExpression
 import org.codehaus.groovy.ast.expr.ClosureExpression
 import org.codehaus.groovy.ast.expr.Expression
@@ -65,16 +69,21 @@ class ListComprehensionTransformer extends ListExpressionTransformer {
 
         // ------------------- FIRST EXPRESSION --------------------
         BinaryExpression firstExpression = asBinary(expressions.head())
-        Expression variables = firstExpression.leftExpression
-        BinaryExpression generator = asBinary(firstExpression.rightExpression)
+        Expression generatedExpression = firstExpression.leftExpression
+        BinaryExpression firstGenerator = asBinary(firstExpression.rightExpression)
 
         // TODO [].plus() is not recognized by @CompileStatic...yet
         List<BinaryExpression> generators =
-            [generator] +
+            [firstGenerator] +
             expressions.tail().findAll(this.&isAGeneratorExpression)
+        List<BinaryExpression> processedGenerators =
+            processGenerators(generators)
 
         // TODO Polymorphism doesn't seem to work with @CompileStatic
-        Expression resultList = buildNestedLoops(variables, generators)
+        Expression resultList =
+            buildNestedLoops(
+                generatedExpression,
+                processedGenerators)
 
         // getVariables (only single value or list or closure)
         // getGuards (OPTIONAL FOR NOW)
@@ -83,6 +92,91 @@ class ListComprehensionTransformer extends ListExpressionTransformer {
         // Generate new code
 
         return resultList
+    }
+
+    @TailRecursive
+    List<BinaryExpression> processGenerators(List<BinaryExpression> rawGenerators) {
+        Boolean isThereAnyListComprehension = rawGenerators.any(this.&isListComprehensionPresent)
+
+        if (!isThereAnyListComprehension) {
+            return rawGenerators
+        } else {
+            return processGenerators(applyUnwrappingToList(rawGenerators))
+        }
+    }
+
+    Boolean isListComprehensionPresent(BinaryExpression expression) {
+        ListExpression expressionToCheck = expression.rightExpression
+        Boolean isAListComprehension =
+            isAPipeBinaryExpression(expressionToCheck.expressions.head())
+
+        return isAListComprehension
+    }
+
+    List<BinaryExpression> applyUnwrappingToList(List<BinaryExpression> rawGenerators) {
+        return rawGenerators.inject(new ArrayList<BinaryExpression>(), this.&applyUnwrappingToExpression)
+    }
+
+    List<BinaryExpression> applyUnwrappingToExpression(
+        List<BinaryExpression> aggregation, BinaryExpression next) {
+
+        if (next.any(this.&isListComprehensionPresent)) {
+            aggregation.addAll(unwrap(next))
+        } else {
+            aggregation.add(next)
+        }
+
+        return aggregation
+    }
+
+    /**
+     * This method unwraps a nested list comprehension and adds all its
+     * elements in a list.
+     *
+     * Lets say we had:
+     *
+     * [ i | i << [ { x + y } | x << (1..10), y << (2..4) ]]
+     *
+     * We are receiving this binary expression:
+     *
+     * [ i << [ { x + y } | x << (1..10), y << (2..4)]]
+     *
+     * Right expression:
+     *
+     * [ { x + y } | x << (1..10), y << (2..4)]
+     *
+     * And left expression:
+     *
+     * i
+     *
+     * And we want to get this:
+     *
+     * [ x << (1..10), y << (2..4), i << { x + y }]
+     *
+     * If we get all binary expressions in order we could finally generate
+     * the execution flow.
+     *
+     */
+    List<BinaryExpression> unwrap(BinaryExpression containsListComprehension) {
+        Expression originalVariable = containsListComprehension.leftExpression
+        // Destructuring nested comprehension
+        ListExpression list = containsListComprehension.rightExpression
+        List<Expression> listExpressions = list.expressions.tail()
+        BinaryExpression firstExpression = list.expressions.head()
+        Expression listVariable = firstExpression.leftExpression
+        Expression firstGenerator = firstExpression.rightExpression
+        // This expression will link the current list with the nested one
+        Expression linkExpression =
+            new BinaryExpression(
+                originalVariable,
+                new Token(Types.LEFT_SHIFT,'<<',-1,-1),
+                listVariable)
+        // first inner generators and then the link between the current and
+        // nested list
+        List<Expression> resultList =
+            ([firstGenerator] + listExpressions) << linkExpression
+
+        return resultList // [ x << (1..10), y << (2..4), i << { x + y }]
     }
 
     /**

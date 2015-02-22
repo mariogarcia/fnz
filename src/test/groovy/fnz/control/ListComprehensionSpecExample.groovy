@@ -18,4 +18,8 @@ class ListComprehensionSpecExample {
         return [ { i + j } | i << (1..2), j << (2..4)]
     }
 
+    List<Integer> getSimpleNestedListResult() {
+        return [ i | i << [ j | j << (1..10)]]
+    }
+
 }
