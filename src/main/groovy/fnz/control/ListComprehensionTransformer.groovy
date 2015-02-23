@@ -175,7 +175,7 @@ class ListComprehensionTransformer extends ListExpressionTransformer {
             new BinaryExpression(
                 originalVariable,
                 new Token(Types.LEFT_SHIFT,'<<',-1,-1),
-                listVariable)
+                treatExpression(listVariable))
         // first inner generators and then the link between the current and
         // nested list
         List<Expression> resultList =
@@ -184,22 +184,15 @@ class ListComprehensionTransformer extends ListExpressionTransformer {
         return resultList // [ x << (1..10), y << (2..4), i << { x + y }]
     }
 
-    /**
-     * [ i | i << (1..10) ]
-     *
-     **/
+
     Expression buildNestedLoops(
-            VariableExpression variables,
+            Expression variable,
             List<BinaryExpression> generators) {
 
-        ListExpression generatedItem = listX(varX(variables.name))
-
-        // TODO refactoring the inject expression to a method returning
-        // a MethodCallExpression will make @CompileStatic pass
         MethodCallExpression expression =
             generators
             .reverse()
-            .inject(generatedItem, this.&createInlineLoop)
+            .inject(treatExpression(variable), this.&createInlineLoop)
 
         return expression
 
@@ -207,46 +200,6 @@ class ListComprehensionTransformer extends ListExpressionTransformer {
 
     ListExpression listX(Expression... expressions) {
         return new ListExpression(expressions as List)
-    }
-
-    /**
-     * [ { i + j } | i << (1..10), j << (1..10) ]
-     *
-     **/
-    Expression buildNestedLoops(
-            ClosureExpression variables,
-            List<BinaryExpression> generators) {
-
-        ListExpression generatedItem =
-            listX(callX(variables, METHOD_NAME_DO_CALL,listX()))
-
-        // TODO refactoring the inject expression to a method returning
-        // a MethodCallExpression will make @CompileStatic pass
-        MethodCallExpression expression =
-            generators
-            .reverse()
-            .inject(generatedItem, this.&createInlineLoop)
-
-        return expression
-
-    }
-
-    /**
-     * [ [i, j] | i << (1..10), j << (1..10) ]
-     *
-     **/
-    Expression buildNestedLoops(
-            ListExpression variables,
-            List<BinaryExpression> generators) {
-
-        ListExpression generatedItem = listX(variables)
-
-        MethodCallExpression expression =
-            generators
-            .reverse()
-            .inject(generatedItem, this.&createInlineLoop)
-
-        return expression
     }
 
     MethodCallExpression createInlineLoop(
@@ -260,6 +213,30 @@ class ListComprehensionTransformer extends ListExpressionTransformer {
                 block(stmt(previous))
             )
         )
+    }
+
+    /**
+     * [ i | i << (1..10) ]
+     *
+     **/
+    ListExpression treatExpression(VariableExpression expression) {
+        return listX(varX(expression.name))
+    }
+
+    /**
+     * [ { i + j } | i << (1..10), j << (1..10) ]
+     *
+     **/
+    ListExpression treatExpression(ClosureExpression expression) {
+        return  listX(callX(expression, METHOD_NAME_DO_CALL,listX()))
+    }
+
+    /**
+     * [ [i, j] | i << (1..10), j << (1..10) ]
+     *
+     **/
+    ListExpression treatExpression(ListExpression expression) {
+        return listX(expression)
     }
 
 }
