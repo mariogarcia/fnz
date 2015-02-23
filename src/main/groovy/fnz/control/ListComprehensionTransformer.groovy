@@ -106,7 +106,12 @@ class ListComprehensionTransformer extends ListExpressionTransformer {
     }
 
     Boolean isListComprehensionPresent(BinaryExpression expression) {
-        ListExpression expressionToCheck = expression.rightExpression
+        Expression expressionToCheck = expression.rightExpression
+
+        if (!(expressionToCheck instanceof ListExpression)) {
+            return false
+        }
+
         Boolean isAListComprehension =
             isAPipeBinaryExpression(expressionToCheck.expressions.head())
 
