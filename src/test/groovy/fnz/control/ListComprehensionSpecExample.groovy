@@ -22,4 +22,12 @@ class ListComprehensionSpecExample {
         return [ i | i << [ j | j << (1..10)]]
     }
 
+    List<List<Integer>> getComplexNestedListResult() {
+        return [
+            [ i , j ] | i << [ x | x << [1]],
+                        j << [ { y + z } | y << [3,5,7],
+                                           z << [1]]
+        ]
+    }
+
 }

@@ -64,4 +64,16 @@ class ListComprehensionSpec extends AstBaseSpec {
         result == [1,2,3,4,5,6,7,8,9,10]
     }
 
+    def 'getting values from different types of nested lists'() {
+        when: 'having nested list comprehensions'
+        List<List<Integer>> result = exampleInstance.getComplexNestedListResult()
+        then: 'checking the result'
+        result == [
+            [1,4],
+            [1,6],
+            [1,8]
+        ]
+
+    }
+
 }
