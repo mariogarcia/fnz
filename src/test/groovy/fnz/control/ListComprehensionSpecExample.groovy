@@ -30,4 +30,20 @@ class ListComprehensionSpecExample {
         ]
     }
 
+    Integer yieldInteger() {
+        return 1
+    }
+
+    List<Integer> getMethodCallReturningOneValue() {
+        return [ i | i < [yieldInteger()] ]
+    }
+
+    List<Integer> yieldNumbers() {
+        return [1,2,3,4,5,6,7,8,9,10]
+    }
+
+    List<Integer> getMethodCallReturningACollection() {
+        return [ x | x < yieldNumbers() ]
+    }
+
 }

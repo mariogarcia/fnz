@@ -76,4 +76,18 @@ class ListComprehensionSpec extends AstBaseSpec {
 
     }
 
+    def 'mixing method call expressions with collections'() {
+        when: 'having nested list comprehensions'
+        List<Integer> result = exampleInstance.getMethodCallReturningOneValue()
+        then: 'checking the result'
+        result == [1]
+    }
+
+    def 'treating method call expressions as generators of collections'() {
+        when: 'having nested list comprehensions'
+        List<Integer> result = exampleInstance.getMethodCallReturningACollection()
+        then: 'checking the result'
+        result == [1,2,3,4,5,6,7,8,9,10]
+    }
+
 }

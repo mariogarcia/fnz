@@ -276,7 +276,7 @@ class ListComprehensionTransformer extends ListExpressionTransformer {
         Expression previous,
         BinaryExpression next) {
         return callX(
-            next.rightExpression,
+            checkMethodCall(next.rightExpression),
             METHOD_NAME_COLLECT_MANY,
             closureX(
                 params(param(make(Object),next.leftExpression.name)),
@@ -307,6 +307,29 @@ class ListComprehensionTransformer extends ListExpressionTransformer {
      **/
     ListExpression treatExpression(ListExpression expression) {
         return listX(expression)
+    }
+
+    /**
+     * List<Integer> getNumbers() {
+     *     return 1..10
+     * }
+     *
+     * [ i | i < numbers ]
+     *
+     *
+     */
+    Expression checkMethodCall(Expression expression) {
+        if (!isMethodCallExpression(expression)) {
+            // dont do anything
+            return expression
+        }
+
+        //  { methodCall() }()
+        return callX(closureX(params(), block(stmt(expression))), METHOD_NAME_DO_CALL)
+    }
+
+    Boolean isMethodCallExpression(Expression expression) {
+        return expression instanceof MethodCallExpression
     }
 
 }
