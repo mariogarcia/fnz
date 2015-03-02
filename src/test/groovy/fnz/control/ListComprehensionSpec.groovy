@@ -90,4 +90,11 @@ class ListComprehensionSpec extends AstBaseSpec {
         result == [1,2,3,4,5,6,7,8,9,10]
     }
 
+    def 'taking only 5 elements from the list comprehension'() {
+        when: 'executing a list and limiting its output by using take method'
+        List<Integer> result = exampleInstance.getTakeExpressionResult()
+        then: 'we should have only the number of elements allowed by the take expression'
+        result == [1,2,3,4,5]
+    }
+
 }

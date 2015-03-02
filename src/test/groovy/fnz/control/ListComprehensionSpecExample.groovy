@@ -43,7 +43,11 @@ class ListComprehensionSpecExample {
     }
 
     List<Integer> getMethodCallReturningACollection() {
-        return [ x | x < yieldNumbers() ]
+        return [ x | x << yieldNumbers() ]
+    }
+
+    List<Integer> getTakeExpressionResult() {
+        return [x | x << yieldNumbers(), take(5) ]
     }
 
 }
