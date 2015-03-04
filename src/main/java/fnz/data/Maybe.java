@@ -4,7 +4,7 @@ package fnz.data;
  *
  * @param <A>
  */
-public abstract class Maybe<A> implements Monad<A>, Or<Maybe<A>> {
+public abstract class Maybe<A> implements Monad<A>, Or<A,Maybe<A>> {
 
     private final Type<A> typedRef;
 
@@ -58,6 +58,11 @@ public abstract class Maybe<A> implements Monad<A>, Or<Maybe<A>> {
             return this;
         }
 
+        @Override
+        public Maybe<JUST> or(Function<JUST,Maybe<JUST>> newOption) {
+            return this;
+        }
+
     }
 
     public static class Nothing<NOTHING> extends Maybe<NOTHING> {
@@ -92,6 +97,11 @@ public abstract class Maybe<A> implements Monad<A>, Or<Maybe<A>> {
         @Override
         public Maybe<NOTHING> or(Maybe<NOTHING> newOption) {
             return newOption;
+        }
+
+        @Override
+        public Maybe<NOTHING> or(Function<NOTHING,Maybe<NOTHING>> newOption) {
+            return newOption.apply(this.getTypedRef().getValue());
         }
 
     }

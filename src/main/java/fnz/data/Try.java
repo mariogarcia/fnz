@@ -5,7 +5,7 @@ package fnz.data;
  * @author mario
  * @param <A>
  */
-public abstract class Try<A> implements Monad<A>, Or<Try<A>> {
+public abstract class Try<A> implements Monad<A>, Or<A,Try<A>> {
 
     private final Type<A> typedRef;
 
@@ -66,6 +66,11 @@ public abstract class Try<A> implements Monad<A>, Or<Try<A>> {
             return this;
         }
 
+        @Override
+        public Try<SUCCESS> or(Function<SUCCESS, Try<SUCCESS>> alternative) {
+            return this;
+        }
+
     }
 
     public static class Failure<FAILURE> extends Try<FAILURE> {
@@ -123,6 +128,11 @@ public abstract class Try<A> implements Monad<A>, Or<Try<A>> {
         @Override
         public Try<FAILURE> or(Try<FAILURE> alternative) {
             return alternative;
+        }
+
+        @Override
+        public Try<FAILURE> or(Function<FAILURE,Try<FAILURE>> alternative) {
+            return alternative.apply(this.getTypedRef().getValue());
         }
 
     }

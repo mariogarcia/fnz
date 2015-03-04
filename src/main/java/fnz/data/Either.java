@@ -4,7 +4,7 @@ package fnz.data;
  *
  * @param <A>
  */
-public abstract class Either<A> implements Monad<A>, Or<Either<A>> {
+public abstract class Either<A> implements Monad<A>, Or<A,Either<A>> {
 
     private final Type<A> typedRef;
 
@@ -57,6 +57,11 @@ public abstract class Either<A> implements Monad<A>, Or<Either<A>> {
             return this;
         }
 
+        @Override
+        public Either<R> or(Function<R,Either<R>> newOption) {
+            return this;
+        }
+
     }
 
     public static class Left<L> extends Either<L> {
@@ -89,6 +94,11 @@ public abstract class Either<A> implements Monad<A>, Or<Either<A>> {
         @Override
         public Either<L> or(Either<L> newOption) {
             return newOption;
+        }
+
+        @Override
+        public Either<L> or(Function<L,Either<L>> newOption) {
+            return newOption.apply(this.getTypedRef().getValue());
         }
 
     }
