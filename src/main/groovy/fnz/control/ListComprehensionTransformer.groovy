@@ -1,11 +1,13 @@
 package fnz.control
 
 import org.codehaus.groovy.ast.Variable
+import org.codehaus.groovy.ast.ClassNode
+import org.codehaus.groovy.ast.MethodNode
 import org.codehaus.groovy.ast.expr.MethodCallExpression
 import org.codehaus.groovy.syntax.Token
 
 import static org.codehaus.groovy.ast.tools.GeneralUtils.*
-import static org.codehaus.groovy.ast.ClassHelper.make
+import static org.codehaus.groovy.ast.ClassHelper.*
 
 import fnz.ast.ListExpressionTransformer
 
@@ -82,9 +84,16 @@ class ListComprehensionTransformer extends ListExpressionTransformer {
         List<BinaryExpression> generators = pushToHead(tailGenerators, firstGenerator)
         List<BinaryExpression> processedGenerators = processGenerators(generators)
 
+        // Getting take expression if any
+        MethodCallExpression takeExpression = expressions.tail().find(this.&isTakeExpression)
+
         // Processing all binary expressions representing the whole list comp.
         Expression resultList =
-            buildNestedLoops(generatedExpression, processedGenerators)
+            buildNestedLoops(
+                // takeIterator.advance()
+                generatedExpression,
+                // takeIterator.join(next)
+                processedGenerators)
 
         // getGuards (OPTIONAL FOR NOW)
         // getTake (OPTIONAL FOR NOW)
@@ -94,6 +103,29 @@ class ListComprehensionTransformer extends ListExpressionTransformer {
 
     static <U> List<U> pushToHead(List<U> list, U element) {
         return [element] + list
+    }
+
+    Boolean isTakeExpression(Expression expression) {
+        if (!isAMethodCallExpression(expression)) {
+            return false
+        }
+
+        MethodCallExpression methodInfo = expression
+
+        if (methodInfo.methodAsString != 'take' ||
+            methodInfo.arguments.size() != 1) {
+            return false
+        }
+
+        Expression firstArgument = methodInfo.arguments.first()
+        ClassNode firstArgumentType = firstArgument.type
+
+        // TODO MATCH WITH int.class type
+        return isNumberType(firstArgumentType) && isPrimitiveType(firstArgumentType)
+    }
+
+    Boolean isAMethodCallExpression(Expression expression) {
+        return expression instanceof MethodCallExpression
     }
 
     /**
