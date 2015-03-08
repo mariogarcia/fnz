@@ -3,6 +3,10 @@ package fnz.data
 import static Either.right
 import static Either.left
 
+import static Fn.Either
+import static Fn.Right
+import static Fn.val
+
 import spock.lang.Specification
 
 class EitherSpec extends Specification {
@@ -85,7 +89,7 @@ class EitherSpec extends Specification {
                     def pr = sample.find(search)
                     // if found then return left to shortcircuit further
                     // searchs
-                    pr ? Either.left(pr) : Either.right(sample)
+                    Either(pr).isLeft() ? Either.right(sample) : Either.left(pr)
                 }
             }
         and: 'composed criterias on top of the base function'
@@ -134,7 +138,30 @@ class EitherSpec extends Specification {
         ]
     }
 
+    void 'using OR as an alternative value'() {
+        when: 'a non valid expression'
+            Either<Integer> possible = Either(value) | Right(0)
+        then: 'we should get what we expected'
+            val(possible) == expected
+        and: 'eventually it will be right'
+            possible.isRight()
+        where: 'possible values are'
+            value | expected
+            null  | 0
+            1     | 1
+    }
 
+    void 'using OR for a lazy computation alternative'() {
+        when: 'a non valid expression'
+            Either<Integer> possible = Either(value) | { Right(0) }
+        then: 'we should get what we expected'
+            val(possible) == expected
+        and: 'rules must apply'
+            possible.isRight()
+        where: 'possible values are'
+            value | expected
+            null  | 0
+            1     | 1
+    }
 
 }
-
