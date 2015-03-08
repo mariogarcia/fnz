@@ -1,22 +1,43 @@
+//  _____  _             _
+// |  __ \| |           (_)
+// | |__) | |_   _  __ _ _ _ __  ___
+// |  ___/| | | | |/ _` | | '_ \/ __|
+// | |    | | |_| | (_| | | | | \__ \
+// |_|    |_|\__,_|\__, |_|_| |_|___/
+//                  __/ |
+//                 |___/
+
+
 buildscript {
     repositories {
         jcenter()
-        maven {
-            url "http://dl.bintray.com/aalmiray/asciidoctor"
-        }
     }
     dependencies {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.5'
-        classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.0'
+        classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.2'
+        classpath 'net.saliman:gradle-cobertura-plugin:2.2.5'
+        classpath 'com.tkruse.gradle:gradle-groovysh-plugin:1.0.4'
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'groovy'
+apply plugin: 'codenarc'
+apply plugin: 'cobertura'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
-apply plugin: 'org.asciidoctor.gradle.asciidoctor'
+apply plugin: 'org.asciidoctor.convert'
+apply plugin: 'com.github.tkruse.groovysh'
+
+//  _____                            _                 _
+// |  __ \                          | |               (_)
+// | |  | | ___ _ __   ___ _ __   __| | ___ _ __   ___ _  ___  ___
+// | |  | |/ _ \ '_ \ / _ \ '_ \ / _` |/ _ \ '_ \ / __| |/ _ \/ __|
+// | |__| |  __/ |_) |  __/ | | | (_| |  __/ | | | (__| |  __/\__ \
+// |_____/ \___| .__/ \___|_| |_|\__,_|\___|_| |_|\___|_|\___||___/
+//             | |
+//             |_|
 
 repositories {
     jcenter()
@@ -26,20 +47,56 @@ dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.4.0'
     compile 'org.slf4j:slf4j-api:1.7.5'
     testCompile 'junit:junit:4.11'
-    testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
+    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
 }
+
+//   _____             __ _                       _   _
+//  / ____|           / _(_)                     | | (_)
+// | |     ___  _ __ | |_ _  __ _ _   _ _ __ __ _| |_ _  ___  _ __
+// | |    / _ \| '_ \|  _| |/ _` | | | | '__/ _` | __| |/ _ \| '_ \
+// | |___| (_) | | | | | | | (_| | |_| | | | (_| | |_| | (_) | | | |
+//  \_____\___/|_| |_|_| |_|\__, |\__,_|_|  \__,_|\__|_|\___/|_| |_|
+//                           __/ |
+//                          |___/
 
 asciidoctor {
-    sourceDir = 'src/docs' as  File
-    options = [
-        attributes: [
-            'icons': 'font',
-            'source-highlighter': 'prettify',
-            'toc': 'left'
-        ]
-    ]
+    sourceDir 'src/docs'
+    attributes(
+        'icons': 'font',
+        'source-highlighter': 'prettify',
+        'toc': 'left'
+    )
 }
 
+asciidoctor.dependsOn clean
+
+codenarc {
+   configFile = new File(projectDir, 'src/codenarc/rules.groovy')
+}
+
+cobertura {
+    coverageFormats = ['html', 'xml']
+}
+
+configurations.all {
+    resolutionStrategy {
+        // Cobertura includes an ASM version that can't handle Java 8, ASM 5.0.3 handles Java8
+        force 'org.ow2.asm:asm:5.0.3'
+        forcedModules = [ 'org.ow2.asm:asm:5.0.3' ]
+    }
+}
+
+groovysh {
+    groovyVersion = '2.4.0'
+}
+
+//  _____  _     _        _ _           _   _
+// |  __ \(_)   | |      (_) |         | | (_)
+// | |  | |_ ___| |_ _ __ _| |__  _   _| |_ _  ___  _ __
+// | |  | | / __| __| '__| | '_ \| | | | __| |/ _ \| '_ \
+// | |__| | \__ \ |_| |  | | |_) | |_| | |_| | (_) | | | |
+// |_____/|_|___/\__|_|  |_|_.__/ \__,_|\__|_|\___/|_| |_|
+//
 
 group = 'fnz'
 version = '1.0.3'
@@ -72,7 +129,18 @@ bintray {
 
 }
 
-task('playground', dependsOn:'classes', type: JavaExec) {
+//   _____          _                    _            _
+//  / ____|        | |                  | |          | |
+// | |    _   _ ___| |_ ___  _ __ ___   | |_ __ _ ___| | _____
+// | |   | | | / __| __/ _ \| '_ ` _ \  | __/ _` / __| |/ / __|
+// | |___| |_| \__ \ || (_) | | | | | | | || (_| \__ \   <\__ \
+//  \_____\__,_|___/\__\___/|_| |_| |_|  \__\__,_|___/_|\_\___/
+//
+
+
+task('console', dependsOn:'classes', type: JavaExec) {
+    group = 'help'
+    description 'starts a Groovy console with the classpath of the current project'
     main='groovy.ui.Console'
     project.dependencies.add("compile", 'org.codehaus.groovy:groovy-console:2.4.0')
     classpath = sourceSets.main.runtimeClasspath
