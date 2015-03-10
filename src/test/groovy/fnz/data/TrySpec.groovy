@@ -175,17 +175,17 @@ class TrySpec extends Specification {
 
     def 'using the or semantics'() {
         given: 'two functions'
-        Function BAD = { it / 0 }
-        Function GOOD =  { it / 2 }
+            Function BAD = { it / 0 }
+            Function GOOD =  { it / 2 }
         and: 'a monadic value'
-        Try<Integer> VALUE  = Success(42)
+            Try<Integer> VALUE  = Success(42)
         when: 'trying to execute several functions'
-        Try<Integer> resultRight = fmap(VALUE, BAD) | fmap(VALUE, GOOD)
-        Try<Integer> resultLeft = fmap(VALUE,GOOD) | fmap(VALUE, BAD)
+            Try<Integer> resultRight = fmap(VALUE, BAD) | fmap(VALUE, GOOD)
+            Try<Integer> resultLeft = fmap(VALUE,GOOD) | fmap(VALUE, BAD)
         then: 'we should be getting the one succeeding'
-        val(resultRight) == 21
-        val(resultLeft) == 21
-        val(resultRight) == val(resultLeft)
+            val(resultRight) == 21
+            val(resultLeft) == 21
+            val(resultRight) == val(resultLeft)
     }
 
 }
