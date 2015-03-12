@@ -23,8 +23,6 @@ public abstract class Maybe<A> implements Monad<A>, Or<A,Maybe<A>> {
 
     public abstract boolean isPresent();
 
-    public abstract Maybe<A> or(Maybe<A> newOption);
-
     public static class Just<JUST> extends Maybe<JUST> {
 
         public Just(Type<JUST> valueRef) {
