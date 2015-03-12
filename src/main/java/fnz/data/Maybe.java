@@ -1,5 +1,9 @@
 package fnz.data;
 
+import static org.codehaus.groovy.runtime.DefaultGroovyMethods.find;
+import static org.codehaus.groovy.runtime.DefaultGroovyMethods.asBoolean;
+import static org.codehaus.groovy.runtime.DefaultGroovyMethods.collect;
+
 /**
  *
  * @param <A>
@@ -115,7 +119,7 @@ public abstract class Maybe<A> implements Monad<A>, Or<A,Maybe<A>> {
     }
 
     public static <T> Maybe<T> maybe(T value) {
-        return value == null ? nothing() : just(value);
+        return asBoolean(collect(value)) ? just(value) : nothing();
     }
 
     public static <T,M extends Monad<T>> Maybe<T> maybe(M monad) {

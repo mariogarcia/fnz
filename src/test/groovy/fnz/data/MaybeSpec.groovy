@@ -169,4 +169,34 @@ class MaybeSpec extends Specification {
             city.isPresent() == false
     }
 
+    void 'using OR with an alternative value'() {
+        given:
+            Maybe<String> name = just('mario')
+        when:
+            Maybe<String> result =
+                name.bind { st -> Maybe.maybe(st - 'mario') }
+            Maybe<String> finalValue =
+                result | Maybe.just('anybody')
+        then:
+            !result.isPresent()
+            val(finalValue) == 'anybody'
+    }
+
+    void 'using OR with an alternative LAZY computation'() {
+        given:
+            Maybe<String> name = just('mario')
+        when:
+            Maybe<String> result =
+                name.bind { st -> Maybe.maybe(st - value) }
+            Maybe<String> finalValue =
+                result | { Maybe.just('anybody') }
+        then:
+            result.isPresent() == present
+            val(finalValue) == remaining
+        where:
+            value   | present | remaining
+            'mario' | false   | 'anybody'
+            'mar'   | true    | 'io'
+    }
+
 }

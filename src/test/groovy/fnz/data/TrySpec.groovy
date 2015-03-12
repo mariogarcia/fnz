@@ -4,6 +4,7 @@ import static Fn.List
 import static Fn.Just
 import static Fn.bind
 import static Fn.fmap
+import static Fn.fapply
 import static Fn.val
 import static Fn.wrap
 import static Fn.recover
@@ -26,6 +27,29 @@ class TrySpec extends Specification {
             result2.isFailure()
     }
     // end::basic1[]
+
+    def 'using fapply over a valid value'() {
+        given: 'a non safe function'
+            Function toTry = { Success(it) }
+            Function notUseThis = { Integer x -> x / 0 }
+        when: 'trying to apply it to a given value'
+            Try result = fapply(bind(Just(2),toTry), Just(notUseThis))
+        then: 'we should not be worried about exceptions'
+            result.isFailure()
+    }
+
+    def 'using fapply over a failure'() {
+        given: 'a non safe function'
+            Function toTry = { Success(it) }
+            Function notUseThis = { Integer x -> x / 0 }
+        when: 'trying to apply it to a given value'
+            Try result =
+                fapply(
+                    Try.failure(new Type(2), new Exception("not enough")),
+                    Just(notUseThis))
+        then: 'we should not be worried about exceptions'
+            result.isFailure()
+    }
 
     // tag::exception1[]
     def 'throwing an exception'() {
@@ -59,6 +83,14 @@ class TrySpec extends Specification {
             val(val(anything)) == 0 // TODO recover(Function... nFunctions)
     }
     // end::recover[]
+
+    def 'using recover() with no recovering functions'() {
+        when:
+            Function failingFn = recover({throw new Exception("ahhh")} as Function)
+            def anything = bind(Just(1), failingFn)
+        then:
+            anything.isFailure()
+    }
 
     def 'classic try catch example'() {
         given: 'a list of numbers as strings'

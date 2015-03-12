@@ -18,6 +18,13 @@ class EitherSpec extends Specification {
             left(null).fapply(right(1)).typedRef.value == null
     }
 
+    void 'applicative: Either applicative not null'() {
+        given: 'there is a valid function'
+            Function<Integer,Integer> inc = { x -> x + 1 }
+        expect: 'the right value to pop up'
+            val(right(1).fapply(right(inc))) == 2
+    }
+
     // tag::functor2[]
     void 'Either functor implementation'() {
         given: 'a function we want to apply'
