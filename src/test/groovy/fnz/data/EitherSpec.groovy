@@ -105,6 +105,7 @@ class EitherSpec extends Specification {
                     .bind(lookByCity)
         then: 'there should be only one item'
             result.isLeft()
+            !result.isRight()
             result.typedRef.value.name == name_of_the_result
         where: 'samples used in this spec are'
             sample          |   name_of_the_result

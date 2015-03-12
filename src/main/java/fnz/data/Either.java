@@ -17,18 +17,18 @@ public abstract class Either<A> implements Monad<A>, Or<A,Either<A>> {
         return this.typedRef;
     }
 
-    public boolean isLeft() {
-        return false;
-    }
-
-    public boolean isRight() {
-        return false;
-    }
+    public abstract boolean isLeft();
+    public abstract boolean isRight();
 
     public static class Right<R> extends Either<R> {
 
         public Right(Type<R> valueRef) {
             super(valueRef);
+        }
+
+        @Override
+        public boolean isLeft() {
+            return false;
         }
 
         @Override
@@ -73,6 +73,11 @@ public abstract class Either<A> implements Monad<A>, Or<A,Either<A>> {
         @Override
         public boolean isLeft() {
             return true;
+        }
+
+        @Override
+        public boolean isRight() {
+            return false;
         }
 
         @Override

@@ -135,8 +135,12 @@ class TrySpec extends Specification {
         then: 'checking both results'
             failure instanceof Try.Failure
             success instanceof Try.Success
-	and: 'success action ends with a given value'
-	    val(success) == 1.5
+            success.isSuccess()
+            !success.isFailure()
+            failure.isFailure()
+            !failure.isSuccess()
+        and: 'success action ends with a given value'
+            val(success) == 1.5
     }
 
     def 'once we have a success we want to make it fail'() {
@@ -156,6 +160,7 @@ class TrySpec extends Specification {
             Try failure = fmap(successSoFar, divByZero)
         then: 'the try instance will return failure'
             failure.isFailure()
+            !failure.isSuccess()
     }
 
     def 'making a failure to throw an exception'() {
@@ -166,7 +171,8 @@ class TrySpec extends Specification {
                     undefined + 1 // wont be executed
                 }
         and: 'once we know it ended wrong'
-            assert successSoFar.isFailure()
+            successSoFar.isFailure()
+            !successSoFar.isSuccess()
         and: 'asking the failure to throw an exception'
             successSoFar.throwException()
         then: 'and only then we will get the exception'

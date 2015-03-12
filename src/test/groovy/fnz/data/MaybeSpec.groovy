@@ -48,6 +48,15 @@ class MaybeSpec extends Specification {
     }
     // end::fapplyspechaskell[]
 
+    void 'using fmap using a Nothing() instance'() {
+        when: 'trying to apply a function when no value'
+            Maybe<Integer> result = Nothing().fmap { x -> x * 2 }
+        then: 'it should not apply the function'
+        and: 'return the same instance'
+            result instanceof Maybe.Nothing
+            !result.isPresent()
+    }
+
 
     // tag::maybebind[]
     void 'Monad: using maybe to shortcircuit a process'() {
@@ -161,4 +170,3 @@ class MaybeSpec extends Specification {
     }
 
 }
-
