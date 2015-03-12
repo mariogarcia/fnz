@@ -19,7 +19,6 @@ public abstract class Try<A> implements Monad<A>, Or<A,Try<A>> {
 
     public abstract Boolean isSuccess();
     public abstract Boolean isFailure() ;
-    public abstract Try<A> recover(Try<A> alternative);
 
     public static class Success<SUCCESS> extends Try<SUCCESS> {
 
@@ -54,11 +53,6 @@ public abstract class Try<A> implements Monad<A>, Or<A,Try<A>> {
             } catch(Throwable th) {
                 return (F) failure(getTypedRef(), th);
             }
-        }
-
-        @Override
-        public Try<SUCCESS> recover(Try<SUCCESS> alternative) {
-            return this;
         }
 
         @Override
@@ -118,11 +112,6 @@ public abstract class Try<A> implements Monad<A>, Or<A,Try<A>> {
 
         public Throwable getException() {
              return this.throwable;
-        }
-
-        @Override
-        public Try<FAILURE> recover(Try<FAILURE> alternative) {
-            return alternative;
         }
 
         @Override

@@ -43,10 +43,6 @@ public final class Fn {
         return Try.failure(null, new NullPointerException());
     }
 
-    public static <A> Try<A> Try(A source) {
-        return (Try<A>) (source != null ? Success(source) : Failure());
-    }
-
     public static <A> ListMonad<A> List(A... values) {
         return ListMonad.list(values);
     }
@@ -67,22 +63,18 @@ public final class Fn {
         };
     }
 
-    public static <A,B,F extends Function<A,B>> Function<A,Try<B>> recover(F fn, F... alternatives) {
+    public static <A,B,F extends Function<A,B>> Function<A,Try<B>> recover(F... alternatives) {
         return new Function<A, Try<B>>() {
             public Try<B> apply(A a) {
-                 try {
-                     return new Try.Success<B>(new Type<B>(fn.apply(a)));
-                 } catch(Throwable thOuter) {
-                     Try.Failure<B> failure = null;
-                     for (F alternative : alternatives) {
-                         try {
-                             return new Try.Success<B>(new Type<B>(alternative.apply(a)));
-                         } catch(Throwable thInner) {
-                             failure = new Try.Failure<B>(thInner);
-                         }
-                     }
-                     return failure;
-                 }
+                Try.Failure<B> failure = null;
+                for (F alternative : alternatives) {
+                    try {
+                        return new Try.Success<B>(new Type<B>(alternative.apply(a)));
+                    } catch(Throwable thInner) {
+                        failure = new Try.Failure<B>(thInner);
+                    }
+                }
+                return failure;
             }
         };
     }
