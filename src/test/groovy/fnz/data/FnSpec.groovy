@@ -73,5 +73,35 @@ class FnSpec extends Specification {
             2     | true | 3
     }
 
+    void 'using maybe method: simple value'() {
+        given: 'a function to increment a given number'
+            def inc = { x ->  x + 1 }
+        when:
+            Maybe result = fmap(Maybe(value), inc)
+        then: 'possible final value should be'
+            result.isPresent() == isPresent
+            val(result) == finalValue
+        where: 'possible values are'
+            value | isPresent | finalValue
+            null  | false| null
+            2     | true | 3
+    }
+
+    void 'using Failure()'() {
+        when: 'trying to use a failure to compute anything'
+            Try result = fmap(Failure(), { x -> x })
+        then: 'we should not be able'
+            result instanceof Try.Failure
+            val(result) == null
+            result.exception instanceof NullPointerException
+    }
+
+    void 'using Success()'() {
+        when: 'trying to use a success value to compute anything'
+            Try result = fmap(Success(1)) { x -> x + 1 }
+        then:
+            result instanceof Try.Success
+            val(result) == 2
+    }
 
 }
