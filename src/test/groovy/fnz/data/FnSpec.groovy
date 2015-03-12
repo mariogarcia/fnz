@@ -7,7 +7,9 @@ import static Fn.List
 import static Fn.Right
 import static Fn.wrap
 import static Fn.val
-import static Fn.maybe
+import static Fn.Maybe
+import static Fn.Failure
+import static Fn.Success
 
 import groovy.transform.CompileStatic
 import groovy.transform.TypeCheckingMode
@@ -55,17 +57,16 @@ class FnSpec extends Specification {
             result.typedRef.value == [1,2,2,3,3,4,4,5]
     }
 
-    @CompileStatic(TypeCheckingMode.SKIP)
-    void 'Using maybe method'() {
+    void 'using maybe method: monadic value'() {
         given: 'a function to increment a given number'
             def inc = { x ->  x + 1 }
         when: 'trying to apply the computation'
             def tryResult =
                 val(fmap(Just(value),wrap(inc)))
         then: 'there could be a result or not'
-            maybe(tryResult).isPresent() == isPresent
+            Maybe(tryResult).isPresent() == isPresent
         and: 'possible final value should be'
-            val(maybe(tryResult)) == finalValue
+            val(Maybe(tryResult)) == finalValue
         where: 'possible values are'
             value | isPresent | finalValue
             null  | false| null

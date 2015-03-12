@@ -28,7 +28,11 @@ public final class Fn {
     }
 
     public static <A> Maybe<A> Maybe(A source) {
-        return (Maybe<A>) (source != null ? Just(source) : Nothing()) ;
+        return Maybe.maybe(source);
+    }
+
+    public static <A,M extends Monad<A>> Maybe<A> Maybe(M source) {
+        return Maybe.maybe(source);
     }
 
     public static <A> Try.Success<A> Success(A source) {
@@ -99,15 +103,6 @@ public final class Fn {
 
     public static <A> A val(Monad<A> monad) {
         return monad != null ? monad.getTypedRef().getValue() : null;
-    }
-
-    @Deprecated
-    public static <A> Maybe<A> maybe(Monad<A> monad) {
-        if (monad == null) return Nothing();
-
-        A value = monad.getTypedRef().getValue();
-
-        return (Maybe<A>) (value != null ? Just(value) : Nothing()) ;
     }
 
 }

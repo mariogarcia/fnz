@@ -114,4 +114,12 @@ public abstract class Maybe<A> implements Monad<A>, Or<A,Maybe<A>> {
         return new Maybe.Nothing();
     }
 
+    public static <T> Maybe<T> maybe(T value) {
+        return value == null ? nothing() : just(value);
+    }
+
+    public static <T,M extends Monad<T>> Maybe<T> maybe(M monad) {
+        return maybe(monad.getTypedRef().getValue());
+    }
+
 }
