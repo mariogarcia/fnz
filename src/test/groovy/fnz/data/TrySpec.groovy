@@ -179,7 +179,7 @@ class TrySpec extends Specification {
             thrown(ArithmeticException)
     }
 
-    def 'using the or semantics'() {
+    def 'using the OR with an alternative VALUE'() {
         given: 'two functions'
             Function BAD = { it / 0 }
             Function GOOD =  { it / 2 }
@@ -191,6 +191,21 @@ class TrySpec extends Specification {
         then: 'we should be getting the one succeeding'
             val(resultRight) == 21
             val(resultLeft) == 21
+            val(resultRight) == val(resultLeft)
+    }
+
+    def 'using the OR with an alternative FUNCTION'() {
+        given: 'two functions'
+            Function BAD = wrap { it / 0 }
+            Function GOOD =  wrap { 2 }
+        and: 'a monadic value'
+            Try<Integer> VALUE  = Success(42)
+        when: 'trying to execute several functions'
+            Try<Integer> resultRight = bind(VALUE, BAD) | GOOD
+            Try<Integer> resultLeft = bind(VALUE,GOOD) | BAD
+        then: 'we should be getting the one succeeding'
+            val(resultRight) == 2
+            val(resultLeft) == 2
             val(resultRight) == val(resultLeft)
     }
 
