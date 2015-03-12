@@ -15,10 +15,8 @@ import groovy.transform.CompileStatic
 import groovy.transform.TypeCheckingMode
 import spock.lang.Specification
 
-@CompileStatic
 class FnSpec extends Specification {
 
-    @CompileStatic(TypeCheckingMode.SKIP)
     void 'Fmap'() {
         given: 'a function (a->b) using functional interface coertion'
             Function<String,Integer> fn =
@@ -31,7 +29,6 @@ class FnSpec extends Specification {
             val(result) == 2
     }
 
-    @CompileStatic(TypeCheckingMode.SKIP)
     void 'Binding'() {
         when: 'Building a nested binding expression'
             Maybe.Just<Integer> result =
@@ -46,7 +43,6 @@ class FnSpec extends Specification {
             val(result) == 3
     }
 
-    @CompileStatic(TypeCheckingMode.SKIP)
     void 'Using bind with a list monad: looks like comprehensions'() {
         given: 'a list monad'
             ListMonad<Integer> numbers = List(1,2,3,4)
