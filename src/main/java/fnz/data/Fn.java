@@ -54,11 +54,7 @@ public final class Fn {
     public static <A,B,F extends Function<A,B>> Function<A, Try<B>> wrap(F fn) {
         return new Function<A, Try<B>>() {
             public Try<B> apply(A a) {
-                try {
-                    return new Try.Success<B>(new Type<B>(fn.apply(a)));
-                } catch (Throwable th) {
-                    return new Try.Failure<B>(th);
-                }
+                return fmap(Success(a), fn);
             }
         };
     }
@@ -66,15 +62,14 @@ public final class Fn {
     public static <A,B,F extends Function<A,B>> Function<A,Try<B>> recover(F... alternatives) {
         return new Function<A, Try<B>>() {
             public Try<B> apply(A a) {
-                Try.Failure<B> failure = null;
+                Try<B> result = null;
                 for (F alternative : alternatives) {
-                    try {
-                        return new Try.Success<B>(new Type<B>(alternative.apply(a)));
-                    } catch(Throwable thInner) {
-                        failure = new Try.Failure<B>(thInner);
+                    result = fmap(Success(a), alternative);
+                    if (result.isSuccess()) {
+                        return result;
                     }
                 }
-                return failure;
+                return result;
             }
         };
     }
