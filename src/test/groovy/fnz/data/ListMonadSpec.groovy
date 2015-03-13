@@ -1,7 +1,9 @@
 package fnz.data
 
-import static ListMonad.list
 import static Fn.bind
+import static Fn.Just
+import static ListMonad.list
+
 import spock.lang.Specification
 
 /**
@@ -17,6 +19,36 @@ class ListMonadSpec extends Specification {
         then: 'result should be the expected'
             fb instanceof ListMonad
             fb.typedRef.value == [2,3,4,5]
+    }
+
+    void 'using fmap with an empty list'() {
+        given: 'a list of numbers'
+            ListMonad<Integer> fa = list()
+        when: 'incrementing their value'
+            ListMonad<Integer> fb = fa.fmap { it + 1 }
+        then: 'result should be the expected'
+            fb instanceof ListMonad
+            fb.typedRef.value == []
+    }
+
+    void 'using fapply'() {
+        given: 'a list of numbers'
+            ListMonad<Integer> fa = list(1,2,3,4)
+        when: 'incrementing their value'
+            ListMonad<Integer> fb = fa.fapply(Just({ x -> x + 1 } as Function))
+        then: 'result should be the expected'
+            fb instanceof ListMonad
+            fb.typedRef.value == [2,3,4,5]
+    }
+
+    void 'using fapply with an empty list'() {
+        given: 'a list of numbers'
+            ListMonad<Integer> fa = list()
+        when: 'incrementing their value'
+            ListMonad<Integer> fb = fa.fapply(Just({ x -> x + 1 } as Function))
+        then: 'result should be the expected'
+            fb instanceof ListMonad
+            fb.typedRef.value == []
     }
 
     void 'using bind'() {
@@ -57,6 +89,24 @@ class ListMonadSpec extends Specification {
             result.typedRef.value == list("hi",2,"bye",3).typedRef.value
     }
 
+    void 'using bind for an empty list'() {
+        given: 'an empty list'
+            ListMonad<Integer> numbers = list()
+        when: 'trying to operate over the list'
+            def result = numbers.bind { x -> x + 1 }
+        then: 'the list remains empty'
+            !numbers.typedRef.value
+    }
+
+    void 'using bind for a list with null'() {
+        given: 'an empty list'
+            ListMonad<Integer> numbers = list(null)
+        when: 'trying to operate over the list'
+            def result = numbers.bind { x -> x + 1 }
+        then: 'the list remains empty'
+            !numbers.typedRef.value
+    }
+
     // tag::listmonadvsplaingroovy1[]
     void 'Comparing list monad with plain Groovy (I)'() {
         when: 'collecting number, its double and its half with plain Groovy'
@@ -75,4 +125,3 @@ class ListMonadSpec extends Specification {
     // end::listmonadvsplaingroovy1[]
 
 }
-

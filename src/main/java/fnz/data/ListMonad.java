@@ -12,7 +12,7 @@ public class ListMonad<A> implements Monad<A> {
 
     private final Iterable<A> value;
 
-    public ListMonad(Iterable<A> values) {
+    private ListMonad(Iterable<A> values) {
         this.value = values;
     }
 
@@ -55,7 +55,7 @@ public class ListMonad<A> implements Monad<A> {
     }
 
     public boolean isNullOrEmpty() {
-        return this.value == null;
+        return this.value == null || !this.value.iterator().hasNext();
     }
 
     public static <T> ListMonad<T> list(T... values){
