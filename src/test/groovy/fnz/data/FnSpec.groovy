@@ -100,4 +100,13 @@ class FnSpec extends Specification {
             val(result) == 2
     }
 
+    void 'using val with null'() {
+        expect: 'a call with null returns null'
+        !val(null)
+    }
+
+    void 'stupid coverage check about creating an instance of final class'() {
+        expect:
+        new Fn()
+    }
 }
