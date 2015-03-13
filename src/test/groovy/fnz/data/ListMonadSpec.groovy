@@ -124,4 +124,12 @@ class ListMonadSpec extends Specification {
     }
     // end::listmonadvsplaingroovy1[]
 
+    void 'testing toString()'() {
+        expect: 'a string representation'
+            list.toString() == expectedRep
+        where: 'possible different types of values are'
+            list     | expectedRep
+            list()   | '[]'
+            list(1)  | '[1]'
+    }
 }

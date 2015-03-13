@@ -54,6 +54,11 @@ public class ListMonad<A> implements Monad<A> {
         return (F) new ListMonad<>(transformed);
     }
 
+    @Override
+    public String toString() {
+        return !isNullOrEmpty() ? this.getTypedRef().getValue().toString() : Arrays.asList().toString();
+    }
+
     public boolean isNullOrEmpty() {
         return this.value == null || !this.value.iterator().hasNext();
     }
