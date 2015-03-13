@@ -25,7 +25,7 @@ public abstract class Maybe<A> implements Monad<A>, Or<A,Maybe<A>> {
 
     public static class Just<JUST> extends Maybe<JUST> {
 
-        public Just(Type<JUST> valueRef) {
+        private Just(Type<JUST> valueRef) {
             super(valueRef);
         }
 
@@ -69,7 +69,7 @@ public abstract class Maybe<A> implements Monad<A>, Or<A,Maybe<A>> {
 
     public static class Nothing<NOTHING> extends Maybe<NOTHING> {
 
-        public Nothing() {
+        private Nothing() {
             super(new Type(null));
         }
 

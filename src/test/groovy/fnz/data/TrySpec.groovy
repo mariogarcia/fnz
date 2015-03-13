@@ -241,4 +241,17 @@ class TrySpec extends Specification {
             val(resultRight) == val(resultLeft)
     }
 
+    def 'building a try with no chance of recovery'() {
+        when:
+            Try notRecoverable =
+                fmap(Try.failure(new Exception('not found'))) { File file -> file.text }
+        then:
+            notRecoverable.isFailure()
+            !notRecoverable.isSuccess()
+        and:
+            notRecoverable.getTypedRef()
+            !notRecoverable.getTypedRef().getValue()
+            !val(notRecoverable)
+    }
+
 }

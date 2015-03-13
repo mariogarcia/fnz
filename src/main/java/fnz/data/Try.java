@@ -22,7 +22,7 @@ public abstract class Try<A> implements Monad<A>, Or<A,Try<A>> {
 
     public static class Success<SUCCESS> extends Try<SUCCESS> {
 
-        public Success(Type<SUCCESS> value) {
+        private Success(Type<SUCCESS> value) {
             super(value);
         }
 
@@ -71,12 +71,12 @@ public abstract class Try<A> implements Monad<A>, Or<A,Try<A>> {
 
         private final Throwable throwable;
 
-        public Failure(Type<FAILURE> value, Throwable th) {
+        private Failure(Type<FAILURE> value, Throwable th) {
             super(value);
             this.throwable = th;
         }
 
-        public Failure(Throwable throwable) {
+        private Failure(Throwable throwable) {
             super(new Type<FAILURE>(null));
             this.throwable = throwable;
         }
@@ -132,6 +132,10 @@ public abstract class Try<A> implements Monad<A>, Or<A,Try<A>> {
 
     public static <T> Try.Failure<T> failure(Type<T> value, Throwable th) {
         return new Try.Failure<T>(value, th);
+    }
+
+    public static <T> Try.Failure<T> failure(Throwable th) {
+        return new Try.Failure<T>(th);
     }
 
 }

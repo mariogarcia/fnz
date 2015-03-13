@@ -22,7 +22,7 @@ public abstract class Either<A> implements Monad<A>, Or<A,Either<A>> {
 
     public static class Right<R> extends Either<R> {
 
-        public Right(Type<R> valueRef) {
+        private Right(Type<R> valueRef) {
             super(valueRef);
         }
 
@@ -40,7 +40,6 @@ public abstract class Either<A> implements Monad<A>, Or<A,Either<A>> {
         public <B> Right<B> fapply(Applicative<Function<R, B>> afn) {
             return this.fmap(afn.getTypedRef().getValue());
         }
-
 
         @Override
         public <B, M extends Monad<B>> M bind(Function<R, M> fn) {
@@ -66,7 +65,7 @@ public abstract class Either<A> implements Monad<A>, Or<A,Either<A>> {
 
     public static class Left<L> extends Either<L> {
 
-        public Left(Type<L> valueRef) {
+        private Left(Type<L> valueRef) {
             super(valueRef);
         }
 
@@ -84,7 +83,6 @@ public abstract class Either<A> implements Monad<A>, Or<A,Either<A>> {
         public <B> Left<B> fapply(Applicative<Function<L, B>> afn) {
             return new Left(getTypedRef());
         }
-
 
         @Override
         public <B, M extends Monad<B>> M bind(Function<L, M> fn) {
