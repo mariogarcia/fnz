@@ -298,6 +298,8 @@ include::{testDir}/fnz/data/TrySpec.groovy[tags=exception1,indent=0]
 <1> You can get the wrapped exception
 <2> Or throw the exception instead
 
+==== Recover
+
 Normally when having an exception we would like to react somehow. Sometimes
 we may want to set, for example a default value in case something went wrong.
 
