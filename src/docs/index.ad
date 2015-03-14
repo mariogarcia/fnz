@@ -6,19 +6,9 @@ Mario Garcia <link:https://www.twitter.com/marioggar[@marioggar]>
 :sourceDirJava: ../../src/main/java
 :stem:
 
-Groovy functional programming experiments
+Functional Groovy
 
-== What is FNZ 
-
-This project is a collection of ideas taken while learning about some functional languages in order
-to figure out how to translate them into Groovy.
-
-The main objectives of this library are:
-
-* Create more control structures
-* Understand persistent collections
-* Ways of enforce immutability
-
+include::intro.ad[]
 
 include::data_theory.ad[]
 
