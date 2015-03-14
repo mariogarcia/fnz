@@ -49,11 +49,6 @@ class Where {
         return this
     }
 
-    Where when(final Map map) {
-        conditions << new Evaluation(condition: { isCase(map, parameters.val) })
-        return this
-    }
-
     Where then(final Closure cl) {
         conditions.last().execution = cl
         return this
@@ -74,35 +69,26 @@ class Where {
     }
 
     def evaluate() {
-        Closure<Evaluation> byApplyingParameters = composedClosure.call(parameters)
+        Closure<Evaluation> byApplyingParameters = applyDelegateToExecution.call(parameters)
         Closure execution =
             conditions.
                 collect(byApplyingParameters).
-                find(firstTrue).execution
+                find(firstTrue).
+                execution
 
         return execution.call()
-    }
-
-    private Closure<Closure<Evaluation>>  applyDelegateToCondition = { final parameters ->
-        return { final Evaluation evaluation ->
-            evaluation.condition.delegate = parameters
-            evaluation
-        }
     }
 
     private Closure<Closure<Evaluation>>  applyDelegateToExecution = { final parameters ->
        return { final Evaluation evaluation ->
             evaluation.execution.delegate = parameters
+            evaluation.condition.delegate = parameters
             evaluation
        }
     }
 
     private Closure<Boolean>  firstTrue = { Evaluation evaluation ->
         evaluation.condition.call()
-    }
-
-    private ComposedClosure<Closure<Evaluation>> getComposedClosure() {
-       return new ComposedClosure(applyDelegateToCondition, applyDelegateToExecution)
     }
 
     public static <T> Maybe<T> check(final Map values, final Closure<Evaluation> evaluation) {
