@@ -54,6 +54,39 @@ class TypeSpec extends AstBaseSpec {
         exampleClass.newInstance().simpleFunctionalInterface()
     }
 
+    void 'simple type error'() {
+        when: 'a simple inner type example with no generics'
+        def exampleClass =
+            helper.parse(
+               """
+               package fnz.samples.type
+
+               class A {
+                    static {
+                        ftype Fn
+                    }
+               }
+               """
+            )
+        then: 'the method to return true'
+            thrown(Exception)
+    }
+
+    void 'simple type checking we could work without package'() {
+        expect: 'parsing doesnt throw any error'
+        def exampleClass =
+            helper.parse(
+               """
+               class A {
+                    static {
+                        ftype Fn >= String >> Integer
+                    }
+               }
+               """
+            )
+    }
+
+
     void 'simple type alias: check imported classes'() {
         given: 'a simple inner type example with no generics'
         def exampleClass =

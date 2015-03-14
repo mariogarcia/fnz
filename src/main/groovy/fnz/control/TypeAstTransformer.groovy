@@ -171,10 +171,6 @@ class TypeAstTransformer extends MethodCallExpressionTransformer implements Opco
         return listExpression.expressions.collect(this.&createParameterFrom) as Parameter[]
     }
 
-    private Parameter createParameterFrom(ClassNode clazz) {
-        return param(clazz, validIdentifier)
-    }
-
     private Parameter createParameterFrom(VariableExpression variable) {
         return param(make(variable.name), validIdentifier)
     }
