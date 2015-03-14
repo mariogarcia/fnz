@@ -210,6 +210,23 @@ someone. Because the rules of the monad, I know if the first search fails the
 second will be triggered, and so on. In case any of them succeed the value will be
 return immediately.
 
+==== Or
+
+The same way we used `or` in Maybe to express an alternative to
+`wrong` values we can use it in `Either`.
+
+[source,java]
+.value
+----
+include::{testDir}/fnz/data/EitherSpec.groovy[tags=eitherorvalue,indent=0]
+----
+
+[source,java]
+.lazy expression
+----
+include::{testDir}/fnz/data/EitherSpec.groovy[tags=eitherorcomputation,indent=0]
+----
+
 === ListMonad
 
 Collections in general are one of the most used data structures ever. 

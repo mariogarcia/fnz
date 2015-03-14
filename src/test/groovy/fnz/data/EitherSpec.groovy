@@ -146,6 +146,7 @@ class EitherSpec extends Specification {
         ]
     }
 
+    // tag::eitherorvalue[]
     void 'using OR as an alternative value'() {
         when: 'a non valid expression'
             Either<Integer> possible = Either(value) | Right(0)
@@ -158,7 +159,9 @@ class EitherSpec extends Specification {
             null  | 0
             1     | 1
     }
+    // end::eitherorvalue[]
 
+    // tag::eitherorcomputation[]
     void 'using OR for a lazy computation alternative'() {
         when: 'a non valid expression'
             Either<Integer> possible = Either(value) | { Right(0) }
@@ -171,5 +174,6 @@ class EitherSpec extends Specification {
             null  | 0
             1     | 1
     }
+    // end::eitherorcomputation[]
 
 }
