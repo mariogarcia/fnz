@@ -4,6 +4,7 @@ package fnz.data
 import static Fn.val
 import static Maybe.just
 import static Maybe.nothing
+import static Maybe.maybe
 // end::imports[]
 
 // tag::fnimports[]
@@ -13,6 +14,7 @@ import static Fn.fapply
 import static Fn.bind
 // end::fnimports[]
 
+import spock.lang.Unroll
 import spock.lang.Specification
 
 /**
@@ -160,6 +162,52 @@ class MaybeSpec extends Specification {
     }
     // end::maybeor2[]
 
+    // tag::maybetruth[]
+    @Unroll
+    void 'using maybe() like the Groovy-Truth'() {
+        when:
+            Maybe<?> result = maybe(value)
+        then:
+            result.isPresent() == valid
+        where:
+            value | valid
+         //---------------//
+            null  | false
+            []    | false
+            ''    | false
+            [:]   | false
+         //---------------//
+            false | true
+            0     | true
+            1     | true
+            [1]   | true
+            [0]   | true
+            [a:1] | true
+    }
+    // end::maybetruth[]
+
+    // tag::maybetruthexample1[]
+    void 'using maybe() simple example (I)'() {
+        when:
+            String unknown = '' // <1>
+            Maybe<String> result = maybe(unknown) | just('me') // <2>
+        then:
+            result.isPresent() // <3>
+            result.typedRef.value == 'me' // <4>
+    }
+    // end::maybetruthexample1[]
+
+    // tag::maybetruthexample2[]
+    void 'using maybe() simple example (II)'() {
+        when:
+            String unknown = 'valid' // <1>
+            Maybe<String> result = maybe(unknown) | just('me') // <2>
+        then:
+            result.isPresent() // <3>
+            result.typedRef.value == 'valid' // <4>
+    }
+    // end::maybetruthexample2[]
+
     void 'testing maybe is present'() {
         when: 'something has value and adding an alternative'
             Maybe<String> name = just("mario")
@@ -170,29 +218,25 @@ class MaybeSpec extends Specification {
     }
 
     void 'using OR with an alternative value'() {
-        given:
-            Maybe<String> name = just('mario')
         when:
-            Maybe<String> result =
-                name.bind { st -> Maybe.maybe(st - 'mario') }
-            Maybe<String> finalValue =
-                result | Maybe.just('anybody')
+            // tag::usingOrAsValue[]
+            Maybe<String> partial = just('mario').bind { String st -> maybe(st - 'mario') } // <1>
+            Maybe<String> result = partial | just('anybody') // <2>
+            // end::usingOrAsValue[]
         then:
-            !result.isPresent()
-            val(finalValue) == 'anybody'
+            !partial.isPresent()
+            val(result) == 'anybody'
     }
 
     void 'using OR with an alternative LAZY computation'() {
-        given:
-            Maybe<String> name = just('mario')
         when:
-            Maybe<String> result =
-                name.bind { st -> Maybe.maybe(st - value) }
-            Maybe<String> finalValue =
-                result | { Maybe.just('anybody') }
+            // tag::usingOrAsLazyExpression[]
+            Maybe<String> partial = just('mario').bind { st -> maybe(st - value) } // <1>
+            Maybe<String> result = partial | { just('anybody') } // <2>
+            // end::usingOrAsLazyExpression[]
         then:
-            result.isPresent() == present
-            val(finalValue) == remaining
+            partial.isPresent() == present
+            val(result) == remaining
         where:
             value   | present | remaining
             'mario' | false   | 'anybody'
