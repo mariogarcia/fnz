@@ -1,6 +1,5 @@
 package fnz.data;
 
-import static org.codehaus.groovy.runtime.DefaultGroovyMethods.find;
 import static org.codehaus.groovy.runtime.DefaultGroovyMethods.asBoolean;
 import static org.codehaus.groovy.runtime.DefaultGroovyMethods.collect;
 
