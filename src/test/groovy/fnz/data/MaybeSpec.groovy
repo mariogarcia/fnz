@@ -215,6 +215,8 @@ class MaybeSpec extends Specification {
         then: 'we should get first value'
             name.isPresent() == true
             city.isPresent() == false
+        and:
+            city.toString() == 'Nothing()'
     }
 
     void 'using OR with an alternative value'() {
@@ -226,6 +228,8 @@ class MaybeSpec extends Specification {
         then:
             !partial.isPresent()
             val(result) == 'anybody'
+        and:
+            result.toString() == 'Just(anybody)'
     }
 
     void 'using OR with an alternative LAZY computation'() {

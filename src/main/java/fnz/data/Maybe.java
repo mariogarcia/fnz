@@ -8,20 +8,13 @@ import static org.codehaus.groovy.runtime.DefaultGroovyMethods.collect;
  *
  * @param <A>
  */
-public abstract class Maybe<A> implements Monad<A>, Or<A,Maybe<A>> {
-
-    private final Type<A> typedRef;
-
-    protected Maybe(Type<A> valueRef) {
-        this.typedRef = valueRef;
-    }
-
-    @Override
-    public Type<A> getTypedRef() {
-        return this.typedRef;
-    }
+public abstract class Maybe<A> extends MonadType<A> implements Or<A,Maybe<A>> {
 
     public abstract boolean isPresent();
+
+    public Maybe(Type<A> valueRef) {
+        super(valueRef);
+    }
 
     public static class Just<JUST> extends Maybe<JUST> {
 

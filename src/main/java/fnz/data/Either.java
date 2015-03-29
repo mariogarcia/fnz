@@ -4,17 +4,10 @@ package fnz.data;
  *
  * @param <A>
  */
-public abstract class Either<A> implements Monad<A>, Or<A,Either<A>> {
-
-    private final Type<A> typedRef;
+public abstract class Either<A> extends MonadType<A> implements Or<A,Either<A>> {
 
     protected Either(Type<A> value) {
-        this.typedRef = value;
-    }
-
-    @Override
-    public Type<A> getTypedRef() {
-        return this.typedRef;
+        super(value);
     }
 
     public abstract boolean isLeft();

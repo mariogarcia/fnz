@@ -5,16 +5,10 @@ package fnz.data;
  * @author mario
  * @param <A>
  */
-public abstract class Try<A> implements Monad<A>, Or<A,Try<A>> {
-
-    private final Type<A> typedRef;
+public abstract class Try<A> extends MonadType<A> implements Or<A,Try<A>> {
 
     protected Try(Type<A> valueRef) {
-        this.typedRef = valueRef;
-    }
-
-    public Type<A> getTypedRef() {
-      return this.typedRef;
+        super(valueRef);
     }
 
     public abstract Boolean isSuccess();
