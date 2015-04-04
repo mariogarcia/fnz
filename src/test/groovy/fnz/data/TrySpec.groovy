@@ -4,6 +4,7 @@ import static Fn.List
 import static Fn.Just
 import static Fn.bind
 import static Fn.fmap
+import static Fn.fapply
 import static Fn.val
 import static Fn.wrap
 import static Fn.recover
@@ -26,6 +27,29 @@ class TrySpec extends Specification {
             result2.isFailure()
     }
     // end::basic1[]
+
+    def 'using fapply over a valid value'() {
+        given: 'a non safe function'
+            Function toTry = { Success(it) }
+            Function notUseThis = { Integer x -> x / 0 }
+        when: 'trying to apply it to a given value'
+            Try result = fapply(bind(Just(2),toTry), Just(notUseThis))
+        then: 'we should not be worried about exceptions'
+            result.isFailure()
+    }
+
+    def 'using fapply over a failure'() {
+        given: 'a non safe function'
+            Function toTry = { Success(it) }
+            Function notUseThis = { Integer x -> x / 0 }
+        when: 'trying to apply it to a given value'
+            Try result =
+                fapply(
+                    Try.failure(new Type(2), new Exception("not enough")),
+                    Just(notUseThis))
+        then: 'we should not be worried about exceptions'
+            result.isFailure()
+    }
 
     // tag::exception1[]
     def 'throwing an exception'() {
@@ -59,6 +83,14 @@ class TrySpec extends Specification {
             val(val(anything)) == 0 // TODO recover(Function... nFunctions)
     }
     // end::recover[]
+
+    def 'using recover() with no recovering functions'() {
+        when:
+            Function failingFn = recover({throw new Exception("ahhh")} as Function)
+            def anything = bind(Just(1), failingFn)
+        then:
+            anything.isFailure()
+    }
 
     def 'classic try catch example'() {
         given: 'a list of numbers as strings'
@@ -135,8 +167,12 @@ class TrySpec extends Specification {
         then: 'checking both results'
             failure instanceof Try.Failure
             success instanceof Try.Success
-	and: 'success action ends with a given value'
-	    val(success) == 1.5
+            success.isSuccess()
+            !success.isFailure()
+            failure.isFailure()
+            !failure.isSuccess()
+        and: 'success action ends with a given value'
+            val(success) == 1.5
     }
 
     def 'once we have a success we want to make it fail'() {
@@ -156,6 +192,7 @@ class TrySpec extends Specification {
             Try failure = fmap(successSoFar, divByZero)
         then: 'the try instance will return failure'
             failure.isFailure()
+            !failure.isSuccess()
     }
 
     def 'making a failure to throw an exception'() {
@@ -166,26 +203,55 @@ class TrySpec extends Specification {
                     undefined + 1 // wont be executed
                 }
         and: 'once we know it ended wrong'
-            assert successSoFar.isFailure()
+            successSoFar.isFailure()
+            !successSoFar.isSuccess()
         and: 'asking the failure to throw an exception'
             successSoFar.throwException()
         then: 'and only then we will get the exception'
             thrown(ArithmeticException)
     }
 
-    def 'using the or semantics'() {
+    def 'using the OR with an alternative VALUE'() {
         given: 'two functions'
-        Function BAD = { it / 0 }
-        Function GOOD =  { it / 2 }
+            Function BAD = { it / 0 }
+            Function GOOD =  { it / 2 }
         and: 'a monadic value'
-        Try<Integer> VALUE  = Success(42)
+            Try<Integer> VALUE  = Success(42)
         when: 'trying to execute several functions'
-        Try<Integer> resultRight = fmap(VALUE, BAD) | fmap(VALUE, GOOD)
-        Try<Integer> resultLeft = fmap(VALUE,GOOD) | fmap(VALUE, BAD)
+            Try<Integer> resultRight = fmap(VALUE, BAD) | fmap(VALUE, GOOD)
+            Try<Integer> resultLeft = fmap(VALUE,GOOD) | fmap(VALUE, BAD)
         then: 'we should be getting the one succeeding'
-        val(resultRight) == 21
-        val(resultLeft) == 21
-        val(resultRight) == val(resultLeft)
+            val(resultRight) == 21
+            val(resultLeft) == 21
+            val(resultRight) == val(resultLeft)
+    }
+
+    def 'using the OR with an alternative FUNCTION'() {
+        given: 'two functions'
+            Function BAD = wrap { it / 0 }
+            Function GOOD =  wrap { 2 }
+        and: 'a monadic value'
+            Try<Integer> VALUE  = Success(42)
+        when: 'trying to execute several functions'
+            Try<Integer> resultRight = bind(VALUE, BAD) | GOOD
+            Try<Integer> resultLeft = bind(VALUE,GOOD) | BAD
+        then: 'we should be getting the one succeeding'
+            val(resultRight) == 2
+            val(resultLeft) == 2
+            val(resultRight) == val(resultLeft)
+    }
+
+    def 'building a try with no chance of recovery'() {
+        when:
+            Try notRecoverable =
+                fmap(Try.failure(new Exception('not found'))) { File file -> file.text }
+        then:
+            notRecoverable.isFailure()
+            !notRecoverable.isSuccess()
+        and:
+            notRecoverable.getTypedRef()
+            !notRecoverable.getTypedRef().getValue()
+            !val(notRecoverable)
     }
 
 }

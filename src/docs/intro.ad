@@ -1,0 +1,32 @@
+== What is FNZ 
+
+This project is a collection of ideas taken from other functional
+languages translated to Groovy.
+
+The main objectives of this library are:
+
+* Create more control structures (let, letm, where...)
+* Understand persistent collections (TODO)
+* Ways of enforce immutability
+
+If you have a copy of the code and you want to start playing with the
+examples writen along the documentation. You can use both
+`groovyshell` and `groovyConsole`. Both are accessible through two
+`gradle` tasks.
+
+IMPORTANT: Of course you should have at least installed JDK 7 in your
+machine. Otherwise `gradle` won't work.
+
+[source, bash]
+.using FNZ in groovysh
+----
+./gradlew -q shell
+----
+
+or
+
+[source, bash]
+.using FNZ in groovyConsole
+----
+./gradlew console
+----

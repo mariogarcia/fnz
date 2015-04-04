@@ -3,6 +3,10 @@ package fnz.data
 import static Either.right
 import static Either.left
 
+import static Fn.Either
+import static Fn.Right
+import static Fn.val
+
 import spock.lang.Specification
 
 class EitherSpec extends Specification {
@@ -12,6 +16,13 @@ class EitherSpec extends Specification {
             def inc = { Integer v -> v + 1 }
         then:
             left(null).fapply(right(1)).typedRef.value == null
+    }
+
+    void 'applicative: Either applicative not null'() {
+        given: 'there is a valid function'
+            Function<Integer,Integer> inc = { x -> x + 1 }
+        expect: 'the right value to pop up'
+            val(right(1).fapply(right(inc))) == 2
     }
 
     // tag::functor2[]
@@ -85,7 +96,7 @@ class EitherSpec extends Specification {
                     def pr = sample.find(search)
                     // if found then return left to shortcircuit further
                     // searchs
-                    pr ? Either.left(pr) : Either.right(sample)
+                    Either(pr).isLeft() ? Either.right(sample) : Either.left(pr)
                 }
             }
         and: 'composed criterias on top of the base function'
@@ -101,6 +112,7 @@ class EitherSpec extends Specification {
                     .bind(lookByCity)
         then: 'there should be only one item'
             result.isLeft()
+            !result.isRight()
             result.typedRef.value.name == name_of_the_result
         where: 'samples used in this spec are'
             sample          |   name_of_the_result
@@ -134,7 +146,34 @@ class EitherSpec extends Specification {
         ]
     }
 
+    // tag::eitherorvalue[]
+    void 'using OR as an alternative value'() {
+        when: 'a non valid expression'
+            Either<Integer> possible = Either(value) | Right(0)
+        then: 'we should get what we expected'
+            val(possible) == expected
+        and: 'eventually it will be right'
+            possible.isRight()
+        where: 'possible values are'
+            value | expected
+            null  | 0
+            1     | 1
+    }
+    // end::eitherorvalue[]
 
+    // tag::eitherorcomputation[]
+    void 'using OR for a lazy computation alternative'() {
+        when: 'a non valid expression'
+            Either<Integer> possible = Either(value) | { Right(0) }
+        then: 'we should get what we expected'
+            val(possible) == expected
+        and: 'rules must apply'
+            possible.isRight()
+        where: 'possible values are'
+            value | expected
+            null  | 0
+            1     | 1
+    }
+    // end::eitherorcomputation[]
 
 }
-

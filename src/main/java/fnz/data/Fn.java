@@ -28,7 +28,11 @@ public final class Fn {
     }
 
     public static <A> Maybe<A> Maybe(A source) {
-        return (Maybe<A>) (source != null ? Just(source) : Nothing()) ;
+        return Maybe.maybe(source);
+    }
+
+    public static <A,M extends Monad<A>> Maybe<A> Maybe(M source) {
+        return Maybe.maybe(source);
     }
 
     public static <A> Try.Success<A> Success(A source) {
@@ -37,10 +41,6 @@ public final class Fn {
 
     public static <A> Try.Failure<A> Failure() {
         return Try.failure(null, new NullPointerException());
-    }
-
-    public static <A> Try<A> Try(A source) {
-        return (Try<A>) (source != null ? Success(source) : Failure());
     }
 
     public static <A> ListMonad<A> List(A... values) {
@@ -54,31 +54,22 @@ public final class Fn {
     public static <A,B,F extends Function<A,B>> Function<A, Try<B>> wrap(F fn) {
         return new Function<A, Try<B>>() {
             public Try<B> apply(A a) {
-                try {
-                    return new Try.Success<B>(new Type<B>(fn.apply(a)));
-                } catch (Throwable th) {
-                    return new Try.Failure<B>(th);
-                }
+                return fmap(Success(a), fn);
             }
         };
     }
 
-    public static <A,B,F extends Function<A,B>> Function<A,Try<B>> recover(F fn, F... alternatives) {
+    public static <A,B,F extends Function<A,B>> Function<A,Try<B>> recover(F... alternatives) {
         return new Function<A, Try<B>>() {
             public Try<B> apply(A a) {
-                 try {
-                     return new Try.Success<B>(new Type<B>(fn.apply(a)));
-                 } catch(Throwable thOuter) {
-                     Try.Failure<B> failure = null;
-                     for (F alternative : alternatives) {
-                         try {
-                             return new Try.Success<B>(new Type<B>(alternative.apply(a)));
-                         } catch(Throwable thInner) {
-                             failure = new Try.Failure<B>(thInner);
-                         }
-                     }
-                     return failure;
-                 }
+                Try<B> result = null;
+                for (F alternative : alternatives) {
+                    result = fmap(Success(a), alternative);
+                    if (result.isSuccess()) {
+                        return result;
+                    }
+                }
+                return result;
             }
         };
     }
@@ -99,15 +90,6 @@ public final class Fn {
 
     public static <A> A val(Monad<A> monad) {
         return monad != null ? monad.getTypedRef().getValue() : null;
-    }
-
-    @Deprecated
-    public static <A> Maybe<A> maybe(Monad<A> monad) {
-        if (monad == null) return Nothing();
-
-        A value = monad.getTypedRef().getValue();
-
-        return (Maybe<A>) (value != null ? Just(value) : Nothing()) ;
     }
 
 }

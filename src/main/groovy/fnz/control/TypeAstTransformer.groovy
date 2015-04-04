@@ -1,23 +1,34 @@
 package fnz.control
 
-import fnz.data.Try
-import fnz.data.Maybe
-import fnz.data.Function
-import fnz.data.ListMonad
+import static org.codehaus.groovy.ast.ClassHelper.make
+import static org.codehaus.groovy.ast.tools.GeneralUtils.constX
+import static org.codehaus.groovy.ast.tools.GeneralUtils.param
+import static org.codehaus.groovy.ast.tools.GeneralUtils.params
+
 import fnz.ast.MethodCallExpressionTransformer
 
 import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
 import groovyjarjarasm.asm.Opcodes
-import org.codehaus.groovy.ast.*
-import org.codehaus.groovy.ast.expr.*
+
+import org.codehaus.groovy.ast.ASTNode
+import org.codehaus.groovy.ast.MixinNode
+import org.codehaus.groovy.ast.ModuleNode
+import org.codehaus.groovy.ast.ClassNode
+import org.codehaus.groovy.ast.InnerClassNode
+import org.codehaus.groovy.ast.MethodNode
+import org.codehaus.groovy.ast.Parameter
+import org.codehaus.groovy.ast.GenericsType
+
+import org.codehaus.groovy.ast.expr.Expression
+import org.codehaus.groovy.ast.expr.ListExpression
+import org.codehaus.groovy.ast.expr.VariableExpression
+import org.codehaus.groovy.ast.expr.MethodCallExpression
+import org.codehaus.groovy.ast.expr.ArgumentListExpression
+import org.codehaus.groovy.ast.expr.BinaryExpression
+
 import org.codehaus.groovy.control.SourceUnit
 import org.codehaus.groovy.syntax.SyntaxException
-
-import static fnz.data.Fn.*
-import static org.codehaus.groovy.control.ResolveVisitor.DEFAULT_IMPORTS
-import static org.codehaus.groovy.ast.ClassHelper.make
-import static org.codehaus.groovy.ast.tools.GeneralUtils.*
 
 @CompileStatic
 class TypeAstTransformer extends MethodCallExpressionTransformer implements Opcodes {
@@ -41,7 +52,7 @@ class TypeAstTransformer extends MethodCallExpressionTransformer implements Opco
         }
 
         InnerClassNode innerClassNode =
-            createFunctionalInterface((BinaryExpression) firstArgumentExpression)
+            getFunctionalInterface((BinaryExpression) firstArgumentExpression)
 
         module.addClass(innerClassNode)
 
@@ -65,7 +76,7 @@ class TypeAstTransformer extends MethodCallExpressionTransformer implements Opco
     }
 
     @CompileDynamic
-    private InnerClassNode createFunctionalInterface(BinaryExpression fiExpression) {
+    private InnerClassNode getFunctionalInterface(BinaryExpression fiExpression) {
         Expression typeInfo = fiExpression.leftExpression
         Expression fnInfo = fiExpression.rightExpression
 
@@ -79,7 +90,7 @@ class TypeAstTransformer extends MethodCallExpressionTransformer implements Opco
 
     private InnerClassNode extractInnerClass(MethodCallExpression methodCallExpression) {
         String innerClassName = "${modulePackageName}${methodCallExpression.methodAsString}"
-        InnerClassNode innerClassNode = buildInnerClass(innerClassName)
+        InnerClassNode innerClassNode = getInnerClass(innerClassName)
 
         innerClassNode.setGenericsTypes(extractGenericsFrom(methodCallExpression))
         innerClassNode.genericsPlaceHolder = true
@@ -88,10 +99,10 @@ class TypeAstTransformer extends MethodCallExpressionTransformer implements Opco
     }
 
     private InnerClassNode extractInnerClass(VariableExpression typeInfoExpression) {
-        return buildInnerClass("${modulePackageName}${typeInfoExpression.name}")
+        return getInnerClass("${modulePackageName}${typeInfoExpression.name}")
     }
 
-    private InnerClassNode buildInnerClass(String innerClassName) {
+    private InnerClassNode getInnerClass(String innerClassName) {
         Closure<Boolean> search = this.&byMainClassName.curry(module.mainClassName)
         ClassNode outerClassNode = module.classes.find(search)
 
@@ -160,26 +171,22 @@ class TypeAstTransformer extends MethodCallExpressionTransformer implements Opco
     }
 
     private Parameter[] extractParametersFrom(MethodCallExpression methodCallExpression) {
-        return params(createParameterFrom(methodCallExpression))
+        return params(getParameterFrom(methodCallExpression))
     }
 
     private Parameter[] extractParametersFrom(VariableExpression variableExpression) {
-        return params(createParameterFrom(variableExpression))
+        return params(getParameterFrom(variableExpression))
     }
 
     private Parameter[] extractParametersFrom(ListExpression listExpression) {
-        return listExpression.expressions.collect(this.&createParameterFrom) as Parameter[]
+        return listExpression.expressions.collect(this.&getParameterFrom) as Parameter[]
     }
 
-    private Parameter createParameterFrom(ClassNode clazz) {
-        return param(clazz, validIdentifier)
-    }
-
-    private Parameter createParameterFrom(VariableExpression variable) {
+    private Parameter getParameterFrom(VariableExpression variable) {
         return param(make(variable.name), validIdentifier)
     }
 
-    private Parameter createParameterFrom(MethodCallExpression methodCallExpression) {
+    private Parameter getParameterFrom(MethodCallExpression methodCallExpression) {
         return param(extractTypeFrom(methodCallExpression), validIdentifier)
     }
 

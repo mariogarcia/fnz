@@ -16,6 +16,7 @@ import org.codehaus.groovy.transform.GroovyASTTransformation
 @GroovyASTTransformation(phase = CompilePhase.CONVERSION)
 class FnzAst extends AbstractASTTransformation {
 
+    @SuppressWarnings('UnusedMethodParameter')
     void visit(ASTNode[] nodes, SourceUnit sourceUnit) {
          List<ClassNode> classNodeList = sourceUnit.AST.classes.collect()
 

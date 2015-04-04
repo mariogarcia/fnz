@@ -76,7 +76,7 @@ class WhereSpec extends Specification {
         when: 'There are only when-then expressions'
             // tag::whereWithNoWhere[]
             Maybe<String> result = check(weight: value) {
-                when { weight <= 51 } then { "You're underweight" }
+                when { weight <= 51 } then { "You're underweight cause you weight $weight" }
                 when { weight <= 90 } then { "You're fat" }
                 otherwise { "Default" }
             }
@@ -85,7 +85,7 @@ class WhereSpec extends Specification {
             val(result) == expected
         where: 'The test value is'
             value | expected
-             51   | "You're underweight"
+             51   | "You're underweight cause you weight 51"
              90   | "You're fat"
              200  | "Default"
     }
@@ -164,4 +164,5 @@ class WhereSpec extends Specification {
             25    | "Medium"
             null  | "No Idea"
     }
+
 }

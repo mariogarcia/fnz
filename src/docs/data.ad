@@ -73,6 +73,71 @@ something ( a transformation for example) with the current inner value.
 include::{testDir}/fnz/data/MaybeSpec.groovy[tags=maybeor2,indent=0]
 ----
 
+==== Or expressions
+
+Of course you can always use the `|` operator when thinking about `or` expressions:
+
+[source,groovy]
+----
+include::{testDir}/fnz/data/MaybeSpec.groovy[tags=usingOrAsValue,indent=0]
+----
+
+<1> The operation ends with and empty string. Using Maybe('') returns
+Nothing()
+<2> In case partial returns Nothing() we would like to use
+Just('anybody') instead
+
+Using `|` makes expressions much more readable... and fun :)
+
+Last example used an `OR` expression. That expression was a simple
+value. Sometimes we would like to use `lazy` expressions we only want
+to be evaluated `just in case`.  When executed those `lazy
+expressions` will be returning a valid value.
+
+[source,groovy]
+----
+include::{testDir}/fnz/data/MaybeSpec.groovy[tags=usingOrAsLazyExpression,indent=0]
+----
+
+<1> The operation ends with and empty string. Using Maybe('') returns
+Nothing()
+<2> In case partial returns Nothing() we would like to use
+Just('anybody') instead. In this case the value is not computed until
+we made sure the previous computation returned Nothing()
+
+
+==== The maybe `truth`
+
+Sometimes you just don't know whether the value is going to be valid
+or not. Then it could come handy to use the `maybe` method.
+
+[source,groovy]
+----
+include::{testDir}/fnz/data/MaybeSpec.groovy[tags=maybetruth,indent=0]
+----
+
+So expressions could become easier to understand when using `maybe`:
+
+[source,groovy]
+----
+include::{testDir}/fnz/data/MaybeSpec.groovy[tags=maybetruthexample1,indent=0]
+----
+
+<1> We are using a possible `not valid` value
+<2> We build an expression that in case the left hand value is not valid we
+will be using the right hand side value instead
+<3> Because the value of the left was not valid then we used the right hand one, hence
+there is a present value
+<4> The value used was 'me'
+
+If there had been a valid value at the right hand side, then that
+value would have been used instead:
+
+[source,groovy]
+----
+include::{testDir}/fnz/data/MaybeSpec.groovy[tags=maybetruthexample2,indent=0]
+----
+
 === Fn 
 
 *fnz.data.Fn* is a class that can be used as a shorcut for all data structures
@@ -145,6 +210,23 @@ someone. Because the rules of the monad, I know if the first search fails the
 second will be triggered, and so on. In case any of them succeed the value will be
 return immediately.
 
+==== Or
+
+The same way we used `or` in Maybe to express an alternative to
+`wrong` values we can use it in `Either`.
+
+[source,java]
+.value
+----
+include::{testDir}/fnz/data/EitherSpec.groovy[tags=eitherorvalue,indent=0]
+----
+
+[source,java]
+.lazy expression
+----
+include::{testDir}/fnz/data/EitherSpec.groovy[tags=eitherorcomputation,indent=0]
+----
+
 === ListMonad
 
 Collections in general are one of the most used data structures ever. 
@@ -215,6 +297,8 @@ include::{testDir}/fnz/data/TrySpec.groovy[tags=exception1,indent=0]
 
 <1> You can get the wrapped exception
 <2> Or throw the exception instead
+
+==== Recover
 
 Normally when having an exception we would like to react somehow. Sometimes
 we may want to set, for example a default value in case something went wrong.

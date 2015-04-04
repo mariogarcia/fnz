@@ -1,16 +1,28 @@
 package fnz.control
 
+import static org.codehaus.groovy.ast.ClassHelper.make
+import static org.codehaus.groovy.ast.tools.GeneralUtils.args
+import static org.codehaus.groovy.ast.tools.GeneralUtils.params
+import static org.codehaus.groovy.ast.tools.GeneralUtils.param
+import static org.codehaus.groovy.ast.tools.GeneralUtils.closureX
+import static org.codehaus.groovy.ast.tools.GeneralUtils.callX
+import static org.codehaus.groovy.ast.tools.GeneralUtils.stmt
+
 import fnz.ast.MethodCallExpressionTransformer
-import fnz.data.Fn
 import groovy.transform.CompileStatic
 import org.codehaus.groovy.ast.VariableScope
-import org.codehaus.groovy.ast.expr.*
+
+import org.codehaus.groovy.ast.expr.Expression
+import org.codehaus.groovy.ast.expr.ArgumentListExpression
+import org.codehaus.groovy.ast.expr.MapEntryExpression
+import org.codehaus.groovy.ast.expr.MapExpression
+import org.codehaus.groovy.ast.expr.ConstantExpression
+import org.codehaus.groovy.ast.expr.ClosureExpression
+import org.codehaus.groovy.ast.expr.MethodCallExpression
+
 import org.codehaus.groovy.ast.stmt.Statement
 import org.codehaus.groovy.classgen.VariableScopeVisitor
 import org.codehaus.groovy.control.SourceUnit
-
-import static org.codehaus.groovy.ast.ClassHelper.make
-import static org.codehaus.groovy.ast.tools.GeneralUtils.*
 
 /**
  *
@@ -52,7 +64,8 @@ class LetAstTransformer extends MethodCallExpressionTransformer {
         // checking if there is another nested let expression
         this.visitClosureExpression(fn)
         // processing this let expression
-        MethodCallExpression result = (MethodCallExpression) mapEntryExpressions.inject(fn, this.&evaluateMapEntryExpression)
+        MethodCallExpression result =
+            (MethodCallExpression) mapEntryExpressions.inject(fn, this.&evaluateMapEntryExpression)
         // fixing variable scope
         this.applyScopeVisitor(result)
 
@@ -70,8 +83,10 @@ class LetAstTransformer extends MethodCallExpressionTransformer {
         String closureVarName = nextKey.value.toString()
         Expression nextValue = next.valueExpression
 
-        Statement previousStatement = previous instanceof ClosureExpression ? stmt(invokeClosure(previous)) : stmt(previous)
-        Expression processedValue = nextValue instanceof ClosureExpression ? invokeClosure(nextValue) : nextValue
+        Statement previousStatement =
+            previous instanceof ClosureExpression ? stmt(invokeClosure(previous)) : stmt(previous)
+        Expression processedValue =
+            nextValue instanceof ClosureExpression ? invokeClosure(nextValue) : nextValue
 
         // we're building a closure having a parameter with the same name as the map entry key
         // and the body is the value or the closure of the map entry value

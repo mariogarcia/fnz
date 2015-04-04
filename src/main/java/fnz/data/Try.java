@@ -5,25 +5,18 @@ package fnz.data;
  * @author mario
  * @param <A>
  */
-public abstract class Try<A> implements Monad<A>, Or<Try<A>> {
-
-    private final Type<A> typedRef;
+public abstract class Try<A> extends MonadType<A> implements Or<A,Try<A>> {
 
     protected Try(Type<A> valueRef) {
-        this.typedRef = valueRef;
-    }
-
-    public Type<A> getTypedRef() {
-      return this.typedRef;
+        super(valueRef);
     }
 
     public abstract Boolean isSuccess();
     public abstract Boolean isFailure() ;
-    public abstract Try<A> recover(Try<A> alternative);
 
     public static class Success<SUCCESS> extends Try<SUCCESS> {
 
-        public Success(Type<SUCCESS> value) {
+        private Success(Type<SUCCESS> value) {
             super(value);
         }
 
@@ -57,12 +50,12 @@ public abstract class Try<A> implements Monad<A>, Or<Try<A>> {
         }
 
         @Override
-        public Try<SUCCESS> recover(Try<SUCCESS> alternative) {
+        public Try<SUCCESS> or(Try<SUCCESS> alternative) {
             return this;
         }
 
         @Override
-        public Try<SUCCESS> or(Try<SUCCESS> alternative) {
+        public Try<SUCCESS> or(Function<SUCCESS, Try<SUCCESS>> alternative) {
             return this;
         }
 
@@ -72,12 +65,12 @@ public abstract class Try<A> implements Monad<A>, Or<Try<A>> {
 
         private final Throwable throwable;
 
-        public Failure(Type<FAILURE> value, Throwable th) {
+        private Failure(Type<FAILURE> value, Throwable th) {
             super(value);
             this.throwable = th;
         }
 
-        public Failure(Throwable throwable) {
+        private Failure(Throwable throwable) {
             super(new Type<FAILURE>(null));
             this.throwable = throwable;
         }
@@ -116,13 +109,13 @@ public abstract class Try<A> implements Monad<A>, Or<Try<A>> {
         }
 
         @Override
-        public Try<FAILURE> recover(Try<FAILURE> alternative) {
+        public Try<FAILURE> or(Try<FAILURE> alternative) {
             return alternative;
         }
 
         @Override
-        public Try<FAILURE> or(Try<FAILURE> alternative) {
-            return alternative;
+        public Try<FAILURE> or(Function<FAILURE,Try<FAILURE>> alternative) {
+            return alternative.apply(this.getTypedRef().getValue());
         }
 
     }
@@ -133,6 +126,10 @@ public abstract class Try<A> implements Monad<A>, Or<Try<A>> {
 
     public static <T> Try.Failure<T> failure(Type<T> value, Throwable th) {
         return new Try.Failure<T>(value, th);
+    }
+
+    public static <T> Try.Failure<T> failure(Throwable th) {
+        return new Try.Failure<T>(th);
     }
 
 }

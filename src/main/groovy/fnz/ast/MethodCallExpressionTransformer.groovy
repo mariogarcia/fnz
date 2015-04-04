@@ -4,7 +4,6 @@ import org.codehaus.groovy.ast.expr.Expression
 import org.codehaus.groovy.ast.expr.MethodCallExpression
 
 import org.codehaus.groovy.control.SourceUnit
-import fnz.ast.DefaultClassCodeExpressionTransformer
 
 /**
  * This class can be used as a base to transform certain MethodCallExpression instances.

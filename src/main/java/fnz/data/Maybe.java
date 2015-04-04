@@ -1,29 +1,23 @@
 package fnz.data;
 
+import static org.codehaus.groovy.runtime.DefaultGroovyMethods.asBoolean;
+import static org.codehaus.groovy.runtime.DefaultGroovyMethods.collect;
+
 /**
  *
  * @param <A>
  */
-public abstract class Maybe<A> implements Monad<A>, Or<Maybe<A>> {
-
-    private final Type<A> typedRef;
-
-    protected Maybe(Type<A> valueRef) {
-        this.typedRef = valueRef;
-    }
-
-    @Override
-    public Type<A> getTypedRef() {
-        return this.typedRef;
-    }
+public abstract class Maybe<A> extends MonadType<A> implements Or<A,Maybe<A>> {
 
     public abstract boolean isPresent();
 
-    public abstract Maybe<A> or(Maybe<A> newOption);
+    public Maybe(Type<A> valueRef) {
+        super(valueRef);
+    }
 
     public static class Just<JUST> extends Maybe<JUST> {
 
-        public Just(Type<JUST> valueRef) {
+        private Just(Type<JUST> valueRef) {
             super(valueRef);
         }
 
@@ -58,11 +52,16 @@ public abstract class Maybe<A> implements Monad<A>, Or<Maybe<A>> {
             return this;
         }
 
+        @Override
+        public Maybe<JUST> or(Function<JUST,Maybe<JUST>> newOption) {
+            return this;
+        }
+
     }
 
     public static class Nothing<NOTHING> extends Maybe<NOTHING> {
 
-        public Nothing() {
+        private Nothing() {
             super(new Type(null));
         }
 
@@ -94,6 +93,11 @@ public abstract class Maybe<A> implements Monad<A>, Or<Maybe<A>> {
             return newOption;
         }
 
+        @Override
+        public Maybe<NOTHING> or(Function<NOTHING,Maybe<NOTHING>> newOption) {
+            return newOption.apply(this.getTypedRef().getValue());
+        }
+
     }
 
     public static <T> Maybe.Just<T> just(T value) {
@@ -102,6 +106,14 @@ public abstract class Maybe<A> implements Monad<A>, Or<Maybe<A>> {
 
     public static <T> Maybe.Nothing<T> nothing() {
         return new Maybe.Nothing();
+    }
+
+    public static <T> Maybe<T> maybe(T value) {
+        return asBoolean(collect(value)) ? just(value) : nothing();
+    }
+
+    public static <T,M extends Monad<T>> Maybe<T> maybe(M monad) {
+        return maybe(monad.getTypedRef().getValue());
     }
 
 }
