@@ -74,6 +74,8 @@ codenarc {
    configFile = new File(projectDir, 'src/codenarc/rules.groovy')
 }
 
+codenarcTest.ignoreFailures = true
+
 cobertura {
     coverageFormats = ['html', 'xml']
 }

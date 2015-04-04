@@ -1,16 +1,31 @@
 package fnz.control
 
+import static org.codehaus.groovy.ast.ClassHelper.make
+import static org.codehaus.groovy.ast.tools.GeneralUtils.callX
+import static org.codehaus.groovy.ast.tools.GeneralUtils.block
+import static org.codehaus.groovy.ast.tools.GeneralUtils.stmt
+import static org.codehaus.groovy.ast.tools.GeneralUtils.args
+import static org.codehaus.groovy.ast.tools.GeneralUtils.param
+import static org.codehaus.groovy.ast.tools.GeneralUtils.params
+import static org.codehaus.groovy.ast.tools.GeneralUtils.closureX
+
 import fnz.ast.MethodCallExpressionTransformer
 import fnz.data.Fn
 import groovy.transform.CompileStatic
 import org.codehaus.groovy.ast.VariableScope
-import org.codehaus.groovy.ast.expr.*
+
+import org.codehaus.groovy.ast.expr.Expression
+import org.codehaus.groovy.ast.expr.ConstantExpression
+import org.codehaus.groovy.ast.expr.MethodCallExpression
+import org.codehaus.groovy.ast.expr.ArgumentListExpression
+import org.codehaus.groovy.ast.expr.MapExpression
+import org.codehaus.groovy.ast.expr.ClosureExpression
+import org.codehaus.groovy.ast.expr.StaticMethodCallExpression
+import org.codehaus.groovy.ast.expr.MapEntryExpression
+
 import org.codehaus.groovy.ast.stmt.Statement
 import org.codehaus.groovy.classgen.VariableScopeVisitor
 import org.codehaus.groovy.control.SourceUnit
-
-import static org.codehaus.groovy.ast.ClassHelper.make
-import static org.codehaus.groovy.ast.tools.GeneralUtils.*
 
 /**
  *
@@ -62,7 +77,8 @@ class LetmAstTransformer extends MethodCallExpressionTransformer {
 
     }
 
-    private StaticMethodCallExpression loopThroughEntryExpressions(final List<MapEntryExpression> expressions, final ClosureExpression fn) {
+    private StaticMethodCallExpression loopThroughEntryExpressions(
+        final List<MapEntryExpression> expressions, final ClosureExpression fn) {
         return (StaticMethodCallExpression) expressions.inject(fn, this.&evaluateMapEntryExpression)
     }
 
@@ -81,10 +97,11 @@ class LetmAstTransformer extends MethodCallExpressionTransformer {
         ClosureExpression closureExpression = closureX(params(param(make(Object), closureVarName)), stmt)
         closureExpression.variableScope = new VariableScope()
 
-        return buildBindExpression(nextValue, closureExpression)
+        return getBindExpression(nextValue, closureExpression)
     }
 
-    private StaticMethodCallExpression buildBindExpression(final Expression value, final ClosureExpression closureWithKey) {
+    private StaticMethodCallExpression getBindExpression(
+        final Expression value, final ClosureExpression closureWithKey) {
         return value instanceof ClosureExpression ?
         callX(make(Fn), BIND_METHOD_NAME, args(callX(value, DO_CALL_METHOD_NAME), closureWithKey)) :
         callX(make(Fn), BIND_METHOD_NAME, args(value, closureWithKey))
