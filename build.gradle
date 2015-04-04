@@ -13,7 +13,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.5'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
         classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.2'
         classpath 'net.saliman:gradle-cobertura-plugin:2.2.5'
         classpath 'com.tkruse.gradle:gradle-groovysh-plugin:1.0.4'
@@ -106,9 +106,9 @@ version = '1.0.4'
 publishing {
     publications {
         mavenCustom(MavenPublication) {
-            groupId group
-            artifactId group
-            version version
+            groupId 'fnz'
+            artifactId 'fnz'
+            version '1.0.4'
 
             from components.java
         }
@@ -122,10 +122,10 @@ bintray {
     publish = true
     publications = ['mavenCustom']
     pkg {
-        name = group
+        name = 'fnz'
         repo = "maven"
         version {
-            name = version
+            name = '1.0.4'
         }
     }
 
