@@ -132,4 +132,27 @@ class ListMonadSpec extends Specification {
             list()   | '[]'
             list(1)  | '[1]'
     }
+
+    void 'testing OR value'() {
+        when: 'establishing an alternative to a possible empty list'
+            def result = source | alternative
+        then: 'we should get the expected value'
+            result.typedRef.value == expected.typedRef.value
+        where: 'sources and alternatives are'
+            source    |alternative |expected
+            list(1,2) |list(1)     |list(1,2)
+            list()    |list(1)     |list(1)
+    }
+
+    void 'testing OR computation'() {
+        when: 'establishing an alternative to a possible empty list'
+            def result = source | { alternative }
+        then: 'we should get the expected value'
+            result.typedRef.value == expected.typedRef.value
+        where: 'sources and alternatives are'
+            source    |alternative |expected
+            list(1,2) |list(1)     |list(1,2)
+            list()    |list(1)     |list(1)
+    }
+
 }

@@ -8,7 +8,7 @@ import java.util.List;
  *
  * @param <A>
  */
-public class ListMonad<A> implements Monad<A> {
+public class ListMonad<A> implements Monad<A>, Or<A,ListMonad<A>> {
 
     private final Iterable<A> value;
 
@@ -69,6 +69,14 @@ public class ListMonad<A> implements Monad<A> {
 
     public static <T> ListMonad <T> list(Iterable<T> values){
         return new ListMonad<>(values);
+    }
+
+    public ListMonad<A> or(ListMonad<A> alternative) {
+        return isNullOrEmpty() ? alternative : this;
+    }
+
+    public ListMonad<A> or(Function<A,ListMonad<A>> alternative) {
+        return isNullOrEmpty() ? alternative.apply(null) : this;
     }
 
 }
