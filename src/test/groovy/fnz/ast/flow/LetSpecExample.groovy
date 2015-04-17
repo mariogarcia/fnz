@@ -1,4 +1,4 @@
-package fnz.control
+package fnz.ast.flow
 
 class LetSpecExample {
 

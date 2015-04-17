@@ -1,4 +1,4 @@
-package fnz.control
+package fnz.flow
 
 import static org.codehaus.groovy.runtime.DefaultGroovyMethods.isCase
 import static fnz.data.Fn.Just

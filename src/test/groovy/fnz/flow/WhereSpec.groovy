@@ -1,6 +1,6 @@
-package fnz.control
+package fnz.flow
 
-import static fnz.control.Where.check
+import static fnz.flow.Where.check
 import static fnz.data.Fn.val
 
 import fnz.data.Maybe

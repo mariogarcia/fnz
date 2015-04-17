@@ -44,13 +44,14 @@ abstract class MethodCallExpressionTransformer extends DefaultClassCodeExpressio
     Expression transform(Expression expression) {
         if (!expression) return
 
-        Boolean isTheMethod =
-            expression instanceof MethodCallExpression &&
-            expression.methodAsString == this.methodCallName
+        return isTransformable(expression) ?
+            transformMethodCall(expression) :
+            expression.transformExpression(this)
+    }
 
-        return isTheMethod ?
-        this.transformMethodCall(expression) :
-        expression.transformExpression(this)
+    Boolean isTransformable(final Expression expression) {
+        return expression instanceof MethodCallExpression &&
+        expression.methodAsString == this.methodCallName
     }
 
     /**

@@ -1,19 +1,20 @@
-package fnz.control
+package fnz.ast.type
 
 import static org.codehaus.groovy.ast.ClassHelper.make
 import static org.codehaus.groovy.ast.tools.GeneralUtils.constX
 import static org.codehaus.groovy.ast.tools.GeneralUtils.param
 import static org.codehaus.groovy.ast.tools.GeneralUtils.params
 
+import static fnz.ast.AstUtils.getArgs
+import static fnz.ast.AstUtils.isBinaryExpression
+import static fnz.ast.AstUtils.getUniqueIdentifier
+
 import fnz.ast.MethodCallExpressionTransformer
 
 import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
-import groovyjarjarasm.asm.Opcodes
 
-import org.codehaus.groovy.ast.ASTNode
 import org.codehaus.groovy.ast.MixinNode
-import org.codehaus.groovy.ast.ModuleNode
 import org.codehaus.groovy.ast.ClassNode
 import org.codehaus.groovy.ast.InnerClassNode
 import org.codehaus.groovy.ast.MethodNode
@@ -28,10 +29,9 @@ import org.codehaus.groovy.ast.expr.ArgumentListExpression
 import org.codehaus.groovy.ast.expr.BinaryExpression
 
 import org.codehaus.groovy.control.SourceUnit
-import org.codehaus.groovy.syntax.SyntaxException
 
 @CompileStatic
-class TypeAstTransformer extends MethodCallExpressionTransformer implements Opcodes {
+class TypeAstTransformer extends MethodCallExpressionTransformer {
 
     static final String TYPE_METHOD_NAME = 'ftype'
     static final String FI_FUNCTION_NAME = 'apply'
@@ -43,10 +43,13 @@ class TypeAstTransformer extends MethodCallExpressionTransformer implements Opco
     }
 
     Expression transformMethodCall(final MethodCallExpression methodCallExpression) {
-        Expression firstArgumentExpression = firstArgumentExpressionFrom(methodCallExpression)
+        Expression firstArgumentExpression = getArgs(methodCallExpression).first()
 
-        if (isNotABinaryExpression(firstArgumentExpression)) {
-            error(sourceUnit, firstArgumentExpression)
+        if (!isBinaryExpression(firstArgumentExpression)) {
+            addError(
+                firstArgumentExpression,
+                "Expected binary expression here. Something like: Fn(A) >> String >> A",
+            )
 
             return methodCallExpression
         }
@@ -57,18 +60,6 @@ class TypeAstTransformer extends MethodCallExpressionTransformer implements Opco
         module.addClass(innerClassNode)
 
         return MEANING_OF_LIFE
-    }
-
-    private boolean isNotABinaryExpression(Expression expression) {
-        return !(expression instanceof BinaryExpression)
-    }
-
-    private ModuleNode getModule() {
-        return sourceUnit.AST
-    }
-
-    private String getModulePackageName() {
-        return module?.packageName?.with { "$it" } ?: ''
     }
 
     private Boolean byMainClassName(String mainName, ClassNode classNode) {
@@ -123,23 +114,6 @@ class TypeAstTransformer extends MethodCallExpressionTransformer implements Opco
         return ACC_STATIC | ACC_ABSTRACT | ACC_INTERFACE
     }
 
-    private Expression firstArgumentExpressionFrom(MethodCallExpression methodCallExpression) {
-        ArgumentListExpression args = (ArgumentListExpression) methodCallExpression.arguments
-
-        return args.first()
-    }
-
-    private void error(SourceUnit sourceUnit, ASTNode node) {
-        sourceUnit
-        .addError(
-            new SyntaxException(
-                "Expected binary expression here. Something like: Fn(A) >> String >> A",
-                node.columnNumber,
-                node.lineNumber
-            )
-        )
-    }
-
     @CompileDynamic
     private MethodNode extractMethod(BinaryExpression fnExpression) {
         Expression inputExpression = fnExpression.leftExpression
@@ -183,15 +157,11 @@ class TypeAstTransformer extends MethodCallExpressionTransformer implements Opco
     }
 
     private Parameter getParameterFrom(VariableExpression variable) {
-        return param(make(variable.name), validIdentifier)
+        return param(make(variable.name), getUniqueIdentifier())
     }
 
     private Parameter getParameterFrom(MethodCallExpression methodCallExpression) {
-        return param(extractTypeFrom(methodCallExpression), validIdentifier)
-    }
-
-    private String getValidIdentifier() {
-        return "a${System.nanoTime()}"
+        return param(extractTypeFrom(methodCallExpression), getUniqueIdentifier())
     }
 
     private ClassNode extractTypeFrom(MethodCallExpression methodCallExpression) {

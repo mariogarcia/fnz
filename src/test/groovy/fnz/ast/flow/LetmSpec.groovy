@@ -1,7 +1,9 @@
-package fnz.control
+package fnz.ast.flow
 
 import static fnz.data.Fn.val
 import static fnz.data.Fn.Right
+
+import fnz.ast.FnzAst
 
 import fnz.data.Try
 import fnz.data.Maybe

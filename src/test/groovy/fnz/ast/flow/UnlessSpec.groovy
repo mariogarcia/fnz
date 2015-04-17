@@ -1,4 +1,6 @@
-package fnz.control
+package fnz.ast.flow
+
+import fnz.ast.FnzAst
 
 import fnz.test.AstBaseSpec
 import spock.lang.Unroll

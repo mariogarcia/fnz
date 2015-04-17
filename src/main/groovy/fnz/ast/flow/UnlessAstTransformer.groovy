@@ -1,9 +1,13 @@
-package fnz.control
+package fnz.ast.flow
 
 import static org.codehaus.groovy.ast.ClassHelper.make
 import static org.codehaus.groovy.ast.tools.GeneralUtils.notX
 import static org.codehaus.groovy.ast.tools.GeneralUtils.ternaryX
 import static org.codehaus.groovy.ast.tools.GeneralUtils.callX
+
+import static fnz.ast.AstUtils.getArgs
+import static fnz.ast.AstUtils.callClosureX
+import static fnz.ast.AstUtils.getLastArgumentAs
 
 import org.codehaus.groovy.ast.expr.Expression
 import org.codehaus.groovy.ast.expr.ClosureExpression
@@ -38,7 +42,6 @@ class UnlessAstTransformer extends MethodCallExpressionTransformer {
 
     static final String JUST = 'Just'
     static final String NOTHING = 'Nothing'
-    static final String DO_CALL = 'doCall'
 
     UnlessAstTransformer(SourceUnit sourceUnit) {
         super(sourceUnit, 'unless')
@@ -46,9 +49,9 @@ class UnlessAstTransformer extends MethodCallExpressionTransformer {
 
     @Override
     Expression transformMethodCall(MethodCallExpression unlessExpression) {
-        ArgumentListExpression argsExpression = (ArgumentListExpression) unlessExpression.arguments
-        Expression booleanExpression = argsExpression.expressions.first()
-        ClosureExpression bodyExpression = (ClosureExpression) argsExpression.expressions.last()
+        ArgumentListExpression args  = getArgs(unlessExpression)
+        Expression booleanExpression = args.first()
+        ClosureExpression bodyExpression = getLastArgumentAs(args, ClosureExpression)
 
         // This introspects closure structure and applies
         // transform(...) on all nodes
@@ -56,7 +59,7 @@ class UnlessAstTransformer extends MethodCallExpressionTransformer {
 
         return ternaryX(
             notX(booleanExpression),
-            callX(make(Fn, false), JUST, callX(bodyExpression, DO_CALL)),
+            callX(make(Fn, false), JUST, callClosureX(bodyExpression)),
             callX(make(Fn, false), NOTHING)
         )
 

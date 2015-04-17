@@ -1,4 +1,4 @@
-package fnz.control
+package fnz.ast.flow
 
 import static org.codehaus.groovy.ast.ClassHelper.make
 import static org.codehaus.groovy.ast.tools.GeneralUtils.callX
@@ -9,9 +9,15 @@ import static org.codehaus.groovy.ast.tools.GeneralUtils.param
 import static org.codehaus.groovy.ast.tools.GeneralUtils.params
 import static org.codehaus.groovy.ast.tools.GeneralUtils.closureX
 
+import static fnz.ast.AstUtils.applyScopeVisitor
+import static fnz.ast.AstUtils.getArgs
+import static fnz.ast.AstUtils.getFirstArgumentAs
+import static fnz.ast.AstUtils.getLastArgumentAs
+
 import fnz.ast.MethodCallExpressionTransformer
 import fnz.data.Fn
 import groovy.transform.CompileStatic
+import groovy.transform.CompileDynamic
 import org.codehaus.groovy.ast.VariableScope
 
 import org.codehaus.groovy.ast.expr.Expression
@@ -62,42 +68,49 @@ class LetmAstTransformer extends MethodCallExpressionTransformer {
     }
 
     Expression transformMethodCall(final MethodCallExpression methodCallExpression) {
-        ArgumentListExpression argumentListExpression = (ArgumentListExpression) methodCallExpression.arguments
-
-        MapExpression mapExpression = (MapExpression) argumentListExpression.expressions.first()
+        ArgumentListExpression args                  = getArgs(methodCallExpression)
+        MapExpression mapExpression                  = getFirstArgumentAs(args, MapExpression)
         List<MapEntryExpression> mapEntryExpressions = mapExpression.mapEntryExpressions.reverse()
-        ClosureExpression fn = (ClosureExpression) argumentListExpression.expressions.last()
+        ClosureExpression fn                         = getLastArgumentAs(args, ClosureExpression)
 
         StaticMethodCallExpression finalExpression = loopThroughEntryExpressions(mapEntryExpressions, fn)
 
         this.visitClosureExpression(fn)
-        this.applyScopeVisitor(finalExpression)
+        applyScopeVisitor(finalExpression, sourceUnit)
 
         return finalExpression
-
     }
 
     private StaticMethodCallExpression loopThroughEntryExpressions(
-        final List<MapEntryExpression> expressions, final ClosureExpression fn) {
+        final List<MapEntryExpression> expressions,
+        final ClosureExpression fn) {
         return (StaticMethodCallExpression) expressions.inject(fn, this.&evaluateMapEntryExpression)
     }
 
-    private void applyScopeVisitor(final StaticMethodCallExpression expression) {
-        VariableScopeVisitor variableScopeVisitor = new VariableScopeVisitor(sourceUnit)
-        variableScopeVisitor.prepareVisit(sourceUnit.AST.scriptClassDummy)
-        variableScopeVisitor.visitStaticMethodCallExpression(expression)
-    }
-
+    @CompileDynamic
     private Expression evaluateMapEntryExpression(final Expression previous, final MapEntryExpression next) {
-        ConstantExpression nextKey = (ConstantExpression) next.keyExpression
-        String closureVarName = nextKey.value.toString()
-        Expression nextValue = next.valueExpression
-        Statement stmt = previous instanceof ClosureExpression ? previous.code : block(stmt(previous))
-
-        ClosureExpression closureExpression = closureX(params(param(make(Object), closureVarName)), stmt)
-        closureExpression.variableScope = new VariableScope()
+        ConstantExpression nextKey          = (ConstantExpression) next.keyExpression
+        String closureVarName               = nextKey.value.toString()
+        Expression nextValue                = next.valueExpression
+        Statement stmt                      = createStatementFrom(previous)
+        ClosureExpression closureExpression = createClosure(closureVarName, stmt)
 
         return getBindExpression(nextValue, closureExpression)
+    }
+
+    ClosureExpression createClosure(final String singleParamName, final Statement block) {
+        ClosureExpression closureExpression = closureX(params(param(make(Object), singleParamName)), block)
+        closureExpression.variableScope = new VariableScope()
+
+        return closureExpression
+    }
+
+    Statement createStatementFrom(final Expression expression) {
+        return block(stmt(expression))
+    }
+
+    Statement createStatementFrom(final ClosureExpression expression) {
+        return expression.code
     }
 
     private StaticMethodCallExpression getBindExpression(
