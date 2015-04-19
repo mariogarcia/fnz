@@ -34,7 +34,7 @@ With *ftype* you can create in one line the same interface:
 
 [source, groovy]
 ----
-include::{testDir}/fnz/control/TypeSpec.groovy[tags=simpleTypeAlias,indent=0]
+include::{testDir}/fnz/ast/type/TypeSpec.groovy[tags=simpleTypeAlias,indent=0]
 ----
 
 In general the use cases are:
@@ -124,21 +124,21 @@ The following example declares some generic type used at return type:
 
 [source, groovy]
 ----
-include::{testDir}/fnz/control/TypeSpec.groovy[tags=genericsBasicReturnType,indent=0]
+include::{testDir}/fnz/ast/type/TypeSpec.groovy[tags=genericsBasicReturnType,indent=0]
 ----
 
 Now the example uses generics both as parameter and return type
 
 [source, groovy]
 ----
-include::{testDir}/fnz/control/TypeSpec.groovy[tags=fullGenericsExample,indent=0]
+include::{testDir}/fnz/ast/type/TypeSpec.groovy[tags=fullGenericsExample,indent=0]
 ----
 
 And mixing generics with other types:
 
 [source, groovy]
 ----
-include::{testDir}/fnz/control/TypeSpec.groovy[tags=fullGenericsWithType,indent=0]
+include::{testDir}/fnz/ast/type/TypeSpec.groovy[tags=fullGenericsWithType,indent=0]
 ----
 
 ==== Multiple parameters
@@ -163,6 +163,6 @@ parameters can be parametrized (use generics) as well.
 
 [source,groovy]
 ----
-include::{testDir}/fnz/control/TypeSpec.groovy[tags=multipleParameters,indent=0]
+include::{testDir}/fnz/ast/type/TypeSpec.groovy[tags=multipleParameters,indent=0]
 ----
 
