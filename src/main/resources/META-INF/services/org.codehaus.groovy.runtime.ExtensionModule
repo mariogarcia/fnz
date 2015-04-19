@@ -1,0 +1,3 @@
+moduleName=fnz
+moduleVersion=1.0
+extensionClasses=fnz.ast.FnzExtensionModule

@@ -4,7 +4,11 @@ ruleset {
     ruleset('rulesets/basic.xml')
     ruleset('rulesets/exceptions.xml')
     ruleset('rulesets/imports.xml')
-    ruleset('rulesets/unused.xml')
+    ruleset('rulesets/unused.xml') {
+        'UnusedMethodParameter' {
+            doNotApplyToClassNames = '*ExtensionModule'
+        }
+    }
 
     ruleset('rulesets/dry.xml') {
         'DuplicateNumberLiteral' {
@@ -25,7 +29,6 @@ ruleset {
         'SpaceBeforeOpeningBrace' {
             doNotApplyToClassNames = '*Spec,*SpecExample'
         }
-
         'ClassJavadoc' {
             enabled = false
         }
@@ -36,7 +39,7 @@ ruleset {
 
     ruleset('rulesets/naming.xml') {
         'MethodName' {
-            doNotApplyToClassNames = '*Spec'
+            doNotApplyToClassNames = '*Spec,*ExtensionModule'
         }
         'VariableName' {
             doNotApplyToClassNames = '*Spec,*SpecExample'
