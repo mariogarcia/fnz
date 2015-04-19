@@ -59,7 +59,6 @@ class MaybeSpec extends Specification {
             !result.isPresent()
     }
 
-
     // tag::maybebind[]
     void 'Monad: using maybe to shortcircuit a process'() {
         given: 'a function dividing only even numbers'
@@ -131,8 +130,6 @@ class MaybeSpec extends Specification {
                  50      |   null
     }
     // end::maybebindhaskell[]
-
-
 
     // tag::maybeor1[]
     void 'testing maybe alternatives (I)'() {

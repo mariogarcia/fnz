@@ -5,8 +5,27 @@ ruleset {
     ruleset('rulesets/exceptions.xml')
     ruleset('rulesets/imports.xml')
     ruleset('rulesets/unused.xml')
-    ruleset('rulesets/dry.xml')
+
+    ruleset('rulesets/dry.xml') {
+        'DuplicateNumberLiteral' {
+            doNotApplyToClassNames = '*Spec,*SpecExample'
+        }
+        'DuplicateStringLiteral' {
+            doNotApplyToClassNames = '*Spec,*SpecExample'
+        }
+        'DuplicateMapLiteral' {
+            doNotApplyToClassNames = '*Spec,*SpecExample'
+        }
+        'DuplicateListLiteral' {
+            doNotApplyToClassNames = '*Spec,*SpecExample'
+        }
+    }
+
     ruleset('rulesets/formatting.xml') {
+        'SpaceBeforeOpeningBrace' {
+            doNotApplyToClassNames = '*Spec,*SpecExample'
+        }
+
         'ClassJavadoc' {
             enabled = false
         }
@@ -14,10 +33,19 @@ ruleset {
             enabled = false
         }
     }
+
     ruleset('rulesets/naming.xml') {
         'MethodName' {
             doNotApplyToClassNames = '*Spec'
         }
+        'VariableName' {
+            doNotApplyToClassNames = '*Spec,*SpecExample'
+        }
+        'FactoryMethodName' {
+            doNotApplyToClassNames = '*Spec,*SpecExample'
+        }
     }
+
     ruleset('rulesets/convention.xml')
+
 }

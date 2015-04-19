@@ -39,7 +39,7 @@ class LetSpec extends AstBaseSpec {
 
     def 'resolve variables'() {
         when: 'Initializing expression and executing closure'
-        Integer result = exampleInstance.sumAndInc(1,2)
+        Integer result = exampleInstance.sumAndInc(1, 2)
         then: 'The value should be the expected'
             result == 4
     }

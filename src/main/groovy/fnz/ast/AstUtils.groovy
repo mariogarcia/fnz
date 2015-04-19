@@ -1,7 +1,8 @@
 package fnz.ast
 
+import static org.codehaus.groovy.ast.tools.GeneralUtils.callX
+
 import groovy.transform.CompileStatic
-import org.codehaus.groovy.ast.VariableScope
 
 import org.codehaus.groovy.control.SourceUnit
 import org.codehaus.groovy.ast.expr.Expression
@@ -13,8 +14,6 @@ import org.codehaus.groovy.ast.expr.MethodCallExpression
 import org.codehaus.groovy.ast.expr.StaticMethodCallExpression
 
 import org.codehaus.groovy.classgen.VariableScopeVisitor
-
-import static org.codehaus.groovy.ast.tools.GeneralUtils.callX
 
 @CompileStatic
 final class AstUtils {

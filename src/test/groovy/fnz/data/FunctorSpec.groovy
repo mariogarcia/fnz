@@ -6,6 +6,7 @@ import static Fn.fmap
 // end::publicapimethods[]
 
 import spock.lang.Specification
+
 /**
  *
  */
@@ -69,9 +70,9 @@ class FunctorSpec extends Specification {
         then: 'checking'
             result == expected
         where: 'possible messy values'
-            input     | expected
-                [1,2] | [2,3]
-                null  | []
+            input      | expected
+                [1, 2] | [2, 3]
+                null   | []
     }
     // end::collect[]
 
@@ -89,9 +90,8 @@ class FunctorSpec extends Specification {
         where: 'possible messy values are'
             input         | expected
                 [1, 2]    | [4, 6]
-                [1, null] | [4,null]
+                [1, null] | [4, null]
     }
     // end::collectandmap[]
 
 }
-

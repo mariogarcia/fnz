@@ -30,7 +30,6 @@ import org.codehaus.groovy.ast.expr.StaticMethodCallExpression
 import org.codehaus.groovy.ast.expr.MapEntryExpression
 
 import org.codehaus.groovy.ast.stmt.Statement
-import org.codehaus.groovy.classgen.VariableScopeVisitor
 import org.codehaus.groovy.control.SourceUnit
 
 /**
@@ -57,6 +56,7 @@ import org.codehaus.groovy.control.SourceUnit
  *
  */
 @CompileStatic
+@SuppressWarnings('FactoryMethodName')
 class LetmAstTransformer extends MethodCallExpressionTransformer {
 
     static final String LET_METHOD_NAME = 'letm'

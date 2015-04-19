@@ -1,10 +1,10 @@
 package fnz.test
 
+import static org.codehaus.groovy.control.CompilePhase.INSTRUCTION_SELECTION
+
 import spock.lang.Specification
 import org.codehaus.groovy.control.CompilePhase
 import org.codehaus.groovy.tools.ast.TransformTestHelper
-
-import static org.codehaus.groovy.control.CompilePhase.INSTRUCTION_SELECTION
 
 /**
 *
@@ -27,9 +27,9 @@ class AstBaseSpec extends Specification{
 
     def getClassToTestForPhase(Class transformationClass, CompilePhase compilePhase) {
         TransformTestHelper invoker =
-            getScriptParser(transformationClass,compilePhase)
+            getScriptParser(transformationClass, compilePhase)
 
-        def qualifiedName = getClass().name.replaceAll("\\.","\\/")
+        def qualifiedName = getClass().name.replaceAll("\\.", "\\/")
         def file = new File("${BASE}${qualifiedName}Example.groovy")
 
         /* The class we want to test */

@@ -1,13 +1,10 @@
 package fnz.ast.type
 
 import static fnz.data.Fn.val
-import static fnz.data.Fn.Right
 
 import fnz.ast.FnzAst
 
-import fnz.data.Try
 import fnz.data.Maybe
-import fnz.data.Either
 import fnz.test.AstBaseSpec
 import org.codehaus.groovy.control.CompilePhase
 
@@ -58,7 +55,6 @@ class TypeSpec extends AstBaseSpec {
 
     void 'simple type error'() {
         when: 'a simple inner type example with no generics'
-        def exampleClass =
             helper.parse(
                """
                package fnz.samples.type
@@ -76,7 +72,6 @@ class TypeSpec extends AstBaseSpec {
 
     void 'simple type checking we could work without package'() {
         expect: 'parsing doesnt throw any error'
-        def exampleClass =
             helper.parse(
                """
                class A {
@@ -87,7 +82,6 @@ class TypeSpec extends AstBaseSpec {
                """
             )
     }
-
 
     void 'simple type alias: check imported classes'() {
         given: 'a simple inner type example with no generics'

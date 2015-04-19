@@ -5,12 +5,10 @@ import static org.codehaus.groovy.ast.tools.GeneralUtils.args
 import static org.codehaus.groovy.ast.tools.GeneralUtils.params
 import static org.codehaus.groovy.ast.tools.GeneralUtils.param
 import static org.codehaus.groovy.ast.tools.GeneralUtils.closureX
-import static org.codehaus.groovy.ast.tools.GeneralUtils.callX
 import static org.codehaus.groovy.ast.tools.GeneralUtils.stmt
 
 import static fnz.ast.AstUtils.applyScopeVisitor
 import static fnz.ast.AstUtils.callClosureX
-import static fnz.ast.AstUtils.isClosureExpression
 import static fnz.ast.AstUtils.getArgs
 import static fnz.ast.AstUtils.getFirstArgumentAs
 import static fnz.ast.AstUtils.getLastArgumentAs
@@ -29,7 +27,6 @@ import org.codehaus.groovy.ast.expr.ClosureExpression
 import org.codehaus.groovy.ast.expr.MethodCallExpression
 
 import org.codehaus.groovy.ast.stmt.Statement
-import org.codehaus.groovy.classgen.VariableScopeVisitor
 import org.codehaus.groovy.control.SourceUnit
 
 /**
@@ -53,6 +50,7 @@ import org.codehaus.groovy.control.SourceUnit
  *
  */
 @CompileStatic
+@SuppressWarnings('FactoryMethodName')
 class LetAstTransformer extends MethodCallExpressionTransformer {
 
     static final String LET_METHOD_NAME = 'let'
@@ -70,7 +68,8 @@ class LetAstTransformer extends MethodCallExpressionTransformer {
         // checking if there is another nested let expression
         this.visitClosureExpression(fn)
         // processing this let expression
-        MethodCallExpression result = (MethodCallExpression) mapEntryExpressions.inject(fn, this.&evaluateMapEntryExpression)
+        MethodCallExpression result =
+            (MethodCallExpression) mapEntryExpressions.inject(fn, this.&evaluateMapEntryExpression)
         // fixing variable scope
         applyScopeVisitor(result, sourceUnit)
 

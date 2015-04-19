@@ -1,10 +1,11 @@
 package fnz.ast.flow
 
+@SuppressWarnings('SpaceBeforeOpeningBrace')
 class LetSpecExample {
 
     // tag::simpleLet[]
     Integer simpleLetExample() {
-        let(x: 1, y: 2,  z: 3) {
+        let(x:1, y:2, z:3) {
             x + y + z
         }
     }
@@ -12,7 +13,7 @@ class LetSpecExample {
 
     // tag::computedValues[]
     Integer computedValues() {
-        let(x: 1, y: 2,  z: { x + y }) {
+        let(x:1, y:2, z:{ x + y }) {
             x + y + z
         }
     }
@@ -20,8 +21,8 @@ class LetSpecExample {
 
     // tag::nestedLet[]
     Integer nestedLetExample() {
-        let(a: 5, b: 15) {
-            let(c: 15, d: { a + 25 }) {
+        let(a:5, b:15) {
+            let(c:15, d:{ a + 25 }) {
                 b + c + d
             }
         }
@@ -30,7 +31,7 @@ class LetSpecExample {
 
     // tag::resolveMethodVariables[]
     Integer sumAndInc(Integer x, Integer y) {
-        let(a: x, b: y) {
+        let(a:x, b:y) {
             a + b + 1
         }
     }

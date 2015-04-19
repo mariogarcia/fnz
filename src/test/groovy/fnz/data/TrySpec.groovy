@@ -33,14 +33,13 @@ class TrySpec extends Specification {
             Function toTry = { Success(it) }
             Function notUseThis = { Integer x -> x / 0 }
         when: 'trying to apply it to a given value'
-            Try result = fapply(bind(Just(2),toTry), Just(notUseThis))
+            Try result = fapply(bind(Just(2), toTry), Just(notUseThis))
         then: 'we should not be worried about exceptions'
             result.isFailure()
     }
 
     def 'using fapply over a failure'() {
         given: 'a non safe function'
-            Function toTry = { Success(it) }
             Function notUseThis = { Integer x -> x / 0 }
         when: 'trying to apply it to a given value'
             Try result =
@@ -74,7 +73,7 @@ class TrySpec extends Specification {
                     { 0.div(0) } as Function, // WRONG
                     recover(
                         { new Date() + "1" } as Function,
-                        { throw new Exception("Something bad") } as Function,
+                        { throw new IllegalArgumentException("Something bad") } as Function,
                         { 0 } as Function
                     ) // WORST
                 )
@@ -86,15 +85,16 @@ class TrySpec extends Specification {
 
     def 'using recover() with no recovering functions'() {
         when:
-            Function failingFn = recover({throw new Exception("ahhh")} as Function)
+            Function failingFn = recover({ throw new IllegalArgumentException("ahhh") } as Function)
             def anything = bind(Just(1), failingFn)
         then:
             anything.isFailure()
     }
 
+    @SuppressWarnings('ReturnNullFromCatchBlock')
     def 'classic try catch example'() {
         given: 'a list of numbers as strings'
-            def numbers = ["1","2a","11","24","4A"]
+            def numbers = ["1", "2a", "11", "24", "4A"]
         when:
             def average =
                 numbers.findResults { n ->
@@ -113,7 +113,7 @@ class TrySpec extends Specification {
 
     def 'classic try catch example RELOADED'() {
         given: 'a list of numbers as strings'
-            def numbers = ["1","2a","11","24","4A"]
+            def numbers = ["1", "2a", "11", "24", "4A"]
             def parse = { item -> Integer.parseInt(item) } as Function
             def ZERO = { 0 } as Function
             def addToList = { x -> x ? List(x) : List() }
@@ -139,7 +139,7 @@ class TrySpec extends Specification {
 
     def 'classic try catch example MONADIC'() {
         given: 'a list of numbers as strings'
-            def numbers = ["1","2a","11","24","4A"]
+            def numbers = ["1", "2a", "11", "24", "4A"]
             def ZERO = { 0 } as Function
             def AVG = { list -> list.sum().div(list.size()) }
             def parse = { item -> Integer.parseInt(item) } as Function
@@ -219,7 +219,7 @@ class TrySpec extends Specification {
             Try<Integer> VALUE  = Success(42)
         when: 'trying to execute several functions'
             Try<Integer> resultRight = fmap(VALUE, BAD) | fmap(VALUE, GOOD)
-            Try<Integer> resultLeft = fmap(VALUE,GOOD) | fmap(VALUE, BAD)
+            Try<Integer> resultLeft = fmap(VALUE, GOOD) | fmap(VALUE, BAD)
         then: 'we should be getting the one succeeding'
             val(resultRight) == 21
             val(resultLeft) == 21
@@ -234,7 +234,7 @@ class TrySpec extends Specification {
             Try<Integer> VALUE  = Success(42)
         when: 'trying to execute several functions'
             Try<Integer> resultRight = bind(VALUE, BAD) | GOOD
-            Try<Integer> resultLeft = bind(VALUE,GOOD) | BAD
+            Try<Integer> resultLeft = bind(VALUE, GOOD) | BAD
         then: 'we should be getting the one succeeding'
             val(resultRight) == 2
             val(resultLeft) == 2
