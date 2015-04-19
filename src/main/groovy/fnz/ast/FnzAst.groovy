@@ -17,7 +17,7 @@ import fnz.ast.type.TypeAstTransformer
  *
  */
 @CompileStatic
-@GroovyASTTransformation(phase = CompilePhase.SEMANTIC_ANALYSIS)
+@GroovyASTTransformation(phase = CompilePhase.CONVERSION)
 class FnzAst extends AstExpressionTransformerAware {
 
     @Override
