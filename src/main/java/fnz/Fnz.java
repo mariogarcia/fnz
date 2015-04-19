@@ -1,11 +1,18 @@
-package fnz.data;
+package fnz;
 
-import java.util.List;
+import fnz.data.Try;
+import fnz.data.Monad;
+import fnz.data.Either;
+import fnz.data.Maybe;
+import fnz.data.Functor;
+import fnz.data.Function;
+import fnz.data.ListMonad;
+import fnz.data.Applicative;
 
 /**
  *
  */
-public final class Fn {
+public final class Fnz {
 
     public static <A> Either.Left<A> Left(A source) {
         return Either.left(source);

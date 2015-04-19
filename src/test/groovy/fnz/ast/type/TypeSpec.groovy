@@ -1,6 +1,6 @@
 package fnz.ast.type
 
-import static fnz.data.Fn.val
+import static fnz.Fnz.val
 
 import fnz.ast.FnzAst
 
@@ -90,7 +90,7 @@ class TypeSpec extends AstBaseSpec {
                """
                package fnz.samples.type
 
-               import fnz.data.Fn
+               import fnz.Fnz
                import fnz.data.Maybe
 
                class A {
@@ -105,10 +105,10 @@ class TypeSpec extends AstBaseSpec {
 
                     boolean simpleFunctionalInterface() {
                          Maybe<Integer> result = executeFunction('1') { String x ->
-                              Fn.Just(Integer.parseInt(x))
+                              Fnz.Just(Integer.parseInt(x))
                          }
 
-                         Fn.val(result) == 1
+                         Fnz.val(result) == 1
                     }
 
                }
@@ -126,7 +126,7 @@ class TypeSpec extends AstBaseSpec {
                // tag::genericsBasicReturnType[]
                package fnz.samples.type
 
-               import fnz.data.Fn
+               import fnz.Fnz
                import fnz.data.Maybe
 
                import groovy.transform.CompileStatic
@@ -144,10 +144,10 @@ class TypeSpec extends AstBaseSpec {
 
                     boolean simpleFunctionalInterface() {
                          Maybe<Integer> result = executeFunction('1') { String x ->
-                              Fn.Just(Integer.parseInt(x))
+                              Fnz.Just(Integer.parseInt(x))
                          }
 
-                         Fn.val(result) == 1
+                         Fnz.val(result) == 1
                     }
 
                }
@@ -204,7 +204,7 @@ class TypeSpec extends AstBaseSpec {
 
                 package fnz.samples.type
 
-                import fnz.data.Fn
+                import fnz.Fnz
                 import fnz.data.Maybe
 
                 class A {
@@ -213,12 +213,12 @@ class TypeSpec extends AstBaseSpec {
                     }
 
                     Integer executeFunction(String source, Fx<String,Integer> fx) {
-                        fx.apply(Fn.Just(source))
+                        fx.apply(Fnz.Just(source))
                     }
 
                     boolean complexFunctionalInterface() {
                         Integer result = executeFunction('1') { Maybe<String> x ->
-                            Fn.val(x.fmap { Integer.parseInt(it) })
+                            Fnz.val(x.fmap { Integer.parseInt(it) })
                         }
 
                         result == 1
@@ -236,7 +236,7 @@ class TypeSpec extends AstBaseSpec {
             helper.parse('''
                 package fnz.samples.type
 
-                import fnz.data.Fn
+                import fnz.Fnz.*
                 import fnz.data.Maybe
 
                 class A {
@@ -268,7 +268,7 @@ class TypeSpec extends AstBaseSpec {
                 // tag::multipleParameters[]
                 package fnz.samples.type
 
-                import static fnz.data.Fn.*
+                import static fnz.Fnz.val
                 import fnz.data.*
 
                 class A {
@@ -301,7 +301,7 @@ class TypeSpec extends AstBaseSpec {
             helper.parse('''
                 package fnz.samples.type
 
-                import static fnz.data.Fn.*
+                import static fnz.Fnz.*
                 import fnz.data.*
 
                 class A {

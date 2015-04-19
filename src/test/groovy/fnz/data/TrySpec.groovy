@@ -1,14 +1,14 @@
 package fnz.data
 
-import static Fn.List
-import static Fn.Just
-import static Fn.bind
-import static Fn.fmap
-import static Fn.fapply
-import static Fn.val
-import static Fn.wrap
-import static Fn.recover
-import static Fn.Success
+import static fnz.Fnz.List
+import static fnz.Fnz.Just
+import static fnz.Fnz.bind
+import static fnz.Fnz.fmap
+import static fnz.Fnz.fapply
+import static fnz.Fnz.val
+import static fnz.Fnz.wrap
+import static fnz.Fnz.recover
+import static fnz.Fnz.Success
 
 import spock.lang.Specification
 

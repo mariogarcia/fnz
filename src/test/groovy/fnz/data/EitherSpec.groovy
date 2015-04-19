@@ -3,9 +3,9 @@ package fnz.data
 import static Either.right
 import static Either.left
 
-import static Fn.Either
-import static Fn.Right
-import static Fn.val
+import static fnz.Fnz.Either
+import static fnz.Fnz.Right
+import static fnz.Fnz.val
 
 import spock.lang.Specification
 

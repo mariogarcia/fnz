@@ -1,8 +1,8 @@
 package fnz.data
 
 // tag::publicapimethods[]
-import static Fn.val
-import static Fn.fmap
+import static fnz.Fnz.val
+import static fnz.Fnz.fmap
 // end::publicapimethods[]
 
 import spock.lang.Specification

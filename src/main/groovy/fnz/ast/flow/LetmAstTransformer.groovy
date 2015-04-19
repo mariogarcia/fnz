@@ -15,7 +15,7 @@ import static fnz.ast.AstUtils.getFirstArgumentAs
 import static fnz.ast.AstUtils.getLastArgumentAs
 
 import fnz.ast.MethodCallExpressionTransformer
-import fnz.data.Fn
+import fnz.Fnz
 import groovy.transform.CompileStatic
 import groovy.transform.CompileDynamic
 import org.codehaus.groovy.ast.VariableScope
@@ -116,8 +116,8 @@ class LetmAstTransformer extends MethodCallExpressionTransformer {
     private StaticMethodCallExpression getBindExpression(
         final Expression value, final ClosureExpression closureWithKey) {
         return value instanceof ClosureExpression ?
-        callX(make(Fn), BIND_METHOD_NAME, args(callX(value, DO_CALL_METHOD_NAME), closureWithKey)) :
-        callX(make(Fn), BIND_METHOD_NAME, args(value, closureWithKey))
+        callX(make(Fnz), BIND_METHOD_NAME, args(callX(value, DO_CALL_METHOD_NAME), closureWithKey)) :
+        callX(make(Fnz), BIND_METHOD_NAME, args(value, closureWithKey))
     }
 
 }

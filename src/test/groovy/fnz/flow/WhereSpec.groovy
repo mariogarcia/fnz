@@ -1,7 +1,7 @@
 package fnz.flow
 
 import static fnz.flow.Where.check
-import static fnz.data.Fn.val
+import static fnz.Fnz.val
 
 import fnz.data.Maybe
 

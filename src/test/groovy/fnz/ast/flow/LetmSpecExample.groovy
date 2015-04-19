@@ -1,10 +1,10 @@
 package fnz.ast.flow
 
-import static fnz.data.Fn.Just
-import static fnz.data.Fn.Right
-import static fnz.data.Fn.Left
-import static fnz.data.Fn.wrap
-import static fnz.data.Fn.bind
+import static fnz.Fnz.Just
+import static fnz.Fnz.Right
+import static fnz.Fnz.Left
+import static fnz.Fnz.wrap
+import static fnz.Fnz.bind
 
 import fnz.data.Try
 import fnz.data.Either

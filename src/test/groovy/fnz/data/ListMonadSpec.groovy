@@ -1,7 +1,7 @@
 package fnz.data
 
-import static Fn.bind
-import static Fn.Just
+import static fnz.Fnz.bind
+import static fnz.Fnz.Just
 import static ListMonad.list
 
 import spock.lang.Specification

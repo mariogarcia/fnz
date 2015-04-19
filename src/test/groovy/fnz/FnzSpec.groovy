@@ -1,18 +1,24 @@
-package fnz.data
+package fnz
 
-import static Fn.bind
-import static Fn.fmap
-import static Fn.Just
-import static Fn.List
-import static Fn.wrap
-import static Fn.val
-import static Fn.Maybe
-import static Fn.Failure
-import static Fn.Success
+import static Fnz.bind
+import static Fnz.fmap
+import static Fnz.Just
+import static Fnz.List
+import static Fnz.wrap
+import static Fnz.val
+import static Fnz.Maybe
+import static Fnz.Failure
+import static Fnz.Success
+
+import fnz.data.Try
+import fnz.data.Function
+import fnz.data.Maybe
+import fnz.data.ListMonad
+
 
 import spock.lang.Specification
 
-class FnSpec extends Specification {
+class FnzSpec extends Specification {
 
     void 'Fmap'() {
         given: 'a function (a->b) using functional interface coertion'
@@ -104,6 +110,7 @@ class FnSpec extends Specification {
 
     void 'stupid coverage check about creating an instance of final class'() {
         expect:
-        new Fn()
+        new Fnz()
     }
+
 }

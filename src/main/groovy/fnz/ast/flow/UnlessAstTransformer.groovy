@@ -17,7 +17,7 @@ import org.codehaus.groovy.ast.expr.ArgumentListExpression
 import groovy.transform.CompileStatic
 import org.codehaus.groovy.control.SourceUnit
 
-import fnz.data.Fn
+import fnz.Fnz
 import fnz.ast.MethodCallExpressionTransformer
 
 /**
@@ -59,8 +59,8 @@ class UnlessAstTransformer extends MethodCallExpressionTransformer {
 
         return ternaryX(
             notX(booleanExpression),
-            callX(make(Fn, false), JUST, callClosureX(bodyExpression)),
-            callX(make(Fn, false), NOTHING)
+            callX(make(Fnz, false), JUST, callClosureX(bodyExpression)),
+            callX(make(Fnz, false), NOTHING)
         )
 
     }

@@ -1,17 +1,17 @@
 package fnz.data
 
 // tag::imports[]
-import static Fn.val
+import static fnz.Fnz.val
 import static Maybe.just
 import static Maybe.nothing
 import static Maybe.maybe
 // end::imports[]
 
 // tag::fnimports[]
-import static Fn.Just
-import static Fn.Nothing
-import static Fn.fapply
-import static Fn.bind
+import static fnz.Fnz.Just
+import static fnz.Fnz.Nothing
+import static fnz.Fnz.fapply
+import static fnz.Fnz.bind
 // end::fnimports[]
 
 import spock.lang.Unroll

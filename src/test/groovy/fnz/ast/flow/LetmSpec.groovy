@@ -1,7 +1,7 @@
 package fnz.ast.flow
 
-import static fnz.data.Fn.val
-import static fnz.data.Fn.Right
+import static fnz.Fnz.val
+import static fnz.Fnz.Right
 
 import fnz.ast.FnzAst
 
