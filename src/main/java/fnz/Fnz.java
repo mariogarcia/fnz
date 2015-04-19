@@ -59,26 +59,11 @@ public final class Fnz {
     }
 
     public static <A,B,F extends Function<A,B>> Function<A, Try<B>> wrap(F fn) {
-        return new Function<A, Try<B>>() {
-            public Try<B> apply(A a) {
-                return fmap(Success(a), fn);
-            }
-        };
+        return Try.wrap(fn);
     }
 
     public static <A,B,F extends Function<A,B>> Function<A,Try<B>> recover(F... alternatives) {
-        return new Function<A, Try<B>>() {
-            public Try<B> apply(A a) {
-                Try<B> result = null;
-                for (F alternative : alternatives) {
-                    result = fmap(Success(a), alternative);
-                    if (result.isSuccess()) {
-                        return result;
-                    }
-                }
-                return result;
-            }
-        };
+        return Try.recover(alternatives);
     }
 
     public static <A,B,MA extends Monad<A>,MB extends Monad<B>> MB bind(MA ma, Function<A,MB> fn) {
