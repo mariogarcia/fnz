@@ -41,16 +41,8 @@ final class AstUtils {
         return callX(closure, DO_CALL_METHOD_NAME, args)
     }
 
-    static Boolean isClosureExpression(final Expression expression) {
-        return expression instanceof ClosureExpression
-    }
-
     static Boolean isBinaryExpression(final Expression expression) {
         return expression instanceof BinaryExpression
-    }
-
-    static Boolean isConstantExpression(final Expression expression) {
-        return expression instanceof ConstantExpression
     }
 
     static ArgumentListExpression getArgs(final MethodCallExpression methodCallExpression) {
@@ -63,10 +55,6 @@ final class AstUtils {
 
     static <U extends Expression> U getLastArgumentAs(final ArgumentListExpression args, Class<U> asType) {
         return asType.cast(args.expressions.last())
-    }
-
-    static Boolean isPlaceHolder(String variableName) {
-        return variableName == PLACEHOLDER_NAME
     }
 
     static String getUniqueIdentifier() {
