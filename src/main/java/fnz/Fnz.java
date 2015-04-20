@@ -58,6 +58,14 @@ public final class Fnz {
         return ListMonad.list(values);
     }
 
+    public static <A,B> Try<B> Try(Function<A,B> fn) {
+        return Try.Try(fn);
+    }
+
+    public static <A,B> Try<B> Try(A a, Function<A,B> fn) {
+        return Try.Try(a, fn);
+    }
+
     public static <A,B,F extends Function<A,B>> Function<A, Try<B>> wrap(F fn) {
         return Try.wrap(fn);
     }

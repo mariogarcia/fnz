@@ -155,4 +155,12 @@ public abstract class Try<A> extends MonadType<A> implements Or<A,Try<A>> {
         };
     }
 
+    public static <A,B> Try<B> Try(Function<A,B> fn) {
+        return wrap(fn).apply(null);
+    }
+
+    public static <A,B> Try<B> Try(A a, Function<A,B> fn) {
+        return wrap(fn).apply(a);
+    }
+
 }

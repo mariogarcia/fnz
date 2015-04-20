@@ -10,6 +10,7 @@ import static fnz.Fnz.wrap
 import static fnz.Fnz.recover
 import static fnz.Fnz.Success
 
+import spock.lang.Unroll
 import spock.lang.Specification
 
 class TrySpec extends Specification {
@@ -252,6 +253,31 @@ class TrySpec extends Specification {
             notRecoverable.getTypedRef()
             !notRecoverable.getTypedRef().getValue()
             !val(notRecoverable)
+    }
+
+    @Unroll
+    def 'check Try only with a function'() {
+        when: 'executing an unsafe action'
+            Try result = Try { value / 0 }
+        then: 'we should get'
+            result
+        where: 'possible values are'
+            value | isSucess
+              1   |   true
+              0   |   false
+    }
+
+    @Unroll
+    def 'check Try with a value and a function'() {
+        when: 'executing an unsafe action'
+            Try result   = Try(value) { x -> 1 / x }
+            Try computed = result.fmap { y -> y + 1 }
+        then: 'we should get'
+            val(computed) == resultExpected
+        where: 'possible values are'
+            value | isSucess | resultExpected
+              1   |   true   |       2
+              0   |   false  |      null
     }
 
 }

@@ -59,12 +59,16 @@ final class FnzExtensionModule {
         return Fnz.List(values)
     }
 
-    static <A,B,F extends Function<A,B>> Function<A, Try<B>> wrap(Object o, F fn) {
-        return Fnz.wrap(fn)
+    public static <A,B> Try<B> Try(Object o, Function<A,B> fn) {
+        return Fnz.Try(fn);
     }
 
-    static <A,B,F extends Function<A,B>> Function<A,Try<B>> recover(Object o, F... alternatives) {
-        return Fnz.recover(alternatives)
+    public static <A,B> Try<B> Try(Object o, A a, Function<A,B> fn) {
+        return Fnz.Try(a, fn);
+    }
+
+    static <A,B,F extends Function<A,B>> Function<A, Try<B>> wrap(Object o, F fn) {
+        return Fnz.wrap(fn)
     }
 
     static <A,B,MA extends Monad<A>,MB extends Monad<B>> MB bind(Object o, MA ma, Function<A,MB> fn) {
