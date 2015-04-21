@@ -53,16 +53,16 @@ final class AstUtils {
         return asType.cast(args.expressions.first())
     }
 
+    static Boolean isToken(Token token, int typeRef) {
+        return token.type == typeRef
+    }
+
     static <U extends Expression> U getLastArgumentAs(final ArgumentListExpression args, Class<U> asType) {
         return asType.cast(args.expressions.last())
     }
 
     static String getUniqueIdentifier() {
         return "_${System.nanoTime()}"
-    }
-
-    static Boolean isToken(Token token, int type) {
-        return token.type == type
     }
 
 }

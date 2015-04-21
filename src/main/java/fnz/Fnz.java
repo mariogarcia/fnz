@@ -70,7 +70,7 @@ public final class Fnz {
         return Try.wrap(fn);
     }
 
-    public static <A,B,F extends Function<A,B>> Function<A,Try<B>> recover(F... alternatives) {
+    public static <A,B> Function<A,Try<B>> recover(Function<A,B>... alternatives) {
         return Try.recover(alternatives);
     }
 

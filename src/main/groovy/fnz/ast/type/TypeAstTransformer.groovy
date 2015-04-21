@@ -8,6 +8,7 @@ import static org.codehaus.groovy.ast.tools.GeneralUtils.params
 import static fnz.ast.AstUtils.getArgs
 import static fnz.ast.AstUtils.isBinaryExpression
 import static fnz.ast.AstUtils.getUniqueIdentifier
+import static fnz.ast.AstUtils.isToken
 
 import static org.codehaus.groovy.syntax.Types.COMPARE_GREATER_THAN_EQUAL
 
@@ -60,13 +61,13 @@ class TypeAstTransformer extends MethodCallExpressionTransformer {
     }
 
     @CompileDynamic
-    private Boolean checkIsBinaryExpressionWithToken(Expression expression, int tokenReference) {
+    Boolean checkIsBinaryExpressionWithToken(Expression expression, int tokenReference) {
         if (!isBinaryExpression(expression)) {
             addError(expression, "Expected binary expression here. Something like: Fn(A) >> String >> A")
             return false
         }
 
-        if (!AstUtils.isToken(expression.operation, tokenReference)) {
+        if (!isToken(expression.operation, tokenReference)) {
             addError(expression, "Token expected $tokenReference got ${expression.operation}")
             return false
         }

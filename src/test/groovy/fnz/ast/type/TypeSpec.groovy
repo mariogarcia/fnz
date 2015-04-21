@@ -70,6 +70,23 @@ class TypeSpec extends AstBaseSpec {
             thrown(Exception)
     }
 
+    void 'not using proper symbols'() {
+        when: 'a simple inner type example with no generics'
+            helper.parse(
+               """
+               package fnz.samples.type
+
+               class A {
+                    static {
+                        ftype Fn >>> Integer >> String
+                    }
+               }
+               """
+            )
+        then: 'the method to return true'
+            thrown(Exception)
+    }
+
     void 'simple type checking we could work without package'() {
         expect: 'parsing doesnt throw any error'
             helper.parse(

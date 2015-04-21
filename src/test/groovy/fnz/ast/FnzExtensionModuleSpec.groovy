@@ -139,11 +139,20 @@ class FnzExtensionModuleSpec extends Specification {
 
     void 'test fapply'() {
         when:
-        def result = fapply(Just(1), Success({ x -> x + 1 } as Function ))
+            def result = fapply(Just(1), Success({ x -> x + 1 } as Function ))
         then:
             result instanceof Maybe.Just
             val(result) == 2
     }
 
+    void 'recovering from possible failures'() {
+        when: 'having a function with a possible error and its alternative'
+            def safeFn = recover(
+                { x -> x / 0 },
+                { y -> y + 1 }
+            )
+        then: 'we should success on getting a valid value'
+            val(Success(1).bind(safeFn)) == 2
+    }
 
 }

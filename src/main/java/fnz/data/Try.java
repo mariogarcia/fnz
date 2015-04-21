@@ -140,11 +140,11 @@ public abstract class Try<A> extends MonadType<A> implements Or<A,Try<A>> {
         };
     }
 
-    public static <A,B,F extends Function<A,B>> Function<A,Try<B>> recover(F... alternatives) {
+    public static <A,B> Function<A,Try<B>> recover(Function<A,B>... alternatives) {
         return new Function<A, Try<B>>() {
             public Try<B> apply(A a) {
                 Try<B> result = null;
-                for (F alternative : alternatives) {
+                for (Function<A,B> alternative : alternatives) {
                     result = success(a).fmap(alternative);
                     if (result.isSuccess()) {
                         return result;

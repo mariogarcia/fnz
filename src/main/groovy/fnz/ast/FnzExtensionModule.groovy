@@ -88,4 +88,8 @@ final class FnzExtensionModule {
         return Fnz.val(monad)
     }
 
+    static <A,B> Function<A,Try<B>> recover(Object o, Closure<?>... alternatives) {
+        return Fnz.recover(alternatives as Function<A,B>[]);
+    }
+
 }
