@@ -19,7 +19,6 @@ import org.codehaus.groovy.classgen.VariableScopeVisitor
 @CompileStatic
 final class AstUtils {
 
-    static final String PLACEHOLDER_NAME = '_'
     static final String DO_CALL_METHOD_NAME = 'doCall'
 
     static void applyScopeVisitor(final MethodCallExpression expression, final SourceUnit sourceUnit) {
