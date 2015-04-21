@@ -9,6 +9,8 @@ import static fnz.ast.AstUtils.getArgs
 import static fnz.ast.AstUtils.isBinaryExpression
 import static fnz.ast.AstUtils.getUniqueIdentifier
 
+import static org.codehaus.groovy.syntax.Types.COMPARE_GREATER_THAN_EQUAL
+
 import fnz.ast.MethodCallExpressionTransformer
 
 import groovy.transform.CompileDynamic
@@ -28,7 +30,10 @@ import org.codehaus.groovy.ast.expr.MethodCallExpression
 import org.codehaus.groovy.ast.expr.ArgumentListExpression
 import org.codehaus.groovy.ast.expr.BinaryExpression
 
+import org.codehaus.groovy.syntax.Token
 import org.codehaus.groovy.control.SourceUnit
+
+import fnz.ast.AstUtils
 
 @CompileStatic
 class TypeAstTransformer extends MethodCallExpressionTransformer {
@@ -43,23 +48,30 @@ class TypeAstTransformer extends MethodCallExpressionTransformer {
     }
 
     Expression transformMethodCall(final MethodCallExpression methodCallExpression) {
-        Expression firstArgumentExpression = getArgs(methodCallExpression).first()
+        Expression firstArg = getArgs(methodCallExpression).first()
+        Boolean isValid = checkIsBinaryExpressionWithToken(firstArg, COMPARE_GREATER_THAN_EQUAL)
 
-        if (!isBinaryExpression(firstArgumentExpression)) {
-            addError(
-                firstArgumentExpression,
-                "Expected binary expression here. Something like: Fn(A) >> String >> A",
-            )
+        if (!isValid) return
 
-            return methodCallExpression
-        }
-
-        InnerClassNode innerClassNode =
-            getFunctionalInterface((BinaryExpression) firstArgumentExpression)
-
+        InnerClassNode innerClassNode = getFunctionalInterface((BinaryExpression) firstArg)
         module.addClass(innerClassNode)
 
         return MEANING_OF_LIFE
+    }
+
+    @CompileDynamic
+    private Boolean checkIsBinaryExpressionWithToken(Expression expression, int tokenReference) {
+        if (!isBinaryExpression(expression)) {
+            addError(expression, "Expected binary expression here. Something like: Fn(A) >> String >> A")
+            return false
+        }
+
+        if (!AstUtils.isToken(expression.operation, tokenReference)) {
+            addError(expression, "Token expected $tokenReference got ${expression.operation}")
+            return false
+        }
+
+        return true
     }
 
     private Boolean byMainClassName(String mainName, ClassNode classNode) {

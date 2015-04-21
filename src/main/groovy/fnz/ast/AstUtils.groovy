@@ -4,11 +4,12 @@ import static org.codehaus.groovy.ast.tools.GeneralUtils.callX
 
 import groovy.transform.CompileStatic
 
+import org.codehaus.groovy.syntax.Token
 import org.codehaus.groovy.control.SourceUnit
+
 import org.codehaus.groovy.ast.expr.Expression
 import org.codehaus.groovy.ast.expr.BinaryExpression
 import org.codehaus.groovy.ast.expr.ClosureExpression
-import org.codehaus.groovy.ast.expr.ConstantExpression
 import org.codehaus.groovy.ast.expr.ArgumentListExpression
 import org.codehaus.groovy.ast.expr.MethodCallExpression
 import org.codehaus.groovy.ast.expr.StaticMethodCallExpression
@@ -59,6 +60,10 @@ final class AstUtils {
 
     static String getUniqueIdentifier() {
         return "_${System.nanoTime()}"
+    }
+
+    static Boolean isToken(Token token, int type) {
+        return token.type == type
     }
 
 }
