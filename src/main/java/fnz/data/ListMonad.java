@@ -32,6 +32,21 @@ public class ListMonad<A> implements Monad<A>, Or<A,ListMonad<A>> {
     }
 
     @Override
+    public <B, M extends Monad<B>> M bind2(TypeAwareFunction<A, M> fn) {
+        if (isNullOrEmpty())
+            return (M) this;
+
+        List<B> items = new ArrayList<>();
+        for (A a : this.value) {
+            ListMonad<B> transformed = (ListMonad<B>) fn.apply((Class<M>) this.getClass(), a);
+            for (B aa : transformed.getTypedRef().getValue()) {
+                items.add(aa);
+            }
+        }
+        return (M) list(items);
+    }
+
+    @Override
     public TypeIterable<A> getTypedRef() {
         return new TypeIterable(this.value);
     }
@@ -65,6 +80,10 @@ public class ListMonad<A> implements Monad<A>, Or<A,ListMonad<A>> {
 
     public static <T> ListMonad<T> list(T... values){
         return list(Arrays.asList(values));
+    }
+
+    public static <A> ListMonad<A> unit(A value) {
+        return list(value);
     }
 
     public static <T> ListMonad <T> list(Iterable<T> values){

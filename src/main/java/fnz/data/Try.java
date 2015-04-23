@@ -36,6 +36,11 @@ public abstract class Try<A> extends MonadType<A> implements Or<A,Try<A>> {
         }
 
         @Override
+        public <B, M extends Monad<B>> M bind2(TypeAwareFunction<SUCCESS, M> fn) {
+            return fn.apply((Class<M>) this.getClass(), getTypedRef().getValue());
+        }
+
+        @Override
         public <B> Applicative<B> fapply(Applicative<Function<SUCCESS, B>> afn) {
               return this.fmap(afn.getTypedRef().getValue());
         }
@@ -59,6 +64,10 @@ public abstract class Try<A> extends MonadType<A> implements Or<A,Try<A>> {
             return this;
         }
 
+        public static <A> Success<A> unit(A value) {
+            return Try.success(value);
+        }
+
     }
 
     public static class Failure<FAILURE> extends Try<FAILURE> {
@@ -78,6 +87,11 @@ public abstract class Try<A> extends MonadType<A> implements Or<A,Try<A>> {
         @Override
         public <B, M extends Monad<B>> M bind(Function<FAILURE, M> fn) {
           return (M) new Try.Failure<FAILURE>(throwable);
+        }
+
+        @Override
+        public <B, M extends Monad<B>> M bind2(TypeAwareFunction<FAILURE, M> fn) {
+            return (M) new Try.Failure<FAILURE>(throwable);
         }
 
         @Override

@@ -155,4 +155,20 @@ class ListMonadSpec extends Specification {
             list()    |list(1)     |list(1)
     }
 
+    void 'testing bind with type awareness and unit'() {
+        when: 'using a valid expression'
+            TypeAwareFunction<Integer,ListMonad<Integer>> fn = { clazz, value ->
+                return clazz.unit(value + 1)
+            }
+            ListMonad<Integer> possible = options.bind2(fn)
+        then: 'the result should have the type'
+            possible instanceof ListMonad
+        and: 'we should get the expected value'
+            val(possible) == expected
+        where: 'possible options are'
+            options | expected
+            list(1) | [2]
+            list()  | []
+    }
+
 }

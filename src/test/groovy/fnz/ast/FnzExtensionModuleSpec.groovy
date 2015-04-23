@@ -16,7 +16,7 @@ class FnzExtensionModuleSpec extends Specification {
 
     void 'testing Right'() {
         when: 'executing an operation over a Left'
-            def right = Right(2).fmap { x -> x + 1}
+            def right = Right(2).fmap { x -> x + 1 }
         then: 'performs the operation'
             val(right) == 3
     }
@@ -123,7 +123,7 @@ class FnzExtensionModuleSpec extends Specification {
 
     void 'test bind'() {
         when:
-            def result = bind(Just(1)) { Success(it + 1)}
+            def result = bind(Just(1)) { Success(it + 1) }
         then:
             result instanceof Try.Success
             val(result) == 2

@@ -6,6 +6,7 @@ import fnz.data.Either;
 import fnz.data.Maybe;
 import fnz.data.Functor;
 import fnz.data.Function;
+import fnz.data.TypeAwareFunction;
 import fnz.data.ListMonad;
 import fnz.data.Applicative;
 
@@ -76,6 +77,10 @@ public final class Fnz {
 
     public static <A,B,MA extends Monad<A>,MB extends Monad<B>> MB bind(MA ma, Function<A,MB> fn) {
        return ma.bind(fn);
+    }
+
+    public static <A,B,MA extends Monad<A>,MB extends Monad<B>> MB bind2(MA ma, TypeAwareFunction<A,MB> fn) {
+        return ma.bind2(fn);
     }
 
     public static <A,B, AA extends Applicative<A>, AB extends Applicative<B>> AB fapply(AA fa, Applicative<Function<A,B>> fn) {

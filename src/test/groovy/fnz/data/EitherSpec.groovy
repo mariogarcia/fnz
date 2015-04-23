@@ -174,4 +174,20 @@ class EitherSpec extends Specification {
     }
     // end::eitherorcomputation[]
 
+    void 'testing bind with type awareness and unit'() {
+        when: 'using a valid expression'
+            TypeAwareFunction<Integer,Either<Integer>> fn = { clazz, value ->
+                return clazz.unit(value + 1)
+            }
+            Either<Integer> possible = options.bind2(fn)
+        then: 'the result should have the type'
+            possible instanceof Either
+        and: 'we should get the expected value'
+            val(possible) == expected
+        where: 'possible options are'
+            options  | expected
+            right(1) | 2
+            left(1)  | 1
+    }
+
 }

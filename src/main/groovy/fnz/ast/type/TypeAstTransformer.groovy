@@ -34,8 +34,6 @@ import org.codehaus.groovy.ast.expr.BinaryExpression
 import org.codehaus.groovy.syntax.Token
 import org.codehaus.groovy.control.SourceUnit
 
-import fnz.ast.AstUtils
-
 @CompileStatic
 class TypeAstTransformer extends MethodCallExpressionTransformer {
 

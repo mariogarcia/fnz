@@ -7,6 +7,7 @@ import org.codehaus.groovy.transform.GroovyASTTransformation
 import fnz.ast.flow.UnlessAstTransformer
 import fnz.ast.flow.LetmAstTransformer
 import fnz.ast.flow.LetAstTransformer
+import fnz.ast.flow.DoAstTransformer
 
 import fnz.ast.type.TypeAstTransformer
 
@@ -26,7 +27,8 @@ class FnzAst extends AstExpressionTransformerAware {
             UnlessAstTransformer,
             LetmAstTransformer,
             LetAstTransformer,
-            TypeAstTransformer
+            TypeAstTransformer,
+            DoAstTransformer
         ]
     }
 

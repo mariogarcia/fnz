@@ -244,4 +244,22 @@ class MaybeSpec extends Specification {
             'mar'   | true    | 'io'
     }
 
+    @Unroll
+    void 'testing bind with type awareness and unit'() {
+        when: 'using a valid expression'
+            TypeAwareFunction<Integer,Maybe<Integer>> fn = { clazz, value ->
+                println "$clazz is ${value.getClass().simpleName}"
+                return clazz.unit(value + 1)
+            } as TypeAwareFunction
+            Maybe<Integer> possible = option.bind2(fn)
+        then: 'the result should have the type'
+            possible instanceof Maybe
+        and: 'we should get the expected value'
+            val(possible) == expected
+        where: 'possible options are'
+            option    | expected
+            just(1)   | 2
+            nothing() | null
+    }
+
 }

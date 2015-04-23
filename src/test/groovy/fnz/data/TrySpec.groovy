@@ -280,4 +280,21 @@ class TrySpec extends Specification {
               0   |   false  |      null
     }
 
+    @Unroll
+    void 'testing bind with type awareness and unit'() {
+        when: 'using a valid expression'
+            TypeAwareFunction<Integer,Try<Integer>> fn = { clazz, value ->
+                return clazz.unit(value + 1)
+            }
+            Try<Integer> possible = option.bind2(fn)
+        then: 'the result should have the type'
+            possible instanceof Try
+        and: 'we should get the expected value'
+            val(possible) == expected
+        where: 'possible options are'
+            option                                         | expected
+            Try.success(1)                                 | 2
+            Try.failure(new IllegalArgumentException('a')) | null
+    }
+
 }

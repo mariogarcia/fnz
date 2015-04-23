@@ -14,6 +14,9 @@ import org.codehaus.groovy.ast.expr.ArgumentListExpression
 import org.codehaus.groovy.ast.expr.MethodCallExpression
 import org.codehaus.groovy.ast.expr.StaticMethodCallExpression
 
+import org.codehaus.groovy.ast.stmt.Statement
+import org.codehaus.groovy.ast.stmt.ExpressionStatement
+
 import org.codehaus.groovy.classgen.VariableScopeVisitor
 
 @CompileStatic
@@ -43,6 +46,14 @@ final class AstUtils {
 
     static Boolean isBinaryExpression(final Expression expression) {
         return expression instanceof BinaryExpression
+    }
+
+    static Boolean isClosureExpression(final Expression expression) {
+        return expression instanceof ClosureExpression
+    }
+
+    static Boolean isExpressionStatement(final Statement statement) {
+        return statement instanceof ExpressionStatement
     }
 
     static ArgumentListExpression getArgs(final MethodCallExpression methodCallExpression) {

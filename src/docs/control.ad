@@ -99,6 +99,55 @@ to handle that possibility using `Try`.
 include::{testdir}/fnz/ast/flow/LetmSpecExample.groovy[tags=combineWithTry]
 ----
 
+=== Do
+
+If you have seen Haskell's *do* expressions, they look like this:
+
+[source, haskell]
+----
+do
+x <- Just 1
+y <- Just (x + 1)
+return x
+----
+
+There are a couple of nice things when using this control flow:
+
+* You don't have to unwrapped/wrap monadic values. In the example when
+  assigning *Just 1* to *x* the value inside (1) it's unwrapped and make it
+  available for the next expression to use it.
+* In the end using the *return* expression make it easier for the programmer
+  to wrap the final value in the proper monadic value without having to do it
+  explicitly. It is assumed by the expression flow.
+
+Well, *Fnz* has tried to mimic the behavior of this expression using both
+methods *$do* and *$return*:
+
+[source, groovy]
+----
+include::{testdir}/fnz/ast/flow/DoSpec.groovy[tags=simpleExample]
+----
+
+Although in Haskell *do* notation you can be using assignments as long
+as other types of expressions, here is not possible. Only assignment
+expressions are allowed by design.
+
+So you may be wondering... How can I use an expression not returning
+any value within the $do/$return statement ?
+
+Well for that purpose a special rule has been added to the *do* notation
+expression. Whenever you wan to use an expression not returning anything
+you should assign that expression to *_*.
+
+The *_* variable name means that you don't care about the returning
+type.  In fact every time you use that name a unique identifier is
+created underneath.
+
+[source, groovy]
+----
+include::{testdir}/fnz/ast/flow/DoSpec.groovy[tags=wildcard1]
+----
+
 === Unless
 
 The rationale behind *Unless* is that sometimes is just a pain to create *negative*
