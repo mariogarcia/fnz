@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 1.5.0">
+<meta name="generator" content="Asciidoctor 1.5.2">
 <title>Control Flow</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic|Noto+Serif:400,400italic,700,700italic|Droid+Sans+Mono:400">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
 /* Remove the comments around the @import statement below when using this as a custom stylesheet */
-/*@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic|Noto+Serif:400,400italic,700,700italic|Droid+Sans+Mono:400";*/
+/*@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400";*/
 article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary{display:block}
 audio,canvas,video{display:inline-block}
 audio:not([controls]){display:none;height:0}
@@ -274,8 +274,8 @@ dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
 ol>li p,ul>li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
 ul.unstyled,ol.unnumbered,ul.checklist,ul.none{list-style-type:none}
 ul.unstyled,ol.unnumbered,ul.checklist{margin-left:.625em}
-ul.checklist li>p:first-child>.fa-check-square-o:first-child,ul.checklist li>p:first-child>input[type="checkbox"]:first-child{margin-right:.25em}
-ul.checklist li>p:first-child>input[type="checkbox"]:first-child{position:relative;top:1px}
+ul.checklist li>p:first-child>.fa-square-o:first-child,ul.checklist li>p:first-child>.fa-check-square-o:first-child{width:1em;font-size:.85em}
+ul.checklist li>p:first-child>input[type="checkbox"]:first-child{width:1em;position:relative;top:1px}
 ul.inline{margin:0 auto .625em auto;margin-left:-1.375em;margin-right:0;padding:0;list-style:none;overflow:hidden}
 ul.inline>li{list-style:none;float:left;margin-left:1.375em;display:block}
 ul.inline>li>*{display:block}
@@ -380,7 +380,7 @@ p{margin-bottom:1.25rem}
 *{-webkit-box-shadow:none!important;box-shadow:none!important;text-shadow:none!important}
 a{color:inherit!important;text-decoration:underline!important}
 a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
-a[href^="http:"]:not(.bare):after,a[href^="https:"]:not(.bare):after,a[href^="mailto:"]:not(.bare):after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+a[href^="http:"]:not(.bare):after,a[href^="https:"]:not(.bare):after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
 abbr[title]:after{content:" (" attr(title) ")"}
 pre,blockquote,tr,img{page-break-inside:avoid}
 thead{display:table-header-group}
@@ -408,7 +408,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .hide-for-print{display:none!important}
 .show-for-print{display:inherit!important}}
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
 <script>document.addEventListener('DOMContentLoaded', prettyPrint)</script>
@@ -422,6 +422,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_let">Let</a></li>
 <li><a href="#_letm">Letm</a></li>
+<li><a href="#_do">Do</a></li>
 <li><a href="#_unless">Unless</a></li>
 <li><a href="#_where">Where</a></li>
 </ul>
@@ -475,7 +476,7 @@ of the closure passed as argument.</p>
 <div class="listingblock">
 <div class="title">Simple values</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/control/LetSpecExample.groovy[tags=simpleLet]</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/ast/flow/LetSpecExample.groovy[tags=simpleLet]</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -486,7 +487,7 @@ see the following example:</p>
 <div class="listingblock">
 <div class="title">Dependant expressions</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/control/LetSpecExample.groovy[tags=computedValues]</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/ast/flow/LetSpecExample.groovy[tags=computedValues]</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -495,7 +496,7 @@ see the following example:</p>
 <div class="listingblock">
 <div class="title">Nested expressions</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/control/LetSpecExample.groovy[tags=nestedLet]</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/ast/flow/LetSpecExample.groovy[tags=nestedLet]</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -538,7 +539,7 @@ to combine let with the <code>Either</code> monad.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/control/LetmSpecExample.groovy[tags=workingWithOtherMonads]</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/ast/flow/LetmSpecExample.groovy[tags=workingWithOtherMonads]</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -548,7 +549,71 @@ to handle that possibility using <code>Try</code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/control/LetmSpecExample.groovy[tags=combineWithTry]</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/ast/flow/LetmSpecExample.groovy[tags=combineWithTry]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_do">Do</h3>
+<div class="paragraph">
+<p>If you have seen Haskell&#8217;s <strong>do</strong> expressions, they look like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-haskell" data-lang="haskell">do
+x &lt;- Just 1
+y &lt;- Just (x + 1)
+return x</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There are a couple of nice things when using this control flow:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>You don&#8217;t have to unwrapped/wrap monadic values. In the example when
+assigning <strong>Just 1</strong> to <strong>x</strong> the value inside (1) it&#8217;s unwrapped and make it
+available for the next expression to use it.</p>
+</li>
+<li>
+<p>In the end using the <strong>return</strong> expression make it easier for the programmer
+to wrap the final value in the proper monadic value without having to do it
+explicitly. It is assumed by the expression flow.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Well, <strong>Fnz</strong> has tried to mimic the behavior of this expression using both
+methods <strong>$do</strong> and <strong>$return</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/ast/flow/DoSpec.groovy[tags=simpleExample]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Although in Haskell <strong>do</strong> notation you can be using assignments as long
+as other types of expressions, here is not possible. Only assignment
+expressions are allowed by design.</p>
+</div>
+<div class="paragraph">
+<p>So you may be wondering&#8230;&#8203; How can I use an expression not returning
+any value within the $do/$return statement ?</p>
+</div>
+<div class="paragraph">
+<p>Well for that purpose a special rule has been added to the <strong>do</strong> notation
+expression. Whenever you wan to use an expression not returning anything
+you should assign that expression to <strong>_</strong>.</p>
+</div>
+<div class="paragraph">
+<p>The <strong>_</strong> variable name means that you don&#8217;t care about the returning
+type.  In fact every time you use that name a unique identifier is
+created underneath.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/ast/flow/DoSpec.groovy[tags=wildcard1]</code></pre>
 </div>
 </div>
 </div>
@@ -566,7 +631,7 @@ conditional expressions.</p>
 <div class="listingblock">
 <div class="title">Unless structure</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/control/UnlessSpecExample.groovy[tags=simpleUnless]</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/ast/flow/UnlessSpecExample.groovy[tags=simpleUnless]</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -622,7 +687,7 @@ of when-then expressions</p>
 <div class="listingblock">
 <div class="title">Simple Where</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/control/WhereSpec.groovy[tags=simpleWhere]</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/flow/WhereSpec.groovy[tags=simpleWhere]</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -632,13 +697,13 @@ some of the parts mentioned before</p>
 <div class="listingblock">
 <div class="title">Ommiting Where</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/control/WhereSpec.groovy[tags=whereWithNoWhere]</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/flow/WhereSpec.groovy[tags=whereWithNoWhere]</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">Only When-Then clauses</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/control/WhereSpec.groovy[tags=whereOnlyWithWhenThen]</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/flow/WhereSpec.groovy[tags=whereOnlyWithWhenThen]</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -648,7 +713,7 @@ But thanks to Groovy&#8217;s objects method isCase() we can create switch-like s
 <div class="listingblock">
 <div class="title">Switch-case Where (Class)</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/control/WhereSpec.groovy[tags=whereSwitchLike1]</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/flow/WhereSpec.groovy[tags=whereSwitchLike1]</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -658,13 +723,13 @@ conditions are the same you would be using in a switch-case block in Groovy.</p>
 <div class="listingblock">
 <div class="title">Switch-case Where (Collections)</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/control/WhereSpec.groovy[tags=whereSwitchLike2]</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/flow/WhereSpec.groovy[tags=whereSwitchLike2]</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">Switch-case Where (Number)</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/control/WhereSpec.groovy[tags=whereSwitchLike3]</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/flow/WhereSpec.groovy[tags=whereSwitchLike3]</code></pre>
 </div>
 </div>
 </div>
@@ -673,7 +738,7 @@ conditions are the same you would be using in a switch-case block in Groovy.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-02-09 23:11:54 CET
+Last updated 2015-04-26 17:38:02 CEST
 </div>
 </div>
 </body>

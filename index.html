@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 1.5.0">
+<meta name="generator" content="Asciidoctor 1.5.2">
 <meta name="author" content="Mario Garcia">
 <title>FNZ</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic|Noto+Serif:400,400italic,700,700italic|Droid+Sans+Mono:400">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
 /* Remove the comments around the @import statement below when using this as a custom stylesheet */
-/*@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic|Noto+Serif:400,400italic,700,700italic|Droid+Sans+Mono:400";*/
+/*@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400";*/
 article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary{display:block}
 audio,canvas,video{display:inline-block}
 audio:not([controls]){display:none;height:0}
@@ -275,8 +275,8 @@ dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
 ol>li p,ul>li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
 ul.unstyled,ol.unnumbered,ul.checklist,ul.none{list-style-type:none}
 ul.unstyled,ol.unnumbered,ul.checklist{margin-left:.625em}
-ul.checklist li>p:first-child>.fa-check-square-o:first-child,ul.checklist li>p:first-child>input[type="checkbox"]:first-child{margin-right:.25em}
-ul.checklist li>p:first-child>input[type="checkbox"]:first-child{position:relative;top:1px}
+ul.checklist li>p:first-child>.fa-square-o:first-child,ul.checklist li>p:first-child>.fa-check-square-o:first-child{width:1em;font-size:.85em}
+ul.checklist li>p:first-child>input[type="checkbox"]:first-child{width:1em;position:relative;top:1px}
 ul.inline{margin:0 auto .625em auto;margin-left:-1.375em;margin-right:0;padding:0;list-style:none;overflow:hidden}
 ul.inline>li{list-style:none;float:left;margin-left:1.375em;display:block}
 ul.inline>li>*{display:block}
@@ -381,7 +381,7 @@ p{margin-bottom:1.25rem}
 *{-webkit-box-shadow:none!important;box-shadow:none!important;text-shadow:none!important}
 a{color:inherit!important;text-decoration:underline!important}
 a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
-a[href^="http:"]:not(.bare):after,a[href^="https:"]:not(.bare):after,a[href^="mailto:"]:not(.bare):after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+a[href^="http:"]:not(.bare):after,a[href^="https:"]:not(.bare):after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
 abbr[title]:after{content:" (" attr(title) ")"}
 pre,blockquote,tr,img{page-break-inside:avoid}
 thead{display:table-header-group}
@@ -409,7 +409,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .hide-for-print{display:none!important}
 .show-for-print{display:inherit!important}}
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
 <script>document.addEventListener('DOMContentLoaded', prettyPrint)</script>
@@ -423,7 +423,8 @@ MathJax.Hub.Config({
   asciimath2jax: {
     delimiters: [["\\$", "\\$"]],
     ignoreClass: "nostem|noasciimath"
-  }
+  },
+  TeX: { equationNumbers: { autoNumber: "none" } }
 });
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.4.0/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
@@ -449,7 +450,7 @@ MathJax.Hub.Config({
 </li>
 <li><a href="#_types">3. Types</a>
 <ul class="sectlevel2">
-<li><a href="#_ftype">3.1. ftype</a></li>
+<li><a href="#_func">3.1. func</a></li>
 </ul>
 </li>
 <li><a href="#_data">4. Data</a>
@@ -465,8 +466,9 @@ MathJax.Hub.Config({
 <ul class="sectlevel2">
 <li><a href="#_let">5.1. Let</a></li>
 <li><a href="#_letm">5.2. Letm</a></li>
-<li><a href="#_unless">5.3. Unless</a></li>
-<li><a href="#_where">5.4. Where</a></li>
+<li><a href="#_do">5.3. Do</a></li>
+<li><a href="#_unless">5.4. Unless</a></li>
+<li><a href="#_where">5.5. Where</a></li>
 </ul>
 </li>
 </ul>
@@ -476,7 +478,7 @@ MathJax.Hub.Config({
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Groovy functional programming experiments</p>
+<p>Functional Groovy</p>
 </div>
 </div>
 </div>
@@ -484,8 +486,8 @@ MathJax.Hub.Config({
 <h2 id="_what_is_fnz">1. What is FNZ</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This project is a collection of ideas taken while learning about some functional languages in order
-to figure out how to translate them into Groovy.</p>
+<p>This project is a collection of ideas taken from other functional
+languages translated to Groovy.</p>
 </div>
 <div class="paragraph">
 <p>The main objectives of this library are:</p>
@@ -493,15 +495,49 @@ to figure out how to translate them into Groovy.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Create more control structures</p>
+<p>Create more control structures (let, letm, where&#8230;&#8203;)</p>
 </li>
 <li>
-<p>Understand persistent collections</p>
+<p>Understand persistent collections (TODO)</p>
 </li>
 <li>
 <p>Ways of enforce immutability</p>
 </li>
 </ul>
+</div>
+<div class="paragraph">
+<p>If you have a copy of the code and you want to start playing with the
+examples writen along the documentation. You can use both
+<code>groovyshell</code> and <code>groovyConsole</code>. Both are accessible through two
+<code>gradle</code> tasks.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Of course you should have at least installed JDK 7 in your
+machine. Otherwise <code>gradle</code> won&#8217;t work.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">using FNZ in groovysh</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-bash" data-lang="bash">./gradlew -q shell</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or</p>
+</div>
+<div class="listingblock">
+<div class="title">using FNZ in groovyConsole</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-bash" data-lang="bash">./gradlew console</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -773,8 +809,8 @@ Haskell does it.</p>
 <div class="listingblock">
 <div class="title">Public API</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import static Fn.val
-import static Fn.fmap</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import static fnz.Fnz.val
+import static fnz.Fnz.fmap</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -858,9 +894,9 @@ into something else.</p>
     then: 'checking'
         result == expected
     where: 'possible messy values'
-        input     | expected
-            [1,2] | [2,3]
-            null  | []
+        input      | expected
+            [1, 2] | [2, 3]
+            null   | []
 }</code></pre>
 </div>
 </div>
@@ -883,7 +919,7 @@ into something else.</p>
     where: 'possible messy values are'
         input         | expected
             [1, 2]    | [4, 6]
-            [1, null] | [4,null]
+            [1, null] | [4, null]
 }</code></pre>
 </div>
 </div>
@@ -979,9 +1015,10 @@ of creating object with new operator every object has a static method to do it.<
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import static Fn.val
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import static fnz.Fnz.val
 import static Maybe.just
-import static Maybe.nothing</code></pre>
+import static Maybe.nothing
+import static Maybe.maybe</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1061,7 +1098,46 @@ following code:</p>
  * @param &lt;A&gt;
  */
 public interface Monad&lt;A&gt; extends Applicative&lt;A&gt; {
+
     public &lt;B,M extends Monad&lt;B&gt;&gt; M bind(Function&lt;A,M&gt; fn);
+
+    /**
+     * The behavior is the same as the bind(Function&lt;A,M&gt;) method but with type awareness.
+     * &lt;br/&gt;
+     * This method was created exclusively for type inference for the $do/$return expressions.
+     * For instance in an expression like the following:
+     * &lt;br/&gt;
+     * &lt;pre&gt;
+     *     $do {
+     *         x = Just(1)
+     *         y = Just(x + 1)
+     *
+     *         $return x + y
+     *     }
+     * &lt;/pre&gt;
+     * &lt;br/&gt;
+     * &lt;br/&gt;
+     * The expression is translated into this:
+     * &lt;br/&gt;
+     * &lt;pre&gt;
+     *     Just(1).bind { _clazz1231, x -&gt;
+     *         Just(x + 1).bind { _clazz2324, y -&gt;
+     *             _clazz2324.unit(y)
+     *         }
+     *     }
+     * &lt;/pre&gt;
+     * &lt;br/&gt;
+     * That way we don't have to specify the type of the Monad needed to
+     * end the expression, the function itself carries the type.
+     *
+     * @param fn a function aware of the type of the returned monad
+     * @return a monad as a result of the function execution
+     *
+     */
+    public &lt;B,M extends Monad&lt;B&gt;&gt; M bind2(TypeAwareFunction&lt;A,M&gt; fn);
+
+
+
 }</code></pre>
 </div>
 </div>
@@ -1075,7 +1151,7 @@ public interface Monad&lt;A&gt; extends Applicative&lt;A&gt; {
 <p>This chapter has to do with other ways of creating/using/extending types with Groovy.</p>
 </div>
 <div class="sect2">
-<h3 id="_ftype">3.1. ftype</h3>
+<h3 id="_func">3.1. func</h3>
 <div class="quoteblock">
 <blockquote>
 <div class="paragraph">
@@ -1087,7 +1163,7 @@ public interface Monad&lt;A&gt; extends Applicative&lt;A&gt; {
 </div>
 </div>
 <div class="paragraph">
-<p><strong>ftype</strong> allows you to declare and create a <a href="http://docs.oracle.com/javase/specs/jls/se8/html/jls-9.html#jls-9.8"><strong>functional interface</strong></a>
+<p><strong>func</strong> allows you to declare and create a <a href="http://docs.oracle.com/javase/specs/jls/se8/html/jls-9.html#jls-9.8"><strong>functional interface</strong></a>
 in one line without the verbosity of having to write a full Java interface.</p>
 </div>
 <div class="paragraph">
@@ -1110,7 +1186,7 @@ like this:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>With <strong>ftype</strong> you can create in one line the same interface:</p>
+<p>With <strong>func</strong> you can create in one line the same interface:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1118,7 +1194,7 @@ like this:</p>
 
 class A {
      static {
-         ftype Fn &gt;= String &gt;&gt; Integer
+         func Fn &gt;= String &gt;&gt; Integer
      }
 
      boolean simpleFunctionalInterface() {
@@ -1145,7 +1221,7 @@ class A {
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class OuterClass {
     static {
-        InterfaceType &gt;= ParameterType &gt;&gt; ReturnType
+        func InterfaceType &gt;= ParameterType &gt;&gt; ReturnType
     }
 }</code></pre>
 </div>
@@ -1157,9 +1233,9 @@ class A {
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class A {
     static {
-        ftype Fa &gt;= String &gt;&gt; Integer
-        ftype Fb &gt;= String &gt;&gt; String
-        ftype Fb &gt;= String &gt;&gt; Date
+        func Fa &gt;= String &gt;&gt; Integer
+        func Fb &gt;= String &gt;&gt; String
+        func Fb &gt;= String &gt;&gt; Date
     }
 }</code></pre>
 </div>
@@ -1174,7 +1250,7 @@ class A {
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class OuterClass {
     static {
-        InterfaceType(A,B) &gt;= A &gt;&gt; B
+        func InterfaceType(A,B) &gt;= A &gt;&gt; B
     }
 }</code></pre>
 </div>
@@ -1235,7 +1311,7 @@ declared by the interface type:</p>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package fnz.samples.type
 
-import fnz.data.Fn
+import fnz.Fnz
 import fnz.data.Maybe
 
 import groovy.transform.CompileStatic
@@ -1244,7 +1320,7 @@ import groovy.transform.CompileStatic
 class A {
 
      static {
-         ftype Fx(X) &gt;= String &gt;&gt; Maybe(X)
+         func Fx(X) &gt;= String &gt;&gt; Maybe(X)
      }
 
      Maybe&lt;Integer&gt; executeFunction(String number, Fx&lt;Integer&gt; fx) {
@@ -1253,10 +1329,10 @@ class A {
 
      boolean simpleFunctionalInterface() {
           Maybe&lt;Integer&gt; result = executeFunction('1') { String x -&gt;
-               Fn.Just(Integer.parseInt(x))
+               Fnz.Just(Integer.parseInt(x))
           }
 
-          Fn.val(result) == 1
+          Fnz.val(result) == 1
      }
 
 }</code></pre>
@@ -1271,7 +1347,7 @@ class A {
 
 class A {
     static {
-        ftype Fx(X,Y) &gt;= X &gt;&gt; Y
+        func Fx(X,Y) &gt;= X &gt;&gt; Y
     }
 
     Integer executeFunction(String source, Fx&lt;String,Integer&gt; fx) {
@@ -1303,21 +1379,21 @@ class A {
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package fnz.samples.type
 
-import fnz.data.Fn
+import fnz.Fnz
 import fnz.data.Maybe
 
 class A {
     static {
-        ftype Fx(X,Y) &gt;= Maybe(X) &gt;&gt; Y
+        func Fx(X,Y) &gt;= Maybe(X) &gt;&gt; Y
     }
 
     Integer executeFunction(String source, Fx&lt;String,Integer&gt; fx) {
-        fx.apply(Fn.Just(source))
+        fx.apply(Fnz.Just(source))
     }
 
     boolean complexFunctionalInterface() {
         Integer result = executeFunction('1') { Maybe&lt;String&gt; x -&gt;
-            Fn.val(x.fmap { Integer.parseInt(it) })
+            Fnz.val(x.fmap { Integer.parseInt(it) })
         }
 
         result == 1
@@ -1339,7 +1415,7 @@ Groovy syntax for lists.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">ftype SUM(X) &gt;= [X,X] &gt;&gt; X</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">func SUM(X) &gt;= [X,X] &gt;&gt; X</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1354,12 +1430,12 @@ parameters can be parametrized (use generics) as well.</p>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package fnz.samples.type
 
-import static fnz.data.Fn.*
+import static fnz.Fnz.val
 import fnz.data.*
 
 class A {
     static {
-        ftype Fx(X) &gt;= [Maybe(X),Maybe(X)] &gt;&gt; X
+        func Fx(X) &gt;= [Maybe(X),Maybe(X)] &gt;&gt; X
     }
 
     Integer executeFunction(Fx&lt;Integer&gt; fx) {
@@ -1536,6 +1612,147 @@ something ( a transformation for example) with the current inner value.</p>
 }</code></pre>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_or_expressions">4.1.1. Or expressions</h4>
+<div class="paragraph">
+<p>Of course you can always use the <code>|</code> operator when thinking about <code>or</code> expressions:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Maybe&lt;String&gt; partial = just('mario').bind { String st -&gt; maybe(st - 'mario') } <i class="conum" data-value="1"></i><b>(1)</b>
+Maybe&lt;String&gt; result = partial | just('anybody') <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The operation ends with and empty string. Using Maybe('') returns
+Nothing()</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>In case partial returns Nothing() we would like to use
+Just('anybody') instead</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Using <code>|</code> makes expressions much more readable&#8230;&#8203; and fun :)</p>
+</div>
+<div class="paragraph">
+<p>Last example used an <code>OR</code> expression. That expression was a simple
+value. Sometimes we would like to use <code>lazy</code> expressions we only want
+to be evaluated <code>just in case</code>.  When executed those <code>lazy
+expressions</code> will be returning a valid value.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Maybe&lt;String&gt; partial = just('mario').bind { st -&gt; maybe(st - value) } <i class="conum" data-value="1"></i><b>(1)</b>
+Maybe&lt;String&gt; result = partial | { just('anybody') } <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The operation ends with and empty string. Using Maybe('') returns
+Nothing()</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>In case partial returns Nothing() we would like to use
+Just('anybody') instead. In this case the value is not computed until
+we made sure the previous computation returned Nothing()</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_the_maybe_code_truth_code">4.1.2. The maybe <code>truth</code></h4>
+<div class="paragraph">
+<p>Sometimes you just don&#8217;t know whether the value is going to be valid
+or not. Then it could come handy to use the <code>maybe</code> method.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Unroll
+void 'using maybe() like the Groovy-Truth'() {
+    when:
+        Maybe&lt;?&gt; result = maybe(value)
+    then:
+        result.isPresent() == valid
+    where:
+        value | valid
+     //---------------//
+        null  | false
+        []    | false
+        ''    | false
+        [:]   | false
+     //---------------//
+        false | true
+        0     | true
+        1     | true
+        [1]   | true
+        [0]   | true
+        [a:1] | true
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>So expressions could become easier to understand when using <code>maybe</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void 'using maybe() simple example (I)'() {
+    when:
+        String unknown = '' <i class="conum" data-value="1"></i><b>(1)</b>
+        Maybe&lt;String&gt; result = maybe(unknown) | just('me') <i class="conum" data-value="2"></i><b>(2)</b>
+    then:
+        result.isPresent() <i class="conum" data-value="3"></i><b>(3)</b>
+        result.typedRef.value == 'me' <i class="conum" data-value="4"></i><b>(4)</b>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>We are using a possible <code>not valid</code> value</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>We build an expression that in case the left hand value is not valid we
+will be using the right hand side value instead</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Because the value of the left was not valid then we used the right hand one, hence
+there is a present value</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The value used was 'me'</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If there had been a valid value at the right hand side, then that
+value would have been used instead:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void 'using maybe() simple example (II)'() {
+    when:
+        String unknown = 'valid' <i class="conum" data-value="1"></i><b>(1)</b>
+        Maybe&lt;String&gt; result = maybe(unknown) | just('me') <i class="conum" data-value="2"></i><b>(2)</b>
+    then:
+        result.isPresent() <i class="conum" data-value="3"></i><b>(3)</b>
+        result.typedRef.value == 'valid' <i class="conum" data-value="4"></i><b>(4)</b>
+}</code></pre>
+</div>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_fn">4.2. Fn</h3>
@@ -1551,9 +1768,10 @@ Haskell-like public methods in an in-out style.</p>
 <div class="listingblock">
 <div class="title">fapply (method-chain) imports</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import static Fn.val
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import static fnz.Fnz.val
 import static Maybe.just
-import static Maybe.nothing</code></pre>
+import static Maybe.nothing
+import static Maybe.maybe</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -1575,10 +1793,10 @@ import static Maybe.nothing</code></pre>
 <div class="listingblock">
 <div class="title">fapply (Fn) imports</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import static Fn.Just
-import static Fn.Nothing
-import static Fn.fapply
-import static Fn.bind</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import static fnz.Fnz.Just
+import static fnz.Fnz.Nothing
+import static fnz.Fnz.fapply
+import static fnz.Fnz.bind</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -1628,7 +1846,7 @@ The search will stop once a person has been found with any of the given rules.</
                 def pr = sample.find(search)
                 // if found then return left to shortcircuit further
                 // searchs
-                pr ? Either.left(pr) : Either.right(sample)
+                Either(pr).isLeft() ? Either.right(sample) : Either.left(pr)
             }
         }
     and: 'composed criterias on top of the base function'
@@ -1644,6 +1862,7 @@ The search will stop once a person has been found with any of the given rules.</
                 .bind(lookByCity)
     then: 'there should be only one item'
         result.isLeft()
+        !result.isRight()
         result.typedRef.value.name == name_of_the_result
     where: 'samples used in this spec are'
         sample          |   name_of_the_result
@@ -1682,6 +1901,47 @@ second will be triggered, and so on. In case any of them succeed the value will 
 return immediately.</td>
 </tr>
 </table>
+</div>
+<div class="sect3">
+<h4 id="_or">4.3.1. Or</h4>
+<div class="paragraph">
+<p>The same way we used <code>or</code> in Maybe to express an alternative to
+<code>wrong</code> values we can use it in <code>Either</code>.</p>
+</div>
+<div class="listingblock">
+<div class="title">value</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">void 'using OR as an alternative value'() {
+    when: 'a non valid expression'
+        Either&lt;Integer&gt; possible = Either(value) | Right(0)
+    then: 'we should get what we expected'
+        val(possible) == expected
+    and: 'eventually it will be right'
+        possible.isRight()
+    where: 'possible values are'
+        value | expected
+        null  | 0
+        1     | 1
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">lazy expression</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">void 'using OR for a lazy computation alternative'() {
+    when: 'a non valid expression'
+        Either&lt;Integer&gt; possible = Either(value) | { Right(0) }
+    then: 'we should get what we expected'
+        val(possible) == expected
+    and: 'rules must apply'
+        possible.isRight()
+    where: 'possible values are'
+        value | expected
+        null  | 0
+        1     | 1
+}</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -1730,10 +1990,93 @@ a certain way.</p>
 either end on a desired value, having an instance of <strong>Success</strong>,
 or could throw an exception, having an instance of <strong>Failure</strong> instead.</p>
 </div>
+<div class="sect3">
+<h4 id="_try_2">4.5.1. Try()</h4>
 <div class="paragraph">
-<p>In order to get a <strong>Try</strong> result we should <strong>wrap</strong> the computation we think
-could fail within a function which returns a <strong>Try</strong> instance with the
-result of the computation (Try.Success or Try.Failure).</p>
+<p>Instead of using a typical try/catch expression we could handle an expression
+as a safe execution but with a possible failure value.</p>
+</div>
+<div class="paragraph">
+<p>We can execute directly an unsafe function using:</p>
+</div>
+<div class="listingblock">
+<div class="title">Using Try directly with a initial value</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Try(A a, Function&lt;A,B&gt;)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Of course a <strong>Function</strong> could be changed by a closure. Lets see the
+following example.</p>
+</div>
+<div class="listingblock">
+<div class="title">Using Try directly with a initial value</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Unroll
+def 'check Try with a value and a function'() {
+    when: 'executing an unsafe action'
+        Try result   = Try(value) { x -&gt; 1 / x }
+        Try computed = result.fmap { y -&gt; y + 1 }
+    then: 'asking if it is a failure or a success'
+        computed.isSuccess() == isSuccess
+        computed.isFailure() == !isSuccess
+    and: 'getting value'
+        val(computed) == resultExpected
+    where: 'possible values are'
+        value | isSuccess | resultExpected
+          1   |   true   |       2
+          0   |   false  |       0
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this example we should be expecting whether a <strong>Try.Success</strong> value
+containing the expected result or a <strong>Try.Failure</strong> with the exception
+thrown (if any) and the initial value used to trigger the execution.</p>
+</div>
+<div class="paragraph">
+<p>There could be some cases where you don&#8217;t care about passing an
+initial value to the <strong>Try</strong> execution.</p>
+</div>
+<div class="listingblock">
+<div class="title">Using Try directly without a initial value</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Try(Function&lt;A,B&gt;)</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Using Try directly without a initial value</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Unroll
+def 'check Try only with a function'() {
+    when: 'executing an unsafe action'
+        Try result = Try { value / 0 } <i class="conum" data-value="1"></i><b>(1)</b>
+    then: 'asking if it is a failure or a success'
+        result.isSuccess() == isSuccess
+        result.isFailure() == !isSuccess
+    where: 'possible values are'
+        value | isSuccess
+          1   |   false
+          0   |   false
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>We can receive a Success or a Failure but we cannot expect to get
+the initial value because it never was provided in the first place.</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_wrap">4.5.2. wrap</h4>
+<div class="paragraph">
+<p>In order to get a <strong>Try</strong> result we could also <strong>wrap</strong> the computation we
+think could fail within a function which returns a <strong>Try</strong> instance with
+the result of the computation (Try.Success or Try.Failure).</p>
 </div>
 <div class="paragraph">
 <p>Like <strong>Either</strong>, composition has a special importance here, due to
@@ -1812,13 +2155,17 @@ like any other exception.</p>
 </tr>
 </table>
 </div>
+</div>
+<div class="sect3">
+<h4 id="_recover">4.5.3. Recover</h4>
 <div class="paragraph">
-<p>Normally when having an exception we would like to react somehow. Sometimes
-we may want to set, for example a default value in case something went wrong.</p>
+<p>Normally when having an exception we would like to have some
+alternative. Sometimes we may want to set, for example a default value
+in case something went wrong.</p>
 </div>
 <div class="paragraph">
-<p>In our example I would like to get zero in case the number was not valid.
-Then I would like to add one to that given number.</p>
+<p>In our example I would like to get zero in case the number was not
+valid.  Then I would like to add one to that given number.</p>
 </div>
 <div class="paragraph">
 <p>What if we want a fallback behavior when something went wrong ?</p>
@@ -1837,7 +2184,7 @@ possible <strong>Failure</strong> instance, and the <strong>Success</strong> ins
                 { 0.div(0) } as Function, // WRONG
                 recover(
                     { new Date() + "1" } as Function,
-                    { throw new Exception("Something bad") } as Function,
+                    { throw new IllegalArgumentException("Something bad") } as Function,
                     { 0 } as Function
                 ) // WORST
             )
@@ -1847,18 +2194,6 @@ possible <strong>Failure</strong> instance, and the <strong>Success</strong> ins
 }</code></pre>
 </div>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Maybe in the future <strong>recover</strong> will receive any number of possible
-alternatives.
-</td>
-</tr>
-</table>
 </div>
 </div>
 </div>
@@ -1909,7 +2244,7 @@ of the closure passed as argument.</p>
 <div class="title">Simple values</div>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">    Integer simpleLetExample() {
-        let(x: 1, y: 2,  z: 3) {
+        let(x:1, y:2, z:3) {
             x + y + z
         }
     }</code></pre>
@@ -1924,7 +2259,7 @@ see the following example:</p>
 <div class="title">Dependant expressions</div>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">    Integer computedValues() {
-        let(x: 1, y: 2,  z: { x + y }) {
+        let(x:1, y:2, z:{ x + y }) {
             x + y + z
         }
     }</code></pre>
@@ -1937,8 +2272,8 @@ see the following example:</p>
 <div class="title">Nested expressions</div>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">    Integer nestedLetExample() {
-        let(a: 5, b: 15) {
-            let(c: 15, d: { a + 25 }) {
+        let(a:5, b:15) {
+            let(c:15, d:{ a + 25 }) {
                 b + c + d
             }
         }
@@ -1986,11 +2321,12 @@ to combine let with the <code>Either</code> monad.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">    Either&lt;Integer&gt; workingWithOtherMonads(final Integer first, final Integer second) {
-        return letm(x: Just(first), y: Just(second)) {
-            letm(result: { Just(first + second) }) {
-                result == 3 ? Right(result) : Left()
-            }
-        }
+        return letm(x:Just(first),
+                    y:Just(second)) {
+                    letm(result: Just(first + second)) {
+                        result == 3 ? Right(result) : Left()
+                    }
+               }
     }</code></pre>
 </div>
 </div>
@@ -2002,8 +2338,9 @@ to handle that possibility using <code>Try</code>.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">    Try&lt;Integer&gt; combineWithTry(Integer first, Integer second) {
-        letm(x: Just(first), y: Just(second)) {
-            bind(Just(second), wrap(this.&amp;dangerousMethod.curry(first)))
+        letm(x:Just(first),
+             y:Just(second)) {
+              bind(Just(second), wrap(this.&amp;dangerousMethod.curry(first)))
         }
     }
 
@@ -2014,7 +2351,109 @@ to handle that possibility using <code>Try</code>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_unless">5.3. Unless</h3>
+<h3 id="_do">5.3. Do</h3>
+<div class="paragraph">
+<p>If you have seen Haskell&#8217;s <strong>do</strong> expressions, they look like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-haskell" data-lang="haskell">do
+x &lt;- Just 1
+y &lt;- Just (x + 1)
+return x</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There are a couple of nice things when using this control flow:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>You don&#8217;t have to unwrapped/wrap monadic values. In the example when
+assigning <strong>Just 1</strong> to <strong>x</strong> the value inside (1) it&#8217;s unwrapped and make it
+available for the next expression to use it.</p>
+</li>
+<li>
+<p>In the end using the <strong>return</strong> expression make it easier for the programmer
+to wrap the final value in the proper monadic value without having to do it
+explicitly. It is assumed by the expression flow.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Well, <strong>Fnz</strong> has tried to mimic the behavior of this expression using both
+methods <strong>$do</strong> and <strong>$return</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">               import fnz.data.Maybe
+
+               class A {
+                    Integer returningDoWithReturn() {
+                          Maybe&lt;Integer&gt; result =
+                              $do {
+                                  x = Just(1)
+                                  y = Just(x + 1)
+                                  z = Just(y)
+
+                                  $return z + 1
+                              }
+
+                         return val(result)
+                    }
+               }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Although in Haskell <strong>do</strong> notation you can be using assignments as long
+as other types of expressions, here is not possible. Only assignment
+expressions are allowed by design.</p>
+</div>
+<div class="paragraph">
+<p>So you may be wondering&#8230;&#8203; How can I use an expression not returning
+any value within the $do/$return statement ?</p>
+</div>
+<div class="paragraph">
+<p>Well for that purpose a special rule has been added to the <strong>do</strong> notation
+expression. Whenever you wan to use an expression not returning anything
+you should assign that expression to <strong>_</strong>.</p>
+</div>
+<div class="paragraph">
+<p>The <strong>_</strong> variable name means that you don&#8217;t care about the returning
+type.  In fact every time you use that name a unique identifier is
+created underneath.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">               import fnz.data.Maybe
+
+               class A {
+
+                    Maybe.Just PrintStrLn(Object val) {
+                        println val
+                        return Just(val)
+                    }
+
+                    Integer returningDoWithReturn() {
+                          Maybe&lt;Integer&gt; result =
+                              $do {
+                                  x = Just(1)
+                                  _ = PrintStrLn("x: $x")
+                                  y = Just(x + 1)
+                                  _ = PrintStrLn("y: $y")
+                                  z = { Just(y + 1) }
+
+                                  $return z + 1
+                              }
+
+                         return val(result)
+                    }
+               }</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_unless">5.4. Unless</h3>
 <div class="paragraph">
 <p>The rationale behind <strong>Unless</strong> is that sometimes is just a pain to create <strong>negative</strong>
 conditional expressions.</p>
@@ -2039,7 +2478,7 @@ evaluates to true.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_where">5.4. Where</h3>
+<h3 id="_where">5.5. Where</h3>
 <div class="paragraph">
 <p>I would say <strong>Where</strong> control belongs to the family of <strong>switch statements</strong> or <strong>multiway branches</strong>.
 I first read about the <strong>Where</strong> clause while I was reading Haskell.</p>
@@ -2107,7 +2546,7 @@ some of the parts mentioned before</p>
 <div class="title">Ommiting Where</div>
 <div class="content">
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">            Maybe&lt;String&gt; result = check(weight: value) {
-                when { weight &lt;= 51 } then { "You're underweight" }
+                when { weight &lt;= 51 } then { "You're underweight cause you weight $weight" }
                 when { weight &lt;= 90 } then { "You're fat" }
                 otherwise { "Default" }
             }</code></pre>
@@ -2181,7 +2620,7 @@ conditions are the same you would be using in a switch-case block in Groovy.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-02-08 23:23:34 CET
+Last updated 2015-04-04 19:26:54 CEST
 </div>
 </div>
 </body>

@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 1.5.0">
+<meta name="generator" content="Asciidoctor 1.5.2">
 <title>Data</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic|Noto+Serif:400,400italic,700,700italic|Droid+Sans+Mono:400">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
 /* Remove the comments around the @import statement below when using this as a custom stylesheet */
-/*@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic|Noto+Serif:400,400italic,700,700italic|Droid+Sans+Mono:400";*/
+/*@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400";*/
 article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary{display:block}
 audio,canvas,video{display:inline-block}
 audio:not([controls]){display:none;height:0}
@@ -274,8 +274,8 @@ dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
 ol>li p,ul>li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
 ul.unstyled,ol.unnumbered,ul.checklist,ul.none{list-style-type:none}
 ul.unstyled,ol.unnumbered,ul.checklist{margin-left:.625em}
-ul.checklist li>p:first-child>.fa-check-square-o:first-child,ul.checklist li>p:first-child>input[type="checkbox"]:first-child{margin-right:.25em}
-ul.checklist li>p:first-child>input[type="checkbox"]:first-child{position:relative;top:1px}
+ul.checklist li>p:first-child>.fa-square-o:first-child,ul.checklist li>p:first-child>.fa-check-square-o:first-child{width:1em;font-size:.85em}
+ul.checklist li>p:first-child>input[type="checkbox"]:first-child{width:1em;position:relative;top:1px}
 ul.inline{margin:0 auto .625em auto;margin-left:-1.375em;margin-right:0;padding:0;list-style:none;overflow:hidden}
 ul.inline>li{list-style:none;float:left;margin-left:1.375em;display:block}
 ul.inline>li>*{display:block}
@@ -380,7 +380,7 @@ p{margin-bottom:1.25rem}
 *{-webkit-box-shadow:none!important;box-shadow:none!important;text-shadow:none!important}
 a{color:inherit!important;text-decoration:underline!important}
 a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
-a[href^="http:"]:not(.bare):after,a[href^="https:"]:not(.bare):after,a[href^="mailto:"]:not(.bare):after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+a[href^="http:"]:not(.bare):after,a[href^="https:"]:not(.bare):after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
 abbr[title]:after{content:" (" attr(title) ")"}
 pre,blockquote,tr,img{page-break-inside:avoid}
 thead{display:table-header-group}
@@ -408,7 +408,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .hide-for-print{display:none!important}
 .show-for-print{display:inherit!important}}
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
 <script>document.addEventListener('DOMContentLoaded', prettyPrint)</script>
@@ -543,6 +543,111 @@ something ( a transformation for example) with the current inner value.</p>
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/MaybeSpec.groovy[tags=maybeor2,indent=0]</code></pre>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_or_expressions">Or expressions</h4>
+<div class="paragraph">
+<p>Of course you can always use the <code>|</code> operator when thinking about <code>or</code> expressions:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/MaybeSpec.groovy[tags=usingOrAsValue,indent=0]</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The operation ends with and empty string. Using Maybe('') returns
+Nothing()</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>In case partial returns Nothing() we would like to use
+Just('anybody') instead</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Using <code>|</code> makes expressions much more readable&#8230;&#8203; and fun :)</p>
+</div>
+<div class="paragraph">
+<p>Last example used an <code>OR</code> expression. That expression was a simple
+value. Sometimes we would like to use <code>lazy</code> expressions we only want
+to be evaluated <code>just in case</code>.  When executed those <code>lazy
+expressions</code> will be returning a valid value.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/MaybeSpec.groovy[tags=usingOrAsLazyExpression,indent=0]</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The operation ends with and empty string. Using Maybe('') returns
+Nothing()</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>In case partial returns Nothing() we would like to use
+Just('anybody') instead. In this case the value is not computed until
+we made sure the previous computation returned Nothing()</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_the_maybe_code_truth_code">The maybe <code>truth</code></h4>
+<div class="paragraph">
+<p>Sometimes you just don&#8217;t know whether the value is going to be valid
+or not. Then it could come handy to use the <code>maybe</code> method.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/MaybeSpec.groovy[tags=maybetruth,indent=0]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>So expressions could become easier to understand when using <code>maybe</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/MaybeSpec.groovy[tags=maybetruthexample1,indent=0]</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>We are using a possible <code>not valid</code> value</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>We build an expression that in case the left hand value is not valid we
+will be using the right hand side value instead</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Because the value of the left was not valid then we used the right hand one, hence
+there is a present value</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The value used was 'me'</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If there had been a valid value at the right hand side, then that
+value would have been used instead:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/MaybeSpec.groovy[tags=maybetruthexample2,indent=0]</code></pre>
+</div>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_fn">Fn</h3>
@@ -636,6 +741,25 @@ return immediately.</td>
 </tr>
 </table>
 </div>
+<div class="sect3">
+<h4 id="_or">Or</h4>
+<div class="paragraph">
+<p>The same way we used <code>or</code> in Maybe to express an alternative to
+<code>wrong</code> values we can use it in <code>Either</code>.</p>
+</div>
+<div class="listingblock">
+<div class="title">value</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Unresolved directive in data.ad - include::{testDir}/fnz/data/EitherSpec.groovy[tags=eitherorvalue,indent=0]</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">lazy expression</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Unresolved directive in data.ad - include::{testDir}/fnz/data/EitherSpec.groovy[tags=eitherorcomputation,indent=0]</code></pre>
+</div>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_listmonad">ListMonad</h3>
@@ -683,10 +807,68 @@ a certain way.</p>
 either end on a desired value, having an instance of <strong>Success</strong>,
 or could throw an exception, having an instance of <strong>Failure</strong> instead.</p>
 </div>
+<div class="sect3">
+<h4 id="_try_2">Try()</h4>
 <div class="paragraph">
-<p>In order to get a <strong>Try</strong> result we should <strong>wrap</strong> the computation we think
-could fail within a function which returns a <strong>Try</strong> instance with the
-result of the computation (Try.Success or Try.Failure).</p>
+<p>Instead of using a typical try/catch expression we could handle an expression
+as a safe execution but with a possible failure value.</p>
+</div>
+<div class="paragraph">
+<p>We can execute directly an unsafe function using:</p>
+</div>
+<div class="listingblock">
+<div class="title">Using Try directly with a initial value</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Try(A a, Function&lt;A,B&gt;)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Of course a <strong>Function</strong> could be changed by a closure. Lets see the
+following example.</p>
+</div>
+<div class="listingblock">
+<div class="title">Using Try directly with a initial value</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/TrySpec.groovy[tags=tryFunction1,indent=0]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this example we should be expecting whether a <strong>Try.Success</strong> value
+containing the expected result or a <strong>Try.Failure</strong> with the exception
+thrown (if any) and the initial value used to trigger the execution.</p>
+</div>
+<div class="paragraph">
+<p>There could be some cases where you don&#8217;t care about passing an
+initial value to the <strong>Try</strong> execution.</p>
+</div>
+<div class="listingblock">
+<div class="title">Using Try directly without a initial value</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Try(Function&lt;A,B&gt;)</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Using Try directly without a initial value</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/TrySpec.groovy[tags=tryFunction2,indent=0]</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>We can receive a Success or a Failure but we cannot expect to get
+the initial value because it never was provided in the first place.</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_wrap">wrap</h4>
+<div class="paragraph">
+<p>In order to get a <strong>Try</strong> result we could also <strong>wrap</strong> the computation we
+think could fail within a function which returns a <strong>Try</strong> instance with
+the result of the computation (Try.Success or Try.Failure).</p>
 </div>
 <div class="paragraph">
 <p>Like <strong>Either</strong>, composition has a special importance here, due to
@@ -744,13 +926,17 @@ like any other exception.</p>
 </tr>
 </table>
 </div>
+</div>
+<div class="sect3">
+<h4 id="_recover">Recover</h4>
 <div class="paragraph">
-<p>Normally when having an exception we would like to react somehow. Sometimes
-we may want to set, for example a default value in case something went wrong.</p>
+<p>Normally when having an exception we would like to have some
+alternative. Sometimes we may want to set, for example a default value
+in case something went wrong.</p>
 </div>
 <div class="paragraph">
-<p>In our example I would like to get zero in case the number was not valid.
-Then I would like to add one to that given number.</p>
+<p>In our example I would like to get zero in case the number was not
+valid.  Then I would like to add one to that given number.</p>
 </div>
 <div class="paragraph">
 <p>What if we want a fallback behavior when something went wrong ?</p>
@@ -765,18 +951,6 @@ possible <strong>Failure</strong> instance, and the <strong>Success</strong> ins
 <pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/TrySpec.groovy[tags=recover,indent=0]</code></pre>
 </div>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Maybe in the future <strong>recover</strong> will receive any number of possible
-alternatives.
-</td>
-</tr>
-</table>
 </div>
 </div>
 </div>
@@ -784,7 +958,7 @@ alternatives.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-02-08 23:23:34 CET
+Last updated 2015-04-26 17:38:02 CEST
 </div>
 </div>
 </body>

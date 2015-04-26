@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.2">
-<title>Types</title>
+<title>What is FNZ</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -418,210 +418,66 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_types">Types</a>
-<ul class="sectlevel2">
-<li><a href="#_func">func</a></li>
-</ul>
-</li>
+<li><a href="#_what_is_fnz">What is FNZ</a></li>
 </ul>
 </div>
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_types">Types</h2>
+<h2 id="_what_is_fnz">What is FNZ</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This chapter has to do with other ways of creating/using/extending types with Groovy.</p>
-</div>
-<div class="sect2">
-<h3 id="_func">func</h3>
-<div class="quoteblock">
-<blockquote>
-<div class="paragraph">
-<p>A functional interface is an interface that has just one abstract method (aside from the methods of Object), and thus represents a single function contract</p>
-</div>
-</blockquote>
-<div class="attribution">
-&#8212; Java(TM) spec
-</div>
+<p>This project is a collection of ideas taken from other functional
+languages translated to Groovy.</p>
 </div>
 <div class="paragraph">
-<p><strong>func</strong> allows you to declare and create a <a href="http://docs.oracle.com/javase/specs/jls/se8/html/jls-9.html#jls-9.8"><strong>functional interface</strong></a>
-in one line without the verbosity of having to write a full Java interface.</p>
+<p>The main objectives of this library are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Create more control structures (let, letm, where&#8230;&#8203;)</p>
+</li>
+<li>
+<p>Understand persistent collections (TODO)</p>
+</li>
+<li>
+<p>Ways of enforce immutability</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
-<p>Normally if you wanted to create a <strong>functional interface</strong> and use it you should be doing something
-like this:</p>
+<p>If you have a copy of the code and you want to start playing with the
+examples writen along the documentation. You can use both
+<code>groovyshell</code> and <code>groovyConsole</code>. Both are accessible through two
+<code>gradle</code> tasks.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Of course you should have at least installed JDK 7 in your
+machine. Otherwise <code>gradle</code> won&#8217;t work.
+</td>
+</tr>
+</table>
 </div>
 <div class="listingblock">
+<div class="title">using FNZ in groovysh</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class A {
-
-    interface Fx {
-        Integer apply(String word)
-    }
-
-    Integer applyFunction(String word, Fx function) {
-        return function.apply(word)
-    }
-
-}</code></pre>
+<pre class="prettyprint highlight"><code class="language-bash" data-lang="bash">./gradlew -q shell</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>With <strong>func</strong> you can create in one line the same interface:</p>
+<p>or</p>
 </div>
 <div class="listingblock">
+<div class="title">using FNZ in groovyConsole</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in type.ad - include::{testDir}/fnz/ast/type/FuncSpec.groovy[tags=simpleTypeAlias,indent=0]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>In general the use cases are:</p>
-</div>
-<div class="sect3">
-<h4 id="_simple_types">Simple types</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class OuterClass {
-    static {
-        func InterfaceType &gt;= ParameterType &gt;&gt; ReturnType
-    }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Of course you can declare as many interfaces as you want:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class A {
-    static {
-        func Fa &gt;= String &gt;&gt; Integer
-        func Fb &gt;= String &gt;&gt; String
-        func Fb &gt;= String &gt;&gt; Date
-    }
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_using_generics">Using generics</h4>
-<div class="paragraph">
-<p>You can also use generics:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class OuterClass {
-    static {
-        func InterfaceType(A,B) &gt;= A &gt;&gt; B
-    }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>You first should to declare the name of the type and maybe generic
-types used in the <code>Functional Inteface</code> signature as a parameter or as
-return type.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">InterfaceType(A,B)</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>And then you should declare the signature of the function:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">A &gt;&gt; B</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>In this case it means that we will be having a method like this:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">B apply(A a)</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>So as a whole it will be the same as writing:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">interface InterfaceType&lt;A,B&gt; {
-    public B apply(A a)
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The parameters and the return type can both use the generic types
-declared by the interface type:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class OuterClass {
-    static {
-        InterfaceType(A,B) &gt;= ParameterType(A) &gt;&gt; ReturnType(B)
-    }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The following example declares some generic type used at return type:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in type.ad - include::{testDir}/fnz/ast/type/FuncSpec.groovy[tags=genericsBasicReturnType,indent=0]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Now the example uses generics both as parameter and return type</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in type.ad - include::{testDir}/fnz/ast/type/FuncSpec.groovy[tags=fullGenericsExample,indent=0]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>And mixing generics with other types:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in type.ad - include::{testDir}/fnz/ast/type/FuncSpec.groovy[tags=fullGenericsWithType,indent=0]</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_multiple_parameters">Multiple parameters</h4>
-<div class="paragraph">
-<p>So far we&#8217;ve been showing functions with just one parameter or at most
-a parameter making use of generics, but wouldn&#8217;t be great to have a
-way of declaring a function with two or more arguments ?</p>
-</div>
-<div class="paragraph">
-<p>It turns out you can. The syntax to acomplish this is to use the
-Groovy syntax for lists.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">func SUM(X) &gt;= [X,X] &gt;&gt; X</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Here we had a funcion <code>SUM</code> which takes two parameters of the same
-type and returns a value of the same type. It makes sense right ?</p>
-</div>
-<div class="paragraph">
-<p>In the following example we&#8217;re using this feature just to show how
-parameters can be parametrized (use generics) as well.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in type.ad - include::{testDir}/fnz/ast/type/FuncSpec.groovy[tags=multipleParameters,indent=0]</code></pre>
-</div>
-</div>
+<pre class="prettyprint highlight"><code class="language-bash" data-lang="bash">./gradlew console</code></pre>
 </div>
 </div>
 </div>
@@ -629,7 +485,7 @@ parameters can be parametrized (use generics) as well.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-04-26 17:38:02 CEST
+Last updated 2015-04-04 19:26:54 CEST
 </div>
 </div>
 </body>
