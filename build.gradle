@@ -101,14 +101,14 @@ groovysh {
 //
 
 group = 'fnz'
-version = '1.0.4'
+version = '1.0.5'
 
 publishing {
     publications {
         mavenCustom(MavenPublication) {
             groupId 'fnz'
             artifactId 'fnz'
-            version '1.0.4'
+            version '1.0.5'
 
             from components.java
         }
@@ -125,7 +125,7 @@ bintray {
         name = 'fnz'
         repo = "maven"
         version {
-            name = '1.0.4'
+            name = '1.0.5'
         }
     }
 
