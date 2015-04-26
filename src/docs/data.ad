@@ -252,17 +252,64 @@ did before, lets sneak a little bit on how *Haskell* does it ;)
 
 === Try
 
+
 Nowadays JVM languages deal with exceptions using *try-catch* blocks. The
 problem is that these constructions force programmers to build their code in
 a certain way.
 
 *Try* monad wraps the result of a given computation. That computation could 
 either end on a desired value, having an instance of *Success*, 
-or could throw an exception, having an instance of *Failure* instead. 
+or could throw an exception, having an instance of *Failure* instead.
 
-In order to get a *Try* result we should *wrap* the computation we think
-could fail within a function which returns a *Try* instance with the
-result of the computation (Try.Success or Try.Failure).
+==== Try()
+
+Instead of using a typical try/catch expression we could handle an expression
+as a safe execution but with a possible failure value.
+
+We can execute directly an unsafe function using:
+
+[source,groovy]
+.Using Try directly with a initial value
+----
+Try(A a, Function<A,B>)
+----
+
+Of course a *Function* could be changed by a closure. Lets see the
+following example.
+
+[source,groovy]
+.Using Try directly with a initial value
+----
+include::{testDir}/fnz/data/TrySpec.groovy[tags=tryFunction1,indent=0]
+----
+
+In this example we should be expecting whether a *Try.Success* value
+containing the expected result or a *Try.Failure* with the exception
+thrown (if any) and the initial value used to trigger the execution.
+
+There could be some cases where you don't care about passing an
+initial value to the *Try* execution.
+
+[source,groovy]
+.Using Try directly without a initial value
+----
+Try(Function<A,B>)
+----
+
+[source,groovy]
+.Using Try directly without a initial value
+----
+include::{testDir}/fnz/data/TrySpec.groovy[tags=tryFunction2,indent=0]
+----
+
+<1> We can receive a Success or a Failure but we cannot expect to get
+the initial value because it never was provided in the first place.
+
+==== wrap
+
+In order to get a *Try* result we could also *wrap* the computation we
+think could fail within a function which returns a *Try* instance with
+the result of the computation (Try.Success or Try.Failure).
 
 Like *Either*, composition has a special importance here, due to
 the fact that when having a *Failure* instance all possible actions
@@ -300,11 +347,12 @@ include::{testDir}/fnz/data/TrySpec.groovy[tags=exception1,indent=0]
 
 ==== Recover
 
-Normally when having an exception we would like to react somehow. Sometimes
-we may want to set, for example a default value in case something went wrong.
+Normally when having an exception we would like to have some
+alternative. Sometimes we may want to set, for example a default value
+in case something went wrong.
 
-In our example I would like to get zero in case the number was not valid. 
-Then I would like to add one to that given number.
+In our example I would like to get zero in case the number was not
+valid.  Then I would like to add one to that given number.
 
 What if we want a fallback behavior when something went wrong ?
 
@@ -316,8 +364,5 @@ possible *Failure* instance, and the *Success* instance to use instead.
 ----
 include::{testDir}/fnz/data/TrySpec.groovy[tags=recover,indent=0]
 ----
-
-NOTE: Maybe in the future *recover* will receive any number of possible
-alternatives.
 
 
