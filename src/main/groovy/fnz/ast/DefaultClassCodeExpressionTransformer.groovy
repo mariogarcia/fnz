@@ -1,7 +1,12 @@
 package fnz.ast
 
+import groovyjarjarasm.asm.Opcodes
 import org.codehaus.groovy.control.SourceUnit
+import org.codehaus.groovy.ast.ASTNode
+import org.codehaus.groovy.ast.ModuleNode
 import org.codehaus.groovy.ast.ClassCodeExpressionTransformer
+import org.codehaus.groovy.ast.expr.Expression
+import org.codehaus.groovy.syntax.SyntaxException
 
 /**
  * Most transformers need at some point the source unit in order to fix or apply
@@ -12,7 +17,8 @@ import org.codehaus.groovy.ast.ClassCodeExpressionTransformer
  * @author Mario Garcia
  *
  */
-class DefaultClassCodeExpressionTransformer extends ClassCodeExpressionTransformer {
+abstract class DefaultClassCodeExpressionTransformer
+    extends ClassCodeExpressionTransformer implements Opcodes {
 
     private SourceUnit sourceUnit
 
@@ -33,4 +39,52 @@ class DefaultClassCodeExpressionTransformer extends ClassCodeExpressionTransform
     SourceUnit getSourceUnit() {
           return this.sourceUnit
     }
+
+    /**
+     * This method creates a new SyntaxException
+     *
+     * @param node The node causing the exception
+     * @param message A meaningful exception message to the user
+     */
+    void addError(ASTNode node, String message) {
+        sourceUnit.addError(
+            new SyntaxException(
+                message,
+                node.columnNumber,
+                node.lineNumber
+            )
+        )
+    }
+
+    /**
+     * This method returns the module of the current
+     * SourceUnit instance
+     *
+     * @return a ModuleNode instance
+     */
+    ModuleNode getModule() {
+        return sourceUnit.AST
+    }
+
+    /**
+     * Sometimes could be useful to get the package name
+     * of the current module
+     *
+     * @return A String representing the current qualified package name
+     */
+    String getModulePackageName() {
+        return module?.packageName?.with { "$it" } ?: ''
+    }
+
+    /**
+     * Classes implementing this method should provide a way
+     * of knowing whether the expression should be transform
+     * or not
+     *
+     * @param expression the expression we may want to transform
+     * @return true if the current expression should be transformed or
+     * false otherwise
+     */
+    abstract Boolean isTransformable(Expression expression)
+
 }

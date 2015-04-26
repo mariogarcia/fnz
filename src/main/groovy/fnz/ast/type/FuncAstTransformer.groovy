@@ -1,19 +1,23 @@
-package fnz.control
+package fnz.ast.type
 
 import static org.codehaus.groovy.ast.ClassHelper.make
 import static org.codehaus.groovy.ast.tools.GeneralUtils.constX
 import static org.codehaus.groovy.ast.tools.GeneralUtils.param
 import static org.codehaus.groovy.ast.tools.GeneralUtils.params
 
+import static fnz.ast.AstUtils.getArgs
+import static fnz.ast.AstUtils.isBinaryExpression
+import static fnz.ast.AstUtils.getUniqueIdentifier
+import static fnz.ast.AstUtils.isToken
+
+import static org.codehaus.groovy.syntax.Types.COMPARE_GREATER_THAN_EQUAL
+
 import fnz.ast.MethodCallExpressionTransformer
 
 import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
-import groovyjarjarasm.asm.Opcodes
 
-import org.codehaus.groovy.ast.ASTNode
 import org.codehaus.groovy.ast.MixinNode
-import org.codehaus.groovy.ast.ModuleNode
 import org.codehaus.groovy.ast.ClassNode
 import org.codehaus.groovy.ast.InnerClassNode
 import org.codehaus.groovy.ast.MethodNode
@@ -27,48 +31,46 @@ import org.codehaus.groovy.ast.expr.MethodCallExpression
 import org.codehaus.groovy.ast.expr.ArgumentListExpression
 import org.codehaus.groovy.ast.expr.BinaryExpression
 
+import org.codehaus.groovy.syntax.Token
 import org.codehaus.groovy.control.SourceUnit
-import org.codehaus.groovy.syntax.SyntaxException
 
 @CompileStatic
-class TypeAstTransformer extends MethodCallExpressionTransformer implements Opcodes {
+class FuncAstTransformer extends MethodCallExpressionTransformer {
 
-    static final String TYPE_METHOD_NAME = 'ftype'
+    static final String TYPE_METHOD_NAME = 'func'
     static final String FI_FUNCTION_NAME = 'apply'
     static final String FI_FUNCTION_PARAM_NAME = 'input'
     static final Expression MEANING_OF_LIFE = constX(42)
 
-    TypeAstTransformer(SourceUnit sourceUnit) {
+    FuncAstTransformer(SourceUnit sourceUnit) {
         super(sourceUnit, TYPE_METHOD_NAME)
     }
 
     Expression transformMethodCall(final MethodCallExpression methodCallExpression) {
-        Expression firstArgumentExpression = firstArgumentExpressionFrom(methodCallExpression)
+        Expression firstArg = getArgs(methodCallExpression).first()
+        Boolean isValid = checkIsBinaryExpressionWithToken(firstArg, COMPARE_GREATER_THAN_EQUAL)
 
-        if (isNotABinaryExpression(firstArgumentExpression)) {
-            error(sourceUnit, firstArgumentExpression)
+        if (!isValid) return
 
-            return methodCallExpression
-        }
-
-        InnerClassNode innerClassNode =
-            getFunctionalInterface((BinaryExpression) firstArgumentExpression)
-
+        InnerClassNode innerClassNode = getFunctionalInterface((BinaryExpression) firstArg)
         module.addClass(innerClassNode)
 
         return MEANING_OF_LIFE
     }
 
-    private boolean isNotABinaryExpression(Expression expression) {
-        return !(expression instanceof BinaryExpression)
-    }
+    @CompileDynamic
+    Boolean checkIsBinaryExpressionWithToken(Expression expression, int tokenReference) {
+        if (!isBinaryExpression(expression)) {
+            addError(expression, "Expected binary expression here. Something like: Fn(A) >> String >> A")
+            return false
+        }
 
-    private ModuleNode getModule() {
-        return sourceUnit.AST
-    }
+        if (!isToken(expression.operation, tokenReference)) {
+            addError(expression, "Token expected $tokenReference got ${expression.operation}")
+            return false
+        }
 
-    private String getModulePackageName() {
-        return module?.packageName?.with { "$it" } ?: ''
+        return true
     }
 
     private Boolean byMainClassName(String mainName, ClassNode classNode) {
@@ -123,23 +125,6 @@ class TypeAstTransformer extends MethodCallExpressionTransformer implements Opco
         return ACC_STATIC | ACC_ABSTRACT | ACC_INTERFACE
     }
 
-    private Expression firstArgumentExpressionFrom(MethodCallExpression methodCallExpression) {
-        ArgumentListExpression args = (ArgumentListExpression) methodCallExpression.arguments
-
-        return args.first()
-    }
-
-    private void error(SourceUnit sourceUnit, ASTNode node) {
-        sourceUnit
-        .addError(
-            new SyntaxException(
-                "Expected binary expression here. Something like: Fn(A) >> String >> A",
-                node.columnNumber,
-                node.lineNumber
-            )
-        )
-    }
-
     @CompileDynamic
     private MethodNode extractMethod(BinaryExpression fnExpression) {
         Expression inputExpression = fnExpression.leftExpression
@@ -183,15 +168,11 @@ class TypeAstTransformer extends MethodCallExpressionTransformer implements Opco
     }
 
     private Parameter getParameterFrom(VariableExpression variable) {
-        return param(make(variable.name), validIdentifier)
+        return param(make(variable.name), getUniqueIdentifier())
     }
 
     private Parameter getParameterFrom(MethodCallExpression methodCallExpression) {
-        return param(extractTypeFrom(methodCallExpression), validIdentifier)
-    }
-
-    private String getValidIdentifier() {
-        return "a${System.nanoTime()}"
+        return param(extractTypeFrom(methodCallExpression), getUniqueIdentifier())
     }
 
     private ClassNode extractTypeFrom(MethodCallExpression methodCallExpression) {

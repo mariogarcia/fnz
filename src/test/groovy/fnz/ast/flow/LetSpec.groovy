@@ -1,4 +1,6 @@
-package fnz.control
+package fnz.ast.flow
+
+import fnz.ast.FnzAst
 
 import fnz.test.AstBaseSpec
 import org.codehaus.groovy.control.CompilePhase
@@ -37,7 +39,7 @@ class LetSpec extends AstBaseSpec {
 
     def 'resolve variables'() {
         when: 'Initializing expression and executing closure'
-        Integer result = exampleInstance.sumAndInc(1,2)
+        Integer result = exampleInstance.sumAndInc(1, 2)
         then: 'The value should be the expected'
             result == 4
     }

@@ -1,17 +1,17 @@
 package fnz.data
 
 // tag::imports[]
-import static Fn.val
+import static fnz.Fnz.val
 import static Maybe.just
 import static Maybe.nothing
 import static Maybe.maybe
 // end::imports[]
 
 // tag::fnimports[]
-import static Fn.Just
-import static Fn.Nothing
-import static Fn.fapply
-import static Fn.bind
+import static fnz.Fnz.Just
+import static fnz.Fnz.Nothing
+import static fnz.Fnz.fapply
+import static fnz.Fnz.bind
 // end::fnimports[]
 
 import spock.lang.Unroll
@@ -58,7 +58,6 @@ class MaybeSpec extends Specification {
             result instanceof Maybe.Nothing
             !result.isPresent()
     }
-
 
     // tag::maybebind[]
     void 'Monad: using maybe to shortcircuit a process'() {
@@ -131,8 +130,6 @@ class MaybeSpec extends Specification {
                  50      |   null
     }
     // end::maybebindhaskell[]
-
-
 
     // tag::maybeor1[]
     void 'testing maybe alternatives (I)'() {
@@ -245,6 +242,24 @@ class MaybeSpec extends Specification {
             value   | present | remaining
             'mario' | false   | 'anybody'
             'mar'   | true    | 'io'
+    }
+
+    @Unroll
+    void 'testing bind with type awareness and unit'() {
+        when: 'using a valid expression'
+            TypeAwareFunction<Integer,Maybe<Integer>> fn = { clazz, value ->
+                println "$clazz is ${value.getClass().simpleName}"
+                return clazz.unit(value + 1)
+            } as TypeAwareFunction
+            Maybe<Integer> possible = option.bind2(fn)
+        then: 'the result should have the type'
+            possible instanceof Maybe
+        and: 'we should get the expected value'
+            val(possible) == expected
+        where: 'possible options are'
+            option    | expected
+            just(1)   | 2
+            nothing() | null
     }
 
 }

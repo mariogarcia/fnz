@@ -32,7 +32,7 @@ Let's see some examples.
 [source,groovy]
 .Simple values
 ----
-include::{testdir}/fnz/control/LetSpecExample.groovy[tags=simpleLet]
+include::{testdir}/fnz/ast/flow/LetSpecExample.groovy[tags=simpleLet]
 ----
 
 Here values provided by the map are accessible within the scope of the closure block.
@@ -42,7 +42,7 @@ see the following example:
 [source,groovy]
 .Dependant expressions
 ----
-include::{testdir}/fnz/control/LetSpecExample.groovy[tags=computedValues]
+include::{testdir}/fnz/ast/flow/LetSpecExample.groovy[tags=computedValues]
 ----
 
 In this example value of *'z'* depends on the values given to *'x'* and *'y'*. Every
@@ -50,7 +50,7 @@ In this example value of *'z'* depends on the values given to *'x'* and *'y'*. E
 [source,groovy]
 .Nested expressions
 ----
-include::{testdir}/fnz/control/LetSpecExample.groovy[tags=nestedLet]
+include::{testdir}/fnz/ast/flow/LetSpecExample.groovy[tags=nestedLet]
 ----
 
 Previous link:https://code.google.com/p/spock[Spock] specification shows how let expressions could be nested.
@@ -87,7 +87,7 @@ to combine let with the `Either` monad.
 
 [source, groovy]
 ----
-include::{testdir}/fnz/control/LetmSpecExample.groovy[tags=workingWithOtherMonads]
+include::{testdir}/fnz/ast/flow/LetmSpecExample.groovy[tags=workingWithOtherMonads]
 ----
 
 You can also combine it with the `Try` monad. This time there's a
@@ -96,7 +96,56 @@ to handle that possibility using `Try`.
 
 [source, groovy]
 ----
-include::{testdir}/fnz/control/LetmSpecExample.groovy[tags=combineWithTry]
+include::{testdir}/fnz/ast/flow/LetmSpecExample.groovy[tags=combineWithTry]
+----
+
+=== Do
+
+If you have seen Haskell's *do* expressions, they look like this:
+
+[source, haskell]
+----
+do
+x <- Just 1
+y <- Just (x + 1)
+return x
+----
+
+There are a couple of nice things when using this control flow:
+
+* You don't have to unwrapped/wrap monadic values. In the example when
+  assigning *Just 1* to *x* the value inside (1) it's unwrapped and make it
+  available for the next expression to use it.
+* In the end using the *return* expression make it easier for the programmer
+  to wrap the final value in the proper monadic value without having to do it
+  explicitly. It is assumed by the expression flow.
+
+Well, *Fnz* has tried to mimic the behavior of this expression using both
+methods *$do* and *$return*:
+
+[source, groovy]
+----
+include::{testdir}/fnz/ast/flow/DoSpec.groovy[tags=simpleExample]
+----
+
+Although in Haskell *do* notation you can be using assignments as long
+as other types of expressions, here is not possible. Only assignment
+expressions are allowed by design.
+
+So you may be wondering... How can I use an expression not returning
+any value within the $do/$return statement ?
+
+Well for that purpose a special rule has been added to the *do* notation
+expression. Whenever you wan to use an expression not returning anything
+you should assign that expression to *_*.
+
+The *_* variable name means that you don't care about the returning
+type.  In fact every time you use that name a unique identifier is
+created underneath.
+
+[source, groovy]
+----
+include::{testdir}/fnz/ast/flow/DoSpec.groovy[tags=wildcard1]
 ----
 
 === Unless
@@ -112,7 +161,7 @@ unless(Boolean,Closure)
 [source,groovy]
 .Unless structure
 ----
-include::{testdir}/fnz/control/UnlessSpecExample.groovy[tags=simpleUnless]
+include::{testdir}/fnz/ast/flow/UnlessSpecExample.groovy[tags=simpleUnless]
 ----
 
 This expression will allow the code block to be executed unless the condition
@@ -148,7 +197,7 @@ of when-then expressions
 [source,groovy]
 .Simple Where
 ----
-include::{testdir}/fnz/control/WhereSpec.groovy[tags=simpleWhere]
+include::{testdir}/fnz/flow/WhereSpec.groovy[tags=simpleWhere]
 ----
 
 This is a simple example about how to use the where expression. You can also omit
@@ -157,13 +206,13 @@ some of the parts mentioned before
 [source,groovy]
 .Ommiting Where
 ----
-include::{testdir}/fnz/control/WhereSpec.groovy[tags=whereWithNoWhere]
+include::{testdir}/fnz/flow/WhereSpec.groovy[tags=whereWithNoWhere]
 ----
 
 [source,groovy]
 .Only When-Then clauses
 ----
-include::{testdir}/fnz/control/WhereSpec.groovy[tags=whereOnlyWithWhenThen]
+include::{testdir}/fnz/flow/WhereSpec.groovy[tags=whereOnlyWithWhenThen]
 ----
 
 The when-then clauses use closures to evaluate their content. 
@@ -172,7 +221,7 @@ But thanks to Groovy's objects method isCase() we can create switch-like stateme
 [source,groovy]
 .Switch-case Where (Class)
 ----
-include::{testdir}/fnz/control/WhereSpec.groovy[tags=whereSwitchLike1]
+include::{testdir}/fnz/flow/WhereSpec.groovy[tags=whereSwitchLike1]
 ----
 
 Instead of passing a map you can evaluate a single value against some conditions. Those
@@ -181,12 +230,12 @@ conditions are the same you would be using in a switch-case block in Groovy.
 [source,groovy]
 .Switch-case Where (Collections)
 ----
-include::{testdir}/fnz/control/WhereSpec.groovy[tags=whereSwitchLike2]
+include::{testdir}/fnz/flow/WhereSpec.groovy[tags=whereSwitchLike2]
 ----
 
 [source,groovy]
 .Switch-case Where (Number)
 ----
-include::{testdir}/fnz/control/WhereSpec.groovy[tags=whereSwitchLike3]
+include::{testdir}/fnz/flow/WhereSpec.groovy[tags=whereSwitchLike3]
 ----
 

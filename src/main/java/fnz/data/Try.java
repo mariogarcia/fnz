@@ -36,6 +36,11 @@ public abstract class Try<A> extends MonadType<A> implements Or<A,Try<A>> {
         }
 
         @Override
+        public <B, M extends Monad<B>> M bind2(TypeAwareFunction<SUCCESS, M> fn) {
+            return fn.apply((Class<M>) this.getClass(), getTypedRef().getValue());
+        }
+
+        @Override
         public <B> Applicative<B> fapply(Applicative<Function<SUCCESS, B>> afn) {
               return this.fmap(afn.getTypedRef().getValue());
         }
@@ -59,6 +64,10 @@ public abstract class Try<A> extends MonadType<A> implements Or<A,Try<A>> {
             return this;
         }
 
+        public static <A> Success<A> unit(A value) {
+            return Try.success(value);
+        }
+
     }
 
     public static class Failure<FAILURE> extends Try<FAILURE> {
@@ -77,17 +86,22 @@ public abstract class Try<A> extends MonadType<A> implements Or<A,Try<A>> {
 
         @Override
         public <B, M extends Monad<B>> M bind(Function<FAILURE, M> fn) {
-          return (M) new Try.Failure<FAILURE>(throwable);
+            return (M) new Try.Failure<FAILURE>(getTypedRef(), throwable);
+        }
+
+        @Override
+        public <B, M extends Monad<B>> M bind2(TypeAwareFunction<FAILURE, M> fn) {
+            return (M) new Try.Failure<FAILURE>(getTypedRef(), throwable);
         }
 
         @Override
         public <B> Applicative<B> fapply(Applicative<Function<FAILURE, B>> afn) {
-            return (Applicative<B>) new Try.Failure<FAILURE>(throwable);
+            return (Applicative<B>) new Try.Failure<FAILURE>(getTypedRef(), throwable);
         }
 
         @Override
         public <B, F extends Functor<B>> F fmap(Function<FAILURE, B> fn) {
-            return (F) new Try.Failure<FAILURE>(throwable);
+            return (F) new Try.Failure<FAILURE>(getTypedRef(), throwable);
         }
 
         @Override
@@ -130,6 +144,37 @@ public abstract class Try<A> extends MonadType<A> implements Or<A,Try<A>> {
 
     public static <T> Try.Failure<T> failure(Throwable th) {
         return new Try.Failure<T>(th);
+    }
+
+    public static <A,B,F extends Function<A,B>> Function<A, Try<B>> wrap(F fn) {
+        return new Function<A, Try<B>>() {
+            public Try<B> apply(A a) {
+                return success(a).fmap(fn);
+            }
+        };
+    }
+
+    public static <A,B> Function<A,Try<B>> recover(Function<A,B>... alternatives) {
+        return new Function<A, Try<B>>() {
+            public Try<B> apply(A a) {
+                Try<B> result = null;
+                for (Function<A,B> alternative : alternatives) {
+                    result = success(a).fmap(alternative);
+                    if (result.isSuccess()) {
+                        return result;
+                    }
+                }
+                return result;
+            }
+        };
+    }
+
+    public static <A,B> Try<B> Try(Function<A,B> fn) {
+        return wrap(fn).apply(null);
+    }
+
+    public static <A,B> Try<B> Try(A a, Function<A,B> fn) {
+        return wrap(fn).apply(a);
     }
 
 }

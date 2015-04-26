@@ -1,4 +1,6 @@
-package fnz.control
+package fnz.ast.flow
+
+import fnz.ast.FnzAst
 
 import fnz.test.AstBaseSpec
 import spock.lang.Unroll
@@ -17,11 +19,11 @@ class UnlessSpec extends AstBaseSpec {
          result == expected
          where:
          sample | expected
-         1|4
-         0|null
-         -1|null
-         2|5
-         3|6
+         1      | 4
+         0      | null
+         -1     | null
+         2      | 5
+         3      | 6
     }
 
     @Unroll
@@ -36,8 +38,9 @@ class UnlessSpec extends AstBaseSpec {
          result == expected
          where:
          sample | expected
-         1|null
-         2|null
+         1      | null
+         2      | null
+
     }
 
 }

@@ -1,7 +1,7 @@
-package fnz.control
+package fnz.flow
 
 import static org.codehaus.groovy.runtime.DefaultGroovyMethods.isCase
-import static fnz.data.Fn.Just
+import static fnz.Fnz.Just
 
 import groovy.transform.CompileStatic
 

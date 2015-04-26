@@ -1,15 +1,16 @@
 package fnz.data
 
-import static Fn.List
-import static Fn.Just
-import static Fn.bind
-import static Fn.fmap
-import static Fn.fapply
-import static Fn.val
-import static Fn.wrap
-import static Fn.recover
-import static Fn.Success
+import static fnz.Fnz.List
+import static fnz.Fnz.Just
+import static fnz.Fnz.bind
+import static fnz.Fnz.fmap
+import static fnz.Fnz.fapply
+import static fnz.Fnz.val
+import static fnz.Fnz.wrap
+import static fnz.Fnz.recover
+import static fnz.Fnz.Success
 
+import spock.lang.Unroll
 import spock.lang.Specification
 
 class TrySpec extends Specification {
@@ -33,14 +34,13 @@ class TrySpec extends Specification {
             Function toTry = { Success(it) }
             Function notUseThis = { Integer x -> x / 0 }
         when: 'trying to apply it to a given value'
-            Try result = fapply(bind(Just(2),toTry), Just(notUseThis))
+            Try result = fapply(bind(Just(2), toTry), Just(notUseThis))
         then: 'we should not be worried about exceptions'
             result.isFailure()
     }
 
     def 'using fapply over a failure'() {
         given: 'a non safe function'
-            Function toTry = { Success(it) }
             Function notUseThis = { Integer x -> x / 0 }
         when: 'trying to apply it to a given value'
             Try result =
@@ -74,7 +74,7 @@ class TrySpec extends Specification {
                     { 0.div(0) } as Function, // WRONG
                     recover(
                         { new Date() + "1" } as Function,
-                        { throw new Exception("Something bad") } as Function,
+                        { throw new IllegalArgumentException("Something bad") } as Function,
                         { 0 } as Function
                     ) // WORST
                 )
@@ -86,15 +86,16 @@ class TrySpec extends Specification {
 
     def 'using recover() with no recovering functions'() {
         when:
-            Function failingFn = recover({throw new Exception("ahhh")} as Function)
+            Function failingFn = recover({ throw new IllegalArgumentException("ahhh") } as Function)
             def anything = bind(Just(1), failingFn)
         then:
             anything.isFailure()
     }
 
+    @SuppressWarnings('ReturnNullFromCatchBlock')
     def 'classic try catch example'() {
         given: 'a list of numbers as strings'
-            def numbers = ["1","2a","11","24","4A"]
+            def numbers = ["1", "2a", "11", "24", "4A"]
         when:
             def average =
                 numbers.findResults { n ->
@@ -113,7 +114,7 @@ class TrySpec extends Specification {
 
     def 'classic try catch example RELOADED'() {
         given: 'a list of numbers as strings'
-            def numbers = ["1","2a","11","24","4A"]
+            def numbers = ["1", "2a", "11", "24", "4A"]
             def parse = { item -> Integer.parseInt(item) } as Function
             def ZERO = { 0 } as Function
             def addToList = { x -> x ? List(x) : List() }
@@ -139,7 +140,7 @@ class TrySpec extends Specification {
 
     def 'classic try catch example MONADIC'() {
         given: 'a list of numbers as strings'
-            def numbers = ["1","2a","11","24","4A"]
+            def numbers = ["1", "2a", "11", "24", "4A"]
             def ZERO = { 0 } as Function
             def AVG = { list -> list.sum().div(list.size()) }
             def parse = { item -> Integer.parseInt(item) } as Function
@@ -219,7 +220,7 @@ class TrySpec extends Specification {
             Try<Integer> VALUE  = Success(42)
         when: 'trying to execute several functions'
             Try<Integer> resultRight = fmap(VALUE, BAD) | fmap(VALUE, GOOD)
-            Try<Integer> resultLeft = fmap(VALUE,GOOD) | fmap(VALUE, BAD)
+            Try<Integer> resultLeft = fmap(VALUE, GOOD) | fmap(VALUE, BAD)
         then: 'we should be getting the one succeeding'
             val(resultRight) == 21
             val(resultLeft) == 21
@@ -234,7 +235,7 @@ class TrySpec extends Specification {
             Try<Integer> VALUE  = Success(42)
         when: 'trying to execute several functions'
             Try<Integer> resultRight = bind(VALUE, BAD) | GOOD
-            Try<Integer> resultLeft = bind(VALUE,GOOD) | BAD
+            Try<Integer> resultLeft = bind(VALUE, GOOD) | BAD
         then: 'we should be getting the one succeeding'
             val(resultRight) == 2
             val(resultLeft) == 2
@@ -252,6 +253,57 @@ class TrySpec extends Specification {
             notRecoverable.getTypedRef()
             !notRecoverable.getTypedRef().getValue()
             !val(notRecoverable)
+    }
+
+    // tag::tryFunction1[]
+    @Unroll
+    def 'check Try with a value and a function'() {
+        when: 'executing an unsafe action'
+            Try result   = Try(value) { x -> 1 / x }
+            Try computed = result.fmap { y -> y + 1 }
+        then: 'asking if it is a failure or a success'
+            computed.isSuccess() == isSuccess
+            computed.isFailure() == !isSuccess
+        and: 'getting value'
+            val(computed) == resultExpected
+        where: 'possible values are'
+            value | isSuccess | resultExpected
+              1   |   true   |       2
+              0   |   false  |       0
+    }
+    // end::tryFunction1[]
+
+
+    // tag::tryFunction2[]
+    @Unroll
+    def 'check Try only with a function'() {
+        when: 'executing an unsafe action'
+            Try result = Try { value / 0 } // <1>
+        then: 'asking if it is a failure or a success'
+            result.isSuccess() == isSuccess
+            result.isFailure() == !isSuccess
+        where: 'possible values are'
+            value | isSuccess
+              1   |   false
+              0   |   false
+    }
+    // end::tryFunction2[]
+
+    @Unroll
+    void 'testing bind with type awareness and unit'() {
+        when: 'using a valid expression'
+            TypeAwareFunction<Integer,Try<Integer>> fn = { clazz, value ->
+                return clazz.unit(value + 1)
+            }
+            Try<Integer> possible = option.bind2(fn)
+        then: 'the result should have the type'
+            possible instanceof Try
+        and: 'we should get the expected value'
+            val(possible) == expected
+        where: 'possible options are'
+            option                                         | expected
+            Try.success(1)                                 | 2
+            Try.failure(new IllegalArgumentException('a')) | null
     }
 
 }

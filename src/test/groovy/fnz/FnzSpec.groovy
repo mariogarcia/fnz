@@ -1,21 +1,23 @@
-package fnz.data
+package fnz
 
-import static Fn.bind
-import static Fn.fmap
-import static Fn.Just
-import static Fn.List
-import static Fn.Right
-import static Fn.wrap
-import static Fn.val
-import static Fn.Maybe
-import static Fn.Failure
-import static Fn.Success
+import static Fnz.bind
+import static Fnz.fmap
+import static Fnz.Just
+import static Fnz.List
+import static Fnz.wrap
+import static Fnz.val
+import static Fnz.Maybe
+import static Fnz.Failure
+import static Fnz.Success
 
-import groovy.transform.CompileStatic
-import groovy.transform.TypeCheckingMode
+import fnz.data.Try
+import fnz.data.Function
+import fnz.data.Maybe
+import fnz.data.ListMonad
+
 import spock.lang.Specification
 
-class FnSpec extends Specification {
+class FnzSpec extends Specification {
 
     void 'Fmap'() {
         given: 'a function (a->b) using functional interface coertion'
@@ -45,12 +47,12 @@ class FnSpec extends Specification {
 
     void 'Using bind with a list monad: looks like comprehensions'() {
         given: 'a list monad'
-            ListMonad<Integer> numbers = List(1,2,3,4)
+            ListMonad<Integer> numbers = List(1, 2, 3, 4)
         when: 'applying a function to bind'
             ListMonad<Integer> result =
                 bind(numbers){ x -> [x, x + 1] as ListMonad }
         then: 'we should get the expected sequence'
-            result.typedRef.value == [1,2,2,3,3,4,4,5]
+            result.typedRef.value == [1, 2, 2, 3, 3, 4, 4, 5]
     }
 
     void 'using maybe method: monadic value'() {
@@ -58,15 +60,15 @@ class FnSpec extends Specification {
             def inc = { x ->  x + 1 }
         when: 'trying to apply the computation'
             def tryResult =
-                val(fmap(Just(value),wrap(inc)))
+                val(fmap(Just(value), wrap(inc)))
         then: 'there could be a result or not'
             Maybe(tryResult).isPresent() == isPresent
         and: 'possible final value should be'
             val(Maybe(tryResult)) == finalValue
         where: 'possible values are'
             value | isPresent | finalValue
-            null  | false| null
-            2     | true | 3
+            null  | false     | null
+            2     | true      | 3
     }
 
     void 'using maybe method: simple value'() {
@@ -79,8 +81,8 @@ class FnSpec extends Specification {
             val(result) == finalValue
         where: 'possible values are'
             value | isPresent | finalValue
-            null  | false| null
-            2     | true | 3
+            null  | false     | null
+            2     | true      | 3
     }
 
     void 'using Failure()'() {
@@ -107,6 +109,7 @@ class FnSpec extends Specification {
 
     void 'stupid coverage check about creating an instance of final class'() {
         expect:
-        new Fn()
+        new Fnz()
     }
+
 }

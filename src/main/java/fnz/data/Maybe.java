@@ -43,6 +43,11 @@ public abstract class Maybe<A> extends MonadType<A> implements Or<A,Maybe<A>> {
         // end::justbind[]
 
         @Override
+        public <B, M extends Monad<B>> M bind2(TypeAwareFunction<JUST, M> fn) {
+            return fn.apply((Class<M>) this.getClass(), getTypedRef().getValue());
+        }
+
+        @Override
         public boolean isPresent() {
             return true;
         }
@@ -55,6 +60,10 @@ public abstract class Maybe<A> extends MonadType<A> implements Or<A,Maybe<A>> {
         @Override
         public Maybe<JUST> or(Function<JUST,Maybe<JUST>> newOption) {
             return this;
+        }
+
+        public static <A> Just<A> unit(A value) {
+            return Maybe.just(value);
         }
 
     }
@@ -73,6 +82,11 @@ public abstract class Maybe<A> extends MonadType<A> implements Or<A,Maybe<A>> {
 
         @Override
         public <B, M extends Monad<B>> M bind(Function<NOTHING, M> fn) {
+            return (M) new Nothing();
+        }
+
+        @Override
+        public <B, M extends Monad<B>> M bind2(TypeAwareFunction<NOTHING, M> fn) {
             return (M) new Nothing();
         }
 

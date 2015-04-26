@@ -1,6 +1,6 @@
-package fnz.control
+package fnz.ast.flow
 
-import static fnz.data.Fn.val
+import static fnz.Fnz.val
 import fnz.data.Maybe
 
 class UnlessSpecExample {

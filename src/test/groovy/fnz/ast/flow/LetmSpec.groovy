@@ -1,7 +1,9 @@
-package fnz.control
+package fnz.ast.flow
 
-import static fnz.data.Fn.val
-import static fnz.data.Fn.Right
+import static fnz.Fnz.val
+import static fnz.Fnz.Right
+
+import fnz.ast.FnzAst
 
 import fnz.data.Try
 import fnz.data.Maybe
@@ -52,13 +54,13 @@ class LetmSpec extends AstBaseSpec {
 
     def 'combine with try monad'() {
         when: 'executing a possible dangerous method'
-        Try result = exampleInstance.combineWithTry(a,b)
+        Try result = exampleInstance.combineWithTry(a, b)
         then: 'we should get a failure instance'
         result.class.isAssignableFrom(expected)
         where: 'possible values and expectations are'
           a | b | expected
-          1|0|Try.Failure
-          1|1|Try.Success
+          1 | 0 | Try.Failure
+          1 | 1 | Try.Success
     }
 
 }

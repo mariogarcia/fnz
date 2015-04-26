@@ -1,11 +1,19 @@
-package fnz.data;
+package fnz;
 
-import java.util.List;
+import fnz.data.Try;
+import fnz.data.Monad;
+import fnz.data.Either;
+import fnz.data.Maybe;
+import fnz.data.Functor;
+import fnz.data.Function;
+import fnz.data.TypeAwareFunction;
+import fnz.data.ListMonad;
+import fnz.data.Applicative;
 
 /**
  *
  */
-public final class Fn {
+public final class Fnz {
 
     public static <A> Either.Left<A> Left(A source) {
         return Either.left(source);
@@ -40,7 +48,7 @@ public final class Fn {
     }
 
     public static <A> Try.Failure<A> Failure() {
-        return Try.failure(null, new NullPointerException());
+        return Try.failure(new NullPointerException());
     }
 
     public static <A> ListMonad<A> List(A... values) {
@@ -51,31 +59,28 @@ public final class Fn {
         return ListMonad.list(values);
     }
 
-    public static <A,B,F extends Function<A,B>> Function<A, Try<B>> wrap(F fn) {
-        return new Function<A, Try<B>>() {
-            public Try<B> apply(A a) {
-                return fmap(Success(a), fn);
-            }
-        };
+    public static <A,B> Try<B> Try(Function<A,B> fn) {
+        return Try.Try(fn);
     }
 
-    public static <A,B,F extends Function<A,B>> Function<A,Try<B>> recover(F... alternatives) {
-        return new Function<A, Try<B>>() {
-            public Try<B> apply(A a) {
-                Try<B> result = null;
-                for (F alternative : alternatives) {
-                    result = fmap(Success(a), alternative);
-                    if (result.isSuccess()) {
-                        return result;
-                    }
-                }
-                return result;
-            }
-        };
+    public static <A,B> Try<B> Try(A a, Function<A,B> fn) {
+        return Try.Try(a, fn);
+    }
+
+    public static <A,B,F extends Function<A,B>> Function<A, Try<B>> wrap(F fn) {
+        return Try.wrap(fn);
+    }
+
+    public static <A,B> Function<A,Try<B>> recover(Function<A,B>... alternatives) {
+        return Try.recover(alternatives);
     }
 
     public static <A,B,MA extends Monad<A>,MB extends Monad<B>> MB bind(MA ma, Function<A,MB> fn) {
        return ma.bind(fn);
+    }
+
+    public static <A,B,MA extends Monad<A>,MB extends Monad<B>> MB bind2(MA ma, TypeAwareFunction<A,MB> fn) {
+        return ma.bind2(fn);
     }
 
     public static <A,B, AA extends Applicative<A>, AB extends Applicative<B>> AB fapply(AA fa, Applicative<Function<A,B>> fn) {

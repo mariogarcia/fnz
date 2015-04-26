@@ -3,18 +3,16 @@ package fnz.data
 import static Either.right
 import static Either.left
 
-import static Fn.Either
-import static Fn.Right
-import static Fn.val
+import static fnz.Fnz.Either
+import static fnz.Fnz.Right
+import static fnz.Fnz.val
 
 import spock.lang.Specification
 
 class EitherSpec extends Specification {
 
     void 'Applicative: Either applicative implementation'() {
-        when:
-            def inc = { Integer v -> v + 1 }
-        then:
+        expect:
             left(null).fapply(right(1)).typedRef.value == null
     }
 
@@ -78,7 +76,7 @@ class EitherSpec extends Specification {
     void 'Either monad when some function returns a left value'() {
         when: 'having a function that could return a left value'
             def div = { Integer v ->
-                return v == 0 ? Either.left(v)  : Either.right(1/v)
+                return v == 0 ? Either.left(v) : Either.right(1 / v)
             }
         then: 'if apply a valid value then the function will be applied'
             right(1).bind(div).typedRef.value == 1
@@ -124,25 +122,25 @@ class EitherSpec extends Specification {
 
     List<Map> getFirstSample() {
         return [
-            [name: 'john', age: 32, city: 'barcelona'],
-            [name: 'peter', age: 51, city: 'london'],
-            [name: 'rob', age: 32, city: 'dublin']
+            [name:'john', age:32, city:'barcelona'],
+            [name:'peter', age:51, city:'london'],
+            [name:'rob', age:32, city:'dublin']
         ]
     }
 
     List<Map> getSecondSample() {
         return [
-            [name: 'peter', age: 51, city: 'london'],
-            [name: 'rob', age: 32, city: 'dublin'],
-            [name: 'johnny', age: 32, city: 'barcelona']
+            [name:'peter', age:51, city:'london'],
+            [name:'rob', age:32, city:'dublin'],
+            [name:'johnny', age:32, city:'barcelona']
         ]
     }
 
     List<Map> getThirdSample() {
         return [
-            [name: 'rob', age: 32, city: 'dublin'],
-            [name: 'johnny', age: 32, city: 'barcelona'],
-            [name: 'peter', age: 50, city: 'london']
+            [name:'rob', age:32, city:'dublin'],
+            [name:'johnny', age:32, city:'barcelona'],
+            [name:'peter', age:50, city:'london']
         ]
     }
 
@@ -175,5 +173,21 @@ class EitherSpec extends Specification {
             1     | 1
     }
     // end::eitherorcomputation[]
+
+    void 'testing bind with type awareness and unit'() {
+        when: 'using a valid expression'
+            TypeAwareFunction<Integer,Either<Integer>> fn = { clazz, value ->
+                return clazz.unit(value + 1)
+            }
+            Either<Integer> possible = options.bind2(fn)
+        then: 'the result should have the type'
+            possible instanceof Either
+        and: 'we should get the expected value'
+            val(possible) == expected
+        where: 'possible options are'
+            options  | expected
+            right(1) | 2
+            left(1)  | 1
+    }
 
 }

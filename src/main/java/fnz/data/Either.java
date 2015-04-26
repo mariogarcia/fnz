@@ -40,8 +40,17 @@ public abstract class Either<A> extends MonadType<A> implements Or<A,Either<A>> 
         }
 
         @Override
+        public <B, M extends Monad<B>> M bind2(TypeAwareFunction<R, M> fn) {
+            return fn.apply((Class<M>) this.getClass(), getTypedRef().getValue());
+        }
+
+        @Override
         public <B, F extends Functor<B>> F fmap(Function<R, B> fn) {
             return (F) right(fn.apply(getTypedRef().getValue()));
+        }
+
+        public static <A> Right<A> unit(A value) {
+            return Either.right(value);
         }
 
         @Override
@@ -79,6 +88,11 @@ public abstract class Either<A> extends MonadType<A> implements Or<A,Either<A>> 
 
         @Override
         public <B, M extends Monad<B>> M bind(Function<L, M> fn) {
+            return (M) new Left(getTypedRef());
+        }
+
+        @Override
+        public <B, M extends Monad<B>> M bind2(TypeAwareFunction<L, M> fn) {
             return (M) new Left(getTypedRef());
         }
 
