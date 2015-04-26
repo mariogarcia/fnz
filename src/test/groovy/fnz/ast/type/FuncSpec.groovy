@@ -8,7 +8,7 @@ import fnz.data.Maybe
 import fnz.test.AstBaseSpec
 import org.codehaus.groovy.control.CompilePhase
 
-class TypeSpec extends AstBaseSpec {
+class FuncSpec extends AstBaseSpec {
 
     def helper
 
@@ -30,7 +30,7 @@ class TypeSpec extends AstBaseSpec {
 
                class A {
                     static {
-                        ftype Fn >= String >> Integer
+                        func Fn >= String >> Integer
                     }
 
                     boolean simpleFunctionalInterface() {
@@ -61,7 +61,7 @@ class TypeSpec extends AstBaseSpec {
 
                class A {
                     static {
-                        ftype Fn
+                        func Fn
                     }
                }
                """
@@ -78,7 +78,7 @@ class TypeSpec extends AstBaseSpec {
 
                class A {
                     static {
-                        ftype Fn >>> Integer >> String
+                        func Fn >>> Integer >> String
                     }
                }
                """
@@ -93,7 +93,7 @@ class TypeSpec extends AstBaseSpec {
                """
                class A {
                     static {
-                        ftype Fn >= String >> Integer
+                        func Fn >= String >> Integer
                     }
                }
                """
@@ -113,7 +113,7 @@ class TypeSpec extends AstBaseSpec {
                class A {
 
                     static {
-                        ftype Fx >= String >> Maybe
+                        func Fx >= String >> Maybe
                     }
 
                     Maybe executeFunction(String number, Fx fx) {
@@ -152,7 +152,7 @@ class TypeSpec extends AstBaseSpec {
                class A {
 
                     static {
-                        ftype Fx(X) >= String >> Maybe(X)
+                        func Fx(X) >= String >> Maybe(X)
                     }
 
                     Maybe<Integer> executeFunction(String number, Fx<Integer> fx) {
@@ -184,7 +184,7 @@ class TypeSpec extends AstBaseSpec {
 
                 class A {
                     static {
-                        ftype Fx(X,Y) >= X >> Y
+                        func Fx(X,Y) >= X >> Y
                     }
 
                     Integer executeFunction(String source, Fx<String,Integer> fx) {
@@ -226,7 +226,7 @@ class TypeSpec extends AstBaseSpec {
 
                 class A {
                     static {
-                        ftype Fx(X,Y) >= Maybe(X) >> Y
+                        func Fx(X,Y) >= Maybe(X) >> Y
                     }
 
                     Integer executeFunction(String source, Fx<String,Integer> fx) {
@@ -258,7 +258,7 @@ class TypeSpec extends AstBaseSpec {
 
                 class A {
                     static {
-                        ftype Fx(X,Y,Z) >= [X,Y] >> List(Z)
+                        func Fx(X,Y,Z) >= [X,Y] >> List(Z)
                     }
 
                     List<Double> executeFunction(Fx<Integer,Integer,Double> fx) {
@@ -290,7 +290,7 @@ class TypeSpec extends AstBaseSpec {
 
                 class A {
                     static {
-                        ftype Fx(X) >= [Maybe(X),Maybe(X)] >> X
+                        func Fx(X) >= [Maybe(X),Maybe(X)] >> X
                     }
 
                     Integer executeFunction(Fx<Integer> fx) {
@@ -323,7 +323,7 @@ class TypeSpec extends AstBaseSpec {
 
                 class A {
                     static {
-                        ftype Fold(X) >= ListMonad(X) >> X
+                        func Fold(X) >= ListMonad(X) >> X
                     }
 
                     Integer executeFunction(Fold<Integer> fx) {

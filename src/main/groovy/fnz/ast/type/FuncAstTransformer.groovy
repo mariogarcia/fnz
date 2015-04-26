@@ -35,14 +35,14 @@ import org.codehaus.groovy.syntax.Token
 import org.codehaus.groovy.control.SourceUnit
 
 @CompileStatic
-class TypeAstTransformer extends MethodCallExpressionTransformer {
+class FuncAstTransformer extends MethodCallExpressionTransformer {
 
-    static final String TYPE_METHOD_NAME = 'ftype'
+    static final String TYPE_METHOD_NAME = 'func'
     static final String FI_FUNCTION_NAME = 'apply'
     static final String FI_FUNCTION_PARAM_NAME = 'input'
     static final Expression MEANING_OF_LIFE = constX(42)
 
-    TypeAstTransformer(SourceUnit sourceUnit) {
+    FuncAstTransformer(SourceUnit sourceUnit) {
         super(sourceUnit, TYPE_METHOD_NAME)
     }
 

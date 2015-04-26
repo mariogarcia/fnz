@@ -2,14 +2,14 @@
 
 This chapter has to do with other ways of creating/using/extending types with Groovy.
 
-=== ftype
+=== func
 
 [quote, Java(TM) spec]
 ""
 A functional interface is an interface that has just one abstract method (aside from the methods of Object), and thus represents a single function contract
 ""
 
-*ftype* allows you to declare and create a http://docs.oracle.com/javase/specs/jls/se8/html/jls-9.html#jls-9.8[*functional interface*]
+*func* allows you to declare and create a http://docs.oracle.com/javase/specs/jls/se8/html/jls-9.html#jls-9.8[*functional interface*]
 in one line without the verbosity of having to write a full Java interface.
 
 Normally if you wanted to create a *functional interface* and use it you should be doing something
@@ -30,11 +30,11 @@ class A {
 }
 ----
 
-With *ftype* you can create in one line the same interface:
+With *func* you can create in one line the same interface:
 
 [source, groovy]
 ----
-include::{testDir}/fnz/ast/type/TypeSpec.groovy[tags=simpleTypeAlias,indent=0]
+include::{testDir}/fnz/ast/type/FuncSpec.groovy[tags=simpleTypeAlias,indent=0]
 ----
 
 In general the use cases are:
@@ -45,7 +45,7 @@ In general the use cases are:
 ----
 class OuterClass {
     static {
-        InterfaceType >= ParameterType >> ReturnType
+        func InterfaceType >= ParameterType >> ReturnType
     }
 }
 ----
@@ -56,9 +56,9 @@ Of course you can declare as many interfaces as you want:
 ----
 class A {
     static {
-        ftype Fa >= String >> Integer
-        ftype Fb >= String >> String
-        ftype Fb >= String >> Date
+        func Fa >= String >> Integer
+        func Fb >= String >> String
+        func Fb >= String >> Date
     }
 }
 ----
@@ -71,7 +71,7 @@ You can also use generics:
 ----
 class OuterClass {
     static {
-        InterfaceType(A,B) >= A >> B
+        func InterfaceType(A,B) >= A >> B
     }
 }
 ----
@@ -124,21 +124,21 @@ The following example declares some generic type used at return type:
 
 [source, groovy]
 ----
-include::{testDir}/fnz/ast/type/TypeSpec.groovy[tags=genericsBasicReturnType,indent=0]
+include::{testDir}/fnz/ast/type/FuncSpec.groovy[tags=genericsBasicReturnType,indent=0]
 ----
 
 Now the example uses generics both as parameter and return type
 
 [source, groovy]
 ----
-include::{testDir}/fnz/ast/type/TypeSpec.groovy[tags=fullGenericsExample,indent=0]
+include::{testDir}/fnz/ast/type/FuncSpec.groovy[tags=fullGenericsExample,indent=0]
 ----
 
 And mixing generics with other types:
 
 [source, groovy]
 ----
-include::{testDir}/fnz/ast/type/TypeSpec.groovy[tags=fullGenericsWithType,indent=0]
+include::{testDir}/fnz/ast/type/FuncSpec.groovy[tags=fullGenericsWithType,indent=0]
 ----
 
 ==== Multiple parameters
@@ -152,7 +152,7 @@ Groovy syntax for lists.
 
 [source, groovy]
 ----
-ftype SUM(X) >= [X,X] >> X
+func SUM(X) >= [X,X] >> X
 ----
 
 Here we had a funcion `SUM` which takes two parameters of the same
@@ -163,6 +163,6 @@ parameters can be parametrized (use generics) as well.
 
 [source,groovy]
 ----
-include::{testDir}/fnz/ast/type/TypeSpec.groovy[tags=multipleParameters,indent=0]
+include::{testDir}/fnz/ast/type/FuncSpec.groovy[tags=multipleParameters,indent=0]
 ----
 

@@ -9,7 +9,7 @@ import fnz.ast.flow.LetmAstTransformer
 import fnz.ast.flow.LetAstTransformer
 import fnz.ast.flow.DoAstTransformer
 
-import fnz.ast.type.TypeAstTransformer
+import fnz.ast.type.FuncAstTransformer
 
 /**
  * This AST applies all transformations available in FNZ.
@@ -27,7 +27,7 @@ class FnzAst extends AstExpressionTransformerAware {
             UnlessAstTransformer,
             LetmAstTransformer,
             LetAstTransformer,
-            TypeAstTransformer,
+            FuncAstTransformer,
             DoAstTransformer
         ]
     }
