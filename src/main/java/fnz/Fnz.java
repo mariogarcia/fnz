@@ -48,7 +48,7 @@ public final class Fnz {
     }
 
     public static <A> Try.Failure<A> Failure() {
-        return Try.failure(null, new NullPointerException());
+        return Try.failure(new NullPointerException());
     }
 
     public static <A> ListMonad<A> List(A... values) {

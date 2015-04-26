@@ -255,30 +255,39 @@ class TrySpec extends Specification {
             !val(notRecoverable)
     }
 
-    @Unroll
-    def 'check Try only with a function'() {
-        when: 'executing an unsafe action'
-            Try result = Try { value / 0 }
-        then: 'we should get'
-            result
-        where: 'possible values are'
-            value | isSucess
-              1   |   true
-              0   |   false
-    }
-
+    // tag::tryFunction1[]
     @Unroll
     def 'check Try with a value and a function'() {
         when: 'executing an unsafe action'
             Try result   = Try(value) { x -> 1 / x }
             Try computed = result.fmap { y -> y + 1 }
-        then: 'we should get'
+        then: 'asking if it is a failure or a success'
+            computed.isSuccess() == isSuccess
+            computed.isFailure() == !isSuccess
+        and: 'getting value'
             val(computed) == resultExpected
         where: 'possible values are'
-            value | isSucess | resultExpected
+            value | isSuccess | resultExpected
               1   |   true   |       2
-              0   |   false  |      null
+              0   |   false  |       0
     }
+    // end::tryFunction1[]
+
+
+    // tag::tryFunction2[]
+    @Unroll
+    def 'check Try only with a function'() {
+        when: 'executing an unsafe action'
+            Try result = Try { value / 0 } // <1>
+        then: 'asking if it is a failure or a success'
+            result.isSuccess() == isSuccess
+            result.isFailure() == !isSuccess
+        where: 'possible values are'
+            value | isSuccess
+              1   |   false
+              0   |   false
+    }
+    // end::tryFunction2[]
 
     @Unroll
     void 'testing bind with type awareness and unit'() {
