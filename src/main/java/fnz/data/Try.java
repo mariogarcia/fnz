@@ -146,7 +146,7 @@ public abstract class Try<A> extends MonadType<A> implements Or<A,Try<A>> {
         return new Try.Failure<T>(th);
     }
 
-    public static <A,B,F extends Function<A,B>> Function<A, Try<B>> wrap(F fn) {
+    public static <A,B,F extends Function<A,B>> Function<A, Try<B>> wrap(final F fn) {
         return new Function<A, Try<B>>() {
             public Try<B> apply(A a) {
                 return success(a).fmap(fn);
@@ -154,7 +154,7 @@ public abstract class Try<A> extends MonadType<A> implements Or<A,Try<A>> {
         };
     }
 
-    public static <A,B> Function<A,Try<B>> recover(Function<A,B>... alternatives) {
+    public static <A,B> Function<A,Try<B>> recover(final Function<A,B>... alternatives) {
         return new Function<A, Try<B>>() {
             public Try<B> apply(A a) {
                 Try<B> result = null;
