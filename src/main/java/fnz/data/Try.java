@@ -68,6 +68,11 @@ public abstract class Try<A> extends MonadType<A> implements Or<A,Try<A>> {
             return Try.success(value);
         }
 
+        @Override
+        public Boolean asBoolean() {
+            return Boolean.TRUE;
+        }
+
     }
 
     public static class Failure<FAILURE> extends Try<FAILURE> {
@@ -130,6 +135,11 @@ public abstract class Try<A> extends MonadType<A> implements Or<A,Try<A>> {
         @Override
         public Try<FAILURE> or(Function<FAILURE,Try<FAILURE>> alternative) {
             return alternative.apply(this.getTypedRef().getValue());
+        }
+
+        @Override
+        public Boolean asBoolean() {
+            return Boolean.FALSE;
         }
 
     }

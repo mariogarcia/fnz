@@ -190,4 +190,13 @@ class EitherSpec extends Specification {
             left(1)  | 1
     }
 
+    void 'using boolean representation'() {
+        given: 'a list of possible values'
+            List values = [Left(1), Right(2)]
+        when: 'filtering the list'
+            def result = values.findAll()*.get()
+        then: 'the only valid result is 2'
+            result == [2]
+    }
+
 }

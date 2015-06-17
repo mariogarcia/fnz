@@ -305,4 +305,16 @@ class TrySpec extends Specification {
             Try.failure(new IllegalArgumentException('a')) | null
     }
 
+    void 'using Try with their boolean representation'() {
+        given: 'a list of possible numbers'
+            List<String> numbers = ['1', '2', 'three']
+        when: 'filtering only by the successful results'
+            List<Integer> result =
+                numbers
+                    .collect(wrap(Integer.&parseInt).&apply)
+                    .findAll()*.get()
+        then: 'we should only get 1 and 2'
+            result == [1, 2]
+    }
+
 }

@@ -262,4 +262,13 @@ class MaybeSpec extends Specification {
             nothing() | null
     }
 
+    void 'using the boolean representation'() {
+        given: 'a list of values'
+            List values = [Just(1), Nothing()]
+        when: 'filtering the list'
+            def result = values.findAll()*.get()
+        then: 'it only should have one value'
+            result == [1]
+    }
+
 }

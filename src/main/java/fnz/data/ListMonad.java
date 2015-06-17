@@ -5,11 +5,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Iterator;
 
+import org.codehaus.groovy.runtime.DefaultGroovyMethods;
+
 /**
  *
  * @param <A>
  */
-public class ListMonad<A> implements Monad<A>, Or<A,ListMonad<A>> {
+public class ListMonad<A> implements Monad<A>, Or<A,ListMonad<A>>, Iterable<A>, Truth {
 
     private final Iterable<A> value;
 
@@ -102,6 +104,31 @@ public class ListMonad<A> implements Monad<A>, Or<A,ListMonad<A>> {
     @Override
     public <U> U get() {
         return (U) this.getTypedRef().getValue();
+    }
+
+    @Override
+    public Iterator iterator() {
+        return this.getTypedRef().getValue().iterator();
+    }
+
+    @Override
+    public Boolean asBoolean() {
+        return this.getTypedRef().getValue().iterator().hasNext();
+    }
+
+    public ListMonad<A> filter() {
+        if (isNullOrEmpty()) {
+            return this;
+        }
+        List<A> transformed = new ArrayList<>();
+        for (A v : this.getTypedRef().getValue()) {
+            if (v instanceof Truth && ((Truth)v).asBoolean()) {
+                transformed.add(v);
+            } else if (!(v instanceof Truth) && DefaultGroovyMethods.asBoolean(v)) {
+                transformed.add(v);
+            }
+        }
+        return new ListMonad<>(transformed);
     }
 
 }

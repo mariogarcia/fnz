@@ -1,6 +1,6 @@
 package fnz.data;
 
-public abstract class MonadType<A> implements Monad<A> {
+public abstract class MonadType<A> implements Monad<A>, Truth {
 
     private static final String EMPTY = "";
 

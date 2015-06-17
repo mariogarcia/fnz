@@ -171,4 +171,46 @@ class ListMonadSpec extends Specification {
             list()  | []
     }
 
+    void 'integrate with Groovy collection methods'() {
+        when: 'trying to iterate a list monad with default methods'
+            def results =
+                List(1,2,3,4)
+                    .collect { x -> x + 1 }
+                    .findAll { it % 2 == 0}
+        then: 'we should only get even numbers'
+            results == [2,4]
+    }
+
+    void 'using boolean representation'() {
+        when: 'having an empty list monad in a normal list'
+            def result1 = List().asBoolean()
+        then: 'we should get and empty list'
+            !result1
+        when: 'using a non empty list monad'
+            def result2 = List(1).asBoolean()
+        then: 'we should get the same list'
+            result2
+    }
+
+    void 'filtering a list monad by monad natural boolean value'() {
+        when: 'having a list of Maybe instances'
+            def list = List(Just(1), Nothing(), Maybe(null)).filter()
+        then: 'we should get only the value wrapped in Just'
+            list*.get() == [1]
+    }
+
+    void 'filtering a list of non monadic values'() {
+        when: 'having a list monad containing normal values'
+            def list = List(1, 2, null, 3).filter()
+        then: 'we should skip the null value'
+            list.get() == [1,2,3]
+    }
+
+    void 'filtering an empty list'() {
+        expect: 'that the empty list monad value equals to an empty list'
+            List().filter()*.get() == []
+        and: 'another way of having an empty list'
+            List([]).filter()*.get() == []
+    }
+
 }

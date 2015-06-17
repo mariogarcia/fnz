@@ -63,6 +63,11 @@ public abstract class Either<A> extends MonadType<A> implements Or<A,Either<A>> 
             return this;
         }
 
+        @Override
+        public Boolean asBoolean() {
+            return Boolean.TRUE;
+        }
+
     }
 
     public static class Left<L> extends Either<L> {
@@ -109,6 +114,11 @@ public abstract class Either<A> extends MonadType<A> implements Or<A,Either<A>> 
         @Override
         public Either<L> or(Function<L,Either<L>> newOption) {
             return newOption.apply(this.getTypedRef().getValue());
+        }
+
+        @Override
+        public Boolean asBoolean() {
+            return Boolean.FALSE;
         }
 
     }

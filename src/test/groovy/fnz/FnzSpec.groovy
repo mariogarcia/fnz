@@ -15,6 +15,7 @@ import fnz.data.Function
 import fnz.data.Maybe
 import fnz.data.ListMonad
 
+import spock.lang.Unroll
 import spock.lang.Specification
 
 class FnzSpec extends Specification {

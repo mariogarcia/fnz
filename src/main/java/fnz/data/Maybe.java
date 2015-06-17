@@ -1,7 +1,6 @@
 package fnz.data;
 
-import static org.codehaus.groovy.runtime.DefaultGroovyMethods.asBoolean;
-import static org.codehaus.groovy.runtime.DefaultGroovyMethods.collect;
+import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 
 /**
  *
@@ -66,6 +65,11 @@ public abstract class Maybe<A> extends MonadType<A> implements Or<A,Maybe<A>> {
             return Maybe.just(value);
         }
 
+        @Override
+        public Boolean asBoolean() {
+            return Boolean.TRUE;
+        }
+
     }
 
     public static class Nothing<NOTHING> extends Maybe<NOTHING> {
@@ -112,6 +116,11 @@ public abstract class Maybe<A> extends MonadType<A> implements Or<A,Maybe<A>> {
             return newOption.apply(this.getTypedRef().getValue());
         }
 
+        @Override
+        public Boolean asBoolean() {
+            return Boolean.FALSE;
+        }
+
     }
 
     public static <T> Maybe.Just<T> just(T value) {
@@ -123,7 +132,7 @@ public abstract class Maybe<A> extends MonadType<A> implements Or<A,Maybe<A>> {
     }
 
     public static <T> Maybe<T> maybe(final T value) {
-        return (Maybe<T>) (asBoolean(collect(value)) ? just(value) : nothing());
+        return (Maybe<T>) (DefaultGroovyMethods.asBoolean(DefaultGroovyMethods.collect(value)) ? just(value) : nothing());
     }
 
     public static <T,M extends Monad<T>> Maybe<T> maybe(M monad) {
