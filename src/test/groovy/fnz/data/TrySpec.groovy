@@ -273,7 +273,6 @@ class TrySpec extends Specification {
     }
     // end::tryFunction1[]
 
-
     // tag::tryFunction2[]
     @Unroll
     def 'check Try only with a function'() {

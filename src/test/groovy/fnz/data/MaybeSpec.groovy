@@ -255,7 +255,7 @@ class MaybeSpec extends Specification {
         then: 'the result should have the type'
             possible instanceof Maybe
         and: 'we should get the expected value'
-            val(possible) == expected
+            possible.get() == expected
         where: 'possible options are'
             option    | expected
             just(1)   | 2

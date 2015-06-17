@@ -3,6 +3,7 @@ package fnz.data;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Iterator;
 
 /**
  *
@@ -96,6 +97,11 @@ public class ListMonad<A> implements Monad<A>, Or<A,ListMonad<A>> {
 
     public ListMonad<A> or(Function<A,ListMonad<A>> alternative) {
         return isNullOrEmpty() ? alternative.apply(null) : this;
+    }
+
+    @Override
+    public <U> U get() {
+        return (U) this.getTypedRef().getValue();
     }
 
 }

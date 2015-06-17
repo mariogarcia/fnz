@@ -28,4 +28,9 @@ public abstract class MonadType<A> implements Monad<A> {
         return simpleName + "(" + valueToStr + ")";
     }
 
+    @Override
+    public <U> U get() {
+        return (U) this.getTypedRef().getValue();
+    }
+
 }

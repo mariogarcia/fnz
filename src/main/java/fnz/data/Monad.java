@@ -43,6 +43,12 @@ public interface Monad<A> extends Applicative<A> {
      */
     public <B,M extends Monad<B>> M bind2(TypeAwareFunction<A,M> fn);
 
-
+    /**
+     * This method is a helper to return the real value wrapped in
+     * this container
+     *
+     * @return an instance of T
+     */
+    public <U> U get();
 
 }

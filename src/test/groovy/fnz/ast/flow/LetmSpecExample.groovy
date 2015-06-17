@@ -38,7 +38,7 @@ class LetmSpecExample {
     Either<Integer> workingWithOtherMonads(final Integer first, final Integer second) {
         return letm(x:Just(first),
                     y:Just(second)) {
-                    letm(result: Just(first + second)) {
+                    letm(result:Just(first + second)) {
                         result == 3 ? Right(result) : Left()
                     }
                }

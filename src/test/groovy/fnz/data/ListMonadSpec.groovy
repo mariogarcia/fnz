@@ -164,7 +164,7 @@ class ListMonadSpec extends Specification {
         then: 'the result should have the type'
             possible instanceof ListMonad
         and: 'we should get the expected value'
-            val(possible) == expected
+            possible.get() == expected
         where: 'possible options are'
             options | expected
             list(1) | [2]
