@@ -112,4 +112,17 @@ class FnzSpec extends Specification {
         new Fnz()
     }
 
+    @Unroll
+    void 'alternative way of getting wrapped value'() {
+        expect: 'the expected output'
+            Fnz.get(input) == output
+        where: 'possible inputs are'
+        input              | output
+        null               | null
+        Maybe(null)        | null
+        1                  | 1
+        Maybe(1)           | 1
+        Maybe(Maybe(null)) | null
+    }
+
 }

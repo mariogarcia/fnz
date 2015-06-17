@@ -97,4 +97,12 @@ public final class Fnz {
         return monad != null ? monad.getTypedRef().getValue() : null;
     }
 
+    public static <A> A get(Monad<A> monad) {
+        return monad.get();
+    }
+
+    public static <A> A get(A value) {
+        return value;
+    }
+
 }
