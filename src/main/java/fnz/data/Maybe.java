@@ -4,7 +4,7 @@ import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 
 /**
  *
- * @param <A>
+ * @param <A> The contained type
  */
 public abstract class Maybe<A> extends MonadType<A> implements Or<A,Maybe<A>> {
 

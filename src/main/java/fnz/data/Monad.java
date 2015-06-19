@@ -2,18 +2,17 @@ package fnz.data;
 
 /**
  *
- * @param <A>
+ * @param <A> The contained type
  */
 public interface Monad<A> extends Applicative<A> {
 
     public <B,M extends Monad<B>> M bind(Function<A,M> fn);
 
     /**
-     * The behavior is the same as the bind(Function<A,M>) method but with type awareness.
-     * <br/>
+     * The behavior is the same as the bind(Function&lt;A,M&gt;) method but with type awareness.
+     * <br>
      * This method was created exclusively for type inference for the $do/$return expressions.
      * For instance in an expression like the following:
-     * <br/>
      * <pre>
      *     $do {
      *         x = Just(1)
@@ -22,21 +21,19 @@ public interface Monad<A> extends Applicative<A> {
      *         $return x + y
      *     }
      * </pre>
-     * <br/>
-     * <br/>
      * The expression is translated into this:
-     * <br/>
      * <pre>
-     *     Just(1).bind { _clazz1231, x ->
-     *         Just(x + 1).bind { _clazz2324, y ->
+     *     Just(1).bind { _clazz1231, x -&gt;
+     *         Just(x + 1).bind { _clazz2324, y -&gt;
      *             _clazz2324.unit(y)
      *         }
      *     }
      * </pre>
-     * <br/>
      * That way we don't have to specify the type of the Monad needed to
      * end the expression, the function itself carries the type.
      *
+     * @param <B> The type contained in the monadic result
+     * @param <M> the result monadic type
      * @param fn a function aware of the type of the returned monad
      * @return a monad as a result of the function execution
      *
@@ -48,6 +45,7 @@ public interface Monad<A> extends Applicative<A> {
      * this container
      *
      * @return an instance of T
+     * @param <U> the type you want to return
      */
     public <U> U get();
 

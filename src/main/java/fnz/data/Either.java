@@ -2,7 +2,7 @@ package fnz.data;
 
 /**
  *
- * @param <A>
+ * @param <A> The contained type
  */
 public abstract class Either<A> extends MonadType<A> implements Or<A,Either<A>> {
 

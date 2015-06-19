@@ -25,7 +25,7 @@ public interface Or<T,M extends Monad<T>> {
      * computed by the function  passed as parameter ,
      * otherwise it should return itself
      *
-     * @param monad possible alternative computation to the current value
+     * @param monadGenerator possible alternative computation to the current value
      * @return current value if valid otherwise it will return
      * the value passed as parameter
      */

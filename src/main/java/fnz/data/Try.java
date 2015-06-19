@@ -2,8 +2,7 @@ package fnz.data;
 
 /**
  *
- * @author mario
- * @param <A>
+ * @param <A> The contained type
  */
 public abstract class Try<A> extends MonadType<A> implements Or<A,Try<A>> {
 

@@ -16,7 +16,7 @@ public interface Truth {
      * make it easier to interact with Groovy collections
      * and participate of the Groovy truth
      *
-     * @return
+     * @return the boolean representation of the current type
      */
     public Boolean asBoolean();
 

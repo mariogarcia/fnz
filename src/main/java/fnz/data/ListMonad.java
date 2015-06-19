@@ -9,7 +9,7 @@ import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 
 /**
  *
- * @param <A>
+ * @param <A> The contained type
  */
 public class ListMonad<A> implements Monad<A>, Or<A,ListMonad<A>>, Iterable<A>, Truth {
 
