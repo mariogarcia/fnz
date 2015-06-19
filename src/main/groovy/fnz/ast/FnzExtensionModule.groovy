@@ -51,6 +51,10 @@ final class FnzExtensionModule {
         return Fnz.Failure()
     }
 
+    static <A> Try.Failure<A> Failure(Object o, A a) {
+        return Fnz.Failure(a)
+    }
+
     static <A> ListMonad<A> List(Object o, A... values) {
         return Fnz.List(values)
     }

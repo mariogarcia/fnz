@@ -317,4 +317,28 @@ class TrySpec extends Specification {
             result == [1, 2]
     }
 
+    void 'using Failure with a value (I)'() {
+        when: 'building a failure based on a given value'
+            Try.Failure<Integer> failureValue = Try.failure(1)
+        then: 'we should be able to get the value producing the failure'
+            failureValue.get() == 1
+        and: 'get an IllegalArgumentException'
+            failureValue.exception instanceof IllegalArgumentException
+            failureValue.exception.message == failureValue.get().toString()
+    }
+
+    void 'using Failure with a value (II)'() {
+        given: 'a list of possible numbers'
+            List<String> numbers = ['1','2','three']
+        when: 'applying the function'
+            def failureValue =
+                numbers
+                    .collect(wrap(Integer.&parseInt).&apply)
+                    .findAll { it.isFailure() }
+                    .first() // Dont use find() with Failure() (Groovy Truth)
+                    .get()
+        then: 'we should get the value producing the failure'
+            failureValue == 'three'
+    }
+
 }

@@ -155,4 +155,14 @@ class FnzExtensionModuleSpec extends Specification {
             val(Success(1).bind(safeFn)) == 2
     }
 
+    void 'using Failure with a value'() {
+        when: 'building a failure based on a given value'
+            Try.Failure<Integer> failureValue = Failure(1)
+        then: 'we should be able to get the value producing the failure'
+            failureValue.get() == 1
+        and: 'get an IllegalArgumentException'
+            failureValue.exception instanceof IllegalArgumentException
+            failureValue.exception.message == failureValue.get().toString()
+    }
+
 }

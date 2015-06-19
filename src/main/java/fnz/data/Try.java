@@ -148,6 +148,14 @@ public abstract class Try<A> extends MonadType<A> implements Or<A,Try<A>> {
         return new Try.Success(new Type(value));
     }
 
+    public static <T> Try.Failure<T> failure(T value) {
+        return failure(value, new IllegalArgumentException("" + value));
+    }
+
+    public static <T> Try.Failure<T> failure(T value, Throwable th) {
+        return failure(new Type<T>(value), th);
+    }
+
     public static <T> Try.Failure<T> failure(Type<T> value, Throwable th) {
         return new Try.Failure<T>(value, th);
     }
