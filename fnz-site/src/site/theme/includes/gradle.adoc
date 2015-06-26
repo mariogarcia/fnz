@@ -1,0 +1,4 @@
+[source,groovy]
+----
+include::../../../fnz-core/build.gradle[tags=buildScript]
+----

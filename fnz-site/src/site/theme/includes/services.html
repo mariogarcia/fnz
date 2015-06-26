@@ -1,0 +1,87 @@
+<!-- Services -->
+<!-- The circle icons use Font Awesome's stacked icon classes. For more information, visit http://fontawesome.io/examples/ -->
+<section id="services" class="services bg-primary">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-lg-10 col-lg-offset-1">
+                <h2>${page.services.title}</h2>
+                <hr class="small">
+                <div class="row">
+                    <% page.services.types.each { type -> %>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="service-item">
+                                <span class="fa-stack fa-4x">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa ${type.image} fa-stack-1x text-primary"></i>
+                            </span>
+                            <h4>
+                                <strong>${type.name}</strong>
+                            </h4>
+                            <p>${type.text}</p>
+                            <a href="#${type.modal}" class="btn btn-light" data-toggle="modal">Learn More</a>
+                        </div>
+                    </div>
+                    <% } %>
+                </div>
+                <!-- /.row (nested) -->
+            </div>
+            <!-- /.col-lg-10 -->
+        </div>
+        <div class="row">
+          <div class="col-lg-10 col-lg-offset-1">
+            <h2>Gradle</h2>
+            <p>Lal la olorem ipsum cognoa ano</p>
+            <div class="row">
+              <div class="col-md-12">
+                ${include "gradle.adoc"}
+              </div>
+            </div>
+            <!-- /.row (nested) -->
+          </div>
+          <!-- /.col-lg-10 -->
+        </div>
+        <!-- /.row -->
+                <div class="row">
+          <div class="col-lg-10 col-lg-offset-1">
+            <h2>Grab</h2>
+            <p>Lal la olorem ipsum cognoa ano</p>
+            <div class="row">
+              <div class="col-md-12">
+                <pre class="code">@Grab('fnz:fnz:1.0.5')</pre>
+              </div>
+            </div>
+            <!-- /.row (nested) -->
+          </div>
+          <!-- /.col-lg-10 -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container -->
+</section>
+
+<!-- Service Modals -->
+<% page.services.modals.each { modal -> %>
+<div class="portfolio-modal modal fade" id="${modal.id}" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-content">
+        <div class="close-modal" data-dismiss="modal">
+            <div class="lr">
+                <div class="rl">
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2">
+                    <div class="modal-body">
+                        <h2>${modal.title}</h2>
+                        <hr class="star-primary">
+                        <img src="${modal.image}" class="img-responsive img-centered" alt="">
+                        <p>${modal.text}</p>
+                        <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<% } %>

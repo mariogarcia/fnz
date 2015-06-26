@@ -1,0 +1,5 @@
+[source,groovy]
+----
+include::../test/groovy/example.groovy[tags=la]
+----
+
