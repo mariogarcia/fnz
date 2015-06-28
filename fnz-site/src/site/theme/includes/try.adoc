@@ -1,0 +1,29 @@
+The `Try` abstraction is a different way of dealing with exceptions in
+your apps. Instead of writing a **try-catch** block just make your
+computation to return a value. Basically if an exception is thrown
+you'll get a **fnz.data.Try.Failure** instance that will contain both
+the value producing the exception and the exception itself.
+
+On the other hand if everything goes ok you'll get a
+**fnz.data.Try.Success** instance with the value produced by the
+computation.
+
+In the following example we're using the `Try(T,Function<A,B>)` from
+class **fnz.Fnz** function.  This function receives a value and a
+function. Because the example is Groovy we are using a closure but if
+you're using Java you could be using an instance of
+**fnz.data.Function**.
+
+[source,groovy]
+----
+include::../test/groovy/TryExampleSpec.groovy[tags=tryBasic1]
+----
+
+Please notice that the second parameter of a **Try** function is a
+function itself (A closure representing a function) so you can
+also pass a method reference
+
+[source,groovy]
+----
+include::../test/groovy/TryExampleSpec.groovy[tags=tryFunction]
+----

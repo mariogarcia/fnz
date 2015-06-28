@@ -1,0 +1,20 @@
+All abstractions are available at `fnz.Fnz` as static functions. 
+
+[source,groovy]
+----
+include::../test/groovy/MaybeExampleSpec.groovy[tags=importStaticTry]
+----
+
+[source,groovy]
+----
+include::../test/groovy/MaybeExampleSpec.groovy[tags=maybeBasic1]
+----
+
+**IMPORTANT**: If you use Fnz in Groovy code, you don't have to
+import the `Fnz` class, `Fnz` has an extension module that exposes
+directly all those functions for you.
+
+[source,groovy]
+----
+include::../test/groovy/MaybeExampleSpec.groovy[tags=maybeBasic2]
+----

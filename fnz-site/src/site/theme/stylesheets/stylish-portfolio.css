@@ -10,7 +10,10 @@ html,
 body {
     width: 100%;
     height: 100%;
+    font-size: 105%;
 }
+
+pre { font-size: 90%; margin-top: 15px; margin-botton:15px;}
 
 body {
     font-family: "Source Sans Pro","Helvetica Neue",Helvetica,Arial,sans-serif;

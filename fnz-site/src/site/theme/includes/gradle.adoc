@@ -1,4 +1,16 @@
+**Fnz** is available at **jcenter**:
+
 [source,groovy]
 ----
-include::../../../fnz-core/build.gradle[tags=buildScript]
+repositories {
+    jcenter()
+}
 ----
+
+and then add the latest **Fnz** dependency:
+
+[source,groovy]
+----
+compile 'fnz:fnz:1.0.5'
+----
+

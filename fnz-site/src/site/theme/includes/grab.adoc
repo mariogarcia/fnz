@@ -1,0 +1,15 @@
+Try your **Hello world* with **Grab**
+
+[source, groovy]
+----
+@Grab('fnz:fnz:1.0.5')
+
+Try<Integer> success = Try(2) { Integer x -> x + 1 }
+Try<Integer> failure = Try(1) { Integer x -> x / 0 }
+
+assert success.isSuccess()
+assert success.get() == 3
+
+assert failure.isFailure()
+assert failure.get() == 1
+----
