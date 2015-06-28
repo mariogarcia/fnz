@@ -97,20 +97,6 @@ class FnzExtensionModuleSpec extends Specification {
             result.exception.message == 'not valid'
     }
 
-    void 'test List(varargs)'() {
-        when: 'creating a list of 4 elements'
-            def list = List(1, 2, 3, 4)
-        then: 'we should get a list of 4 elements'
-            val(list).size() == 4
-    }
-
-    void 'test List(iterable)'() {
-        when: 'creating a list from another iterable'
-            def list = List([1, 2, 3, 4])
-        then: 'we should get the expected number of elements'
-            val(list).size() == 4
-    }
-
     void 'test wrap(fn)'() {
         when: 'wrapping an unsafe function'
             def unsafe = { 0 / 0 }

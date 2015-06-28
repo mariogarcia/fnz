@@ -40,6 +40,8 @@ repositories {
 }
 
 dependencies {
+    compile project(':fnz-core')
+
     compile 'org.codehaus.groovy:groovy-all:2.4.0'
     compile 'org.slf4j:slf4j-api:1.7.5'
     testCompile 'junit:junit:4.11'

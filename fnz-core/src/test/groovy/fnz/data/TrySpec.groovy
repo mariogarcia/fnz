@@ -11,6 +11,8 @@ import static fnz.Fnz.recover
 import static fnz.Fnz.Success
 
 import fnz.Fnz
+import fnz.data.Maybe.Just
+
 import spock.lang.Unroll
 import spock.lang.Specification
 
@@ -113,49 +115,20 @@ class TrySpec extends Specification {
             average == 12
     }
 
-    def 'classic try catch example RELOADED'() {
-        given: 'a list of numbers as strings'
-            def numbers = ["1", "2a", "11", "24", "4A"]
-            def parse = { item -> Integer.parseInt(item) } as Function
-            def ZERO = { 0 } as Function
-            def addToList = { x -> x ? List(x) : List() }
-            def AVG = { list -> list.sum().div(list.size()) }
-        when: 'calculating average safely'
-            def average =
-                val(fmap(
-                    Just(
-                        numbers.collectMany { n ->
-                            val(
-                                bind(
-                                    bind(Just(n), recover(parse, ZERO)),
-                                    addToList
-                                )
-                            )
-                        }
-                    ),
-                    AVG
-                ))
-        then: 'the average should be 12'
-            average == 12
-    }
-
     def 'classic try catch example MONADIC'() {
         given: 'a list of numbers as strings'
             def numbers = ["1", "2a", "11", "24", "4A"]
-            def ZERO = { 0 } as Function
-            def AVG = { list -> list.sum().div(list.size()) }
-            def parse = { item -> Integer.parseInt(item) } as Function
-            def addToList = { x -> x ? List(x) : List() }
-        when: 'trying to get the average'
-            def numberList  =
-                 bind(List(numbers)) { n ->
-                     bind(bind(Just(n), recover(parse, ZERO)), addToList)
-                 }
-            assert numberList instanceof ListMonad
-            assert val(numberList).size() == 3
-            def average = val(fmap(Just(val(numberList)), AVG))
-        then: 'the average should be 12'
-            average == 12
+            def TO_ZERO = { 0 } as Function
+            def TO_INT = Integer.&parseInt as Function
+        when: 'trying to sum all numbers'
+            def total =
+                numbers
+                .collect(Just.&unit)
+                .bind(recover(TO_INT, TO_ZERO))
+                .getAll()
+                .sum()
+        then: 'total should be 36'
+            total == 36
     }
 
     def 'basic execution of a try'() {

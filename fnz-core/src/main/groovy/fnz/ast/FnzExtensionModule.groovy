@@ -9,8 +9,8 @@ import fnz.data.Either
 import fnz.data.Maybe
 import fnz.data.Functor
 import fnz.data.Function
-import fnz.data.ListMonad
 import fnz.data.Applicative
+import fnz.data.TypeAwareFunction
 
 @CompileStatic
 final class FnzExtensionModule {
@@ -55,14 +55,6 @@ final class FnzExtensionModule {
         return Fnz.Failure(a)
     }
 
-    static <A> ListMonad<A> List(Object o, A... values) {
-        return Fnz.List(values)
-    }
-
-    static <A> ListMonad<A> List(Object o, Iterable<A> values) {
-        return Fnz.List(values)
-    }
-
     public static <A,B> Try<B> Try(Object o, Function<A,B> fn) {
         return Fnz.Try(fn);
     }
@@ -94,6 +86,23 @@ final class FnzExtensionModule {
 
     static <A,B> Function<A,Try<B>> recover(Object o, Closure<?>... alternatives) {
         return Fnz.recover(alternatives as Function<A,B>[]);
+    }
+
+    static <A,B, FA extends Functor<A>, FB extends Functor<B>> Collection<FB> fmap(Collection<FA> o, Function<A,B> fn) {
+        return Fnz.fmap(o, fn);
+    }
+
+    static <A,B,MA extends Monad<A>,MB extends Monad<B>> Collection<MB> bind(Collection<MA> o, Function<A,MB> fn) {
+        return Fnz.bind(o, fn);
+    }
+
+    @SuppressWarnings("LineLength")
+    static <A,B,MA extends Monad<A>,MB extends Monad<B>> Collection<MB> bind2(Collection<MA> o, TypeAwareFunction<A,MB> fn) {
+        return Fnz.bind2(o, fn);
+    }
+
+    public static <A,MA extends Monad<A>> Collection<A> getAll(Collection<MA> o) {
+        return Fnz.getAll(o);
     }
 
 }

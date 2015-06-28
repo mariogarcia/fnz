@@ -1,5 +1,13 @@
 package fnz;
 
+import static java.util.Arrays.asList;
+
+import static org.codehaus.groovy.runtime.DefaultGroovyMethods.collect;
+import static org.codehaus.groovy.runtime.DefaultGroovyMethods.collectMany;
+
+import groovy.lang.Closure;
+import java.util.Collection;
+
 import fnz.data.Try;
 import fnz.data.Monad;
 import fnz.data.Either;
@@ -7,7 +15,6 @@ import fnz.data.Maybe;
 import fnz.data.Functor;
 import fnz.data.Function;
 import fnz.data.TypeAwareFunction;
-import fnz.data.ListMonad;
 import fnz.data.Applicative;
 
 /**
@@ -55,14 +62,6 @@ public final class Fnz {
         return Try.failure(a);
     }
 
-    public static <A> ListMonad<A> List(A... values) {
-        return ListMonad.list(values);
-    }
-
-    public static <A> ListMonad<A> List(Iterable<A> values) {
-        return ListMonad.list(values);
-    }
-
     public static <A,B> Try<B> Try(Function<A,B> fn) {
         return Try.Try(fn);
     }
@@ -85,6 +84,38 @@ public final class Fnz {
 
     public static <A,B,MA extends Monad<A>,MB extends Monad<B>> MB bind2(MA ma, TypeAwareFunction<A,MB> fn) {
         return ma.bind2(fn);
+    }
+
+    public static <A,B, FA extends Functor<A>, FB extends Functor<B>> Collection<FB> fmap(Collection<FA> o, Function<A,B> fn) {
+        return (Collection<FB>) collect(o, new Closure<FB>(o) {
+                public FB doCall(FA element) {
+                    return element.fmap(fn);
+                }
+            });
+    }
+
+    public static <A,B,MA extends Monad<A>,MB extends Monad<B>> Collection<MB> bind(Collection<MA> o, Function<A,MB> fn) {
+        return (Collection<MB>) collectMany(o, new Closure<Collection<? extends MB>>(o) {
+                public Collection<MB> doCall(MA element) {
+                    return asList(element.bind(fn));
+                }
+            });
+    }
+
+    public static <A,B,MA extends Monad<A>,MB extends Monad<B>> Collection<MB> bind2(Collection<MA> o, TypeAwareFunction<A,MB> fn) {
+        return (Collection<MB>) collectMany(o, new Closure<Collection<? extends MB>>(o) {
+                public Collection<MB> doCall(MA element) {
+                    return asList(element.bind2(fn));
+                }
+            });
+    }
+
+    public static <A,MA extends Monad<A>> Collection<A> getAll(Collection<MA> o) {
+        return (Collection<A>) collect(o, new Closure<A>(o) {
+                public A doCall(MA element) {
+                    return element.get();
+                }
+            });
     }
 
     public static <A,B, AA extends Applicative<A>, AB extends Applicative<B>> AB fapply(AA fa, Applicative<Function<A,B>> fn) {

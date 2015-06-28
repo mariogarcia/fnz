@@ -3,7 +3,6 @@ package fnz
 import static Fnz.bind
 import static Fnz.fmap
 import static Fnz.Just
-import static Fnz.List
 import static Fnz.wrap
 import static Fnz.val
 import static Fnz.Maybe
@@ -13,7 +12,6 @@ import static Fnz.Success
 import fnz.data.Try
 import fnz.data.Function
 import fnz.data.Maybe
-import fnz.data.ListMonad
 
 import spock.lang.Unroll
 import spock.lang.Specification
@@ -46,14 +44,16 @@ class FnzSpec extends Specification {
             val(result) == 3
     }
 
-    void 'Using bind with a list monad: looks like comprehensions'() {
-        given: 'a list monad'
-            ListMonad<Integer> numbers = List(1, 2, 3, 4)
-        when: 'applying a function to bind'
-            ListMonad<Integer> result =
-                bind(numbers){ x -> [x, x + 1] as ListMonad }
+    void 'Using bind with a list: looks like comprehensions'() {
+        when: 'using a list'
+            List<Integer> numbers =
+                [1, 2, 3, 4]
+                   .collect(Maybe.Just.&unit)
+                   .bind { x ->
+                       Just([x, x + 1])
+                   }
         then: 'we should get the expected sequence'
-            result.typedRef.value == [1, 2, 2, 3, 3, 4, 4, 5]
+            numbers*.get() == [[1, 2], [2, 3], [3, 4], [4, 5]]
     }
 
     void 'using maybe method: monadic value'() {

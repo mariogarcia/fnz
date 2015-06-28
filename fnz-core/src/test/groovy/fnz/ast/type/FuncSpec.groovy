@@ -325,17 +325,17 @@ class FuncSpec extends AstBaseSpec {
 
                 class A {
                     static {
-                        func Fold(X) >= ListMonad(X) >> X
+                        func Fold(X) >= List(X) >> X
                     }
 
                     Integer executeFunction(Fold<Integer> fx) {
-                        return fx.apply(List(1,2))
+                        return fx.apply([1,2])
                     }
 
                     boolean complexFunctionalInterface() {
                         Integer result =
-                            executeFunction { ListMonad<Integer> list ->
-                                val(list).sum()
+                            executeFunction { List<Integer> list ->
+                                list.sum()
                             }
 
                         result == 3
