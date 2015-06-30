@@ -18,7 +18,6 @@ import static org.codehaus.groovy.ast.tools.GeneralUtils.closureX
 
 import static org.codehaus.groovy.ast.tools.GenericsUtils.nonGeneric
 
-import fnz.Fnz
 import fnz.ast.AstUtils
 import fnz.ast.MethodCallExpressionTransformer
 
@@ -31,7 +30,6 @@ import org.codehaus.groovy.ast.expr.ArgumentListExpression
 import org.codehaus.groovy.ast.expr.ClosureExpression
 import org.codehaus.groovy.ast.expr.BinaryExpression
 import org.codehaus.groovy.ast.expr.VariableExpression
-import org.codehaus.groovy.ast.expr.StaticMethodCallExpression
 
 import org.codehaus.groovy.ast.stmt.Statement
 import org.codehaus.groovy.ast.stmt.ExpressionStatement
@@ -177,11 +175,12 @@ class DoAstTransformer extends MethodCallExpressionTransformer {
         return block(stmt(expression))
     }
 
-    private StaticMethodCallExpression getBindExpression(
+    private MethodCallExpression getBindExpression(
         final Expression value, final ClosureExpression closureWithKey) {
+
         return isClosureExpression(value) ?
-            callX(make(Fnz), BIND_METHOD_NAME, args(callX(value, DO_CALL_METHOD_NAME), closureWithKey)) :
-            callX(make(Fnz), BIND_METHOD_NAME, args(value, closureWithKey))
+            callX(callX(value, DO_CALL_METHOD_NAME), BIND_METHOD_NAME, args(closureWithKey)) :
+            callX(value, BIND_METHOD_NAME, args(closureWithKey))
     }
 
 }

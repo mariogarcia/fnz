@@ -120,12 +120,11 @@ class TrySpec extends Specification {
             def numbers = ["1", "2a", "11", "24", "4A"]
             def TO_ZERO = { 0 } as Function
             def TO_INT = Integer.&parseInt as Function
+            def SUM = { x, y -> x + y }
         when: 'trying to sum all numbers'
             def total =
                 numbers
-                .collect(Just.&unit)
-                .bind(recover(TO_INT, TO_ZERO))
-                .getAll()
+                .fmap(recover(TO_INT, TO_ZERO))*.get()
                 .sum()
         then: 'total should be 36'
             total == 36

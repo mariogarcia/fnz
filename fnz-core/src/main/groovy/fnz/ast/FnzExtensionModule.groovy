@@ -10,6 +10,7 @@ import fnz.data.Maybe
 import fnz.data.Functor
 import fnz.data.Function
 import fnz.data.Applicative
+import fnz.data.ListMonad
 import fnz.data.TypeAwareFunction
 
 @CompileStatic
@@ -41,6 +42,14 @@ final class FnzExtensionModule {
 
     static <A,M extends Monad<A>> Maybe<A> Maybe(Object o, M source) {
         return Fnz.Maybe(source)
+    }
+
+    static <A> ListMonad<A> List(Object o, A... values) {
+        return Fnz.List(values)
+    }
+
+    static <A> ListMonad<A> List(Object o, Iterable<A> values) {
+        return Fnz.List(values)
     }
 
     static <A> Try.Success<A> Success(Object o, A source) {
@@ -88,21 +97,20 @@ final class FnzExtensionModule {
         return Fnz.recover(alternatives as Function<A,B>[]);
     }
 
-    static <A,B, FA extends Functor<A>, FB extends Functor<B>> Collection<FB> fmap(Collection<FA> o, Function<A,B> fn) {
-        return Fnz.fmap(o, fn);
+    static <A,B, M extends Monad<B>> M bind(Iterable<A> col, Function<A, M> fn) {
+        return col instanceof ListMonad ? col.bind(fn) : Fnz.List(col).bind(fn)
     }
 
-    static <A,B,MA extends Monad<A>,MB extends Monad<B>> Collection<MB> bind(Collection<MA> o, Function<A,MB> fn) {
-        return Fnz.bind(o, fn);
+    static <A,B, M extends Monad<B>> M bind2(Iterable<A> col, TypeAwareFunction<A, M> fn) {
+        return col instanceof ListMonad ? col.bind2(fn) : Fnz.List(col).bind2(fn)
     }
 
-    @SuppressWarnings("LineLength")
-    static <A,B,MA extends Monad<A>,MB extends Monad<B>> Collection<MB> bind2(Collection<MA> o, TypeAwareFunction<A,MB> fn) {
-        return Fnz.bind2(o, fn);
+    static <A,B> Applicative<B> fapply(Iterable<A> col, Applicative<Function<A, B>> afn) {
+        return col instanceof ListMonad ? col.fapply(afn) : Fnz.List(col).fapply(afn)
     }
 
-    public static <A,MA extends Monad<A>> Collection<A> getAll(Collection<MA> o) {
-        return Fnz.getAll(o);
+    static <A,B, F extends Functor<B>> F fmap(Iterable<A> col, Function<A, B> fn) {
+        return col instanceof ListMonad  ? col.fmap(fn) : Fnz.List(col).fmap(fn)
     }
 
 }

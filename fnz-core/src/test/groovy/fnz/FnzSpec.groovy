@@ -46,10 +46,9 @@ class FnzSpec extends Specification {
 
     void 'Using bind with a list: looks like comprehensions'() {
         when: 'using a list'
-            List<Integer> numbers =
+            def numbers =
                 [1, 2, 3, 4]
-                   .collect(Maybe.Just.&unit)
-                   .bind { x ->
+                   .fmap { x ->
                        Just([x, x + 1])
                    }
         then: 'we should get the expected sequence'

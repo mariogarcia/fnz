@@ -15,7 +15,6 @@ import static fnz.ast.AstUtils.getFirstArgumentAs
 import static fnz.ast.AstUtils.getLastArgumentAs
 
 import fnz.ast.MethodCallExpressionTransformer
-import fnz.Fnz
 import groovy.transform.CompileStatic
 import groovy.transform.CompileDynamic
 import org.codehaus.groovy.ast.VariableScope
@@ -26,7 +25,6 @@ import org.codehaus.groovy.ast.expr.MethodCallExpression
 import org.codehaus.groovy.ast.expr.ArgumentListExpression
 import org.codehaus.groovy.ast.expr.MapExpression
 import org.codehaus.groovy.ast.expr.ClosureExpression
-import org.codehaus.groovy.ast.expr.StaticMethodCallExpression
 import org.codehaus.groovy.ast.expr.MapEntryExpression
 
 import org.codehaus.groovy.ast.stmt.Statement
@@ -73,7 +71,7 @@ class LetmAstTransformer extends MethodCallExpressionTransformer {
         List<MapEntryExpression> mapEntryExpressions = mapExpression.mapEntryExpressions.reverse()
         ClosureExpression fn                         = getLastArgumentAs(args, ClosureExpression)
 
-        StaticMethodCallExpression finalExpression = loopThroughEntryExpressions(mapEntryExpressions, fn)
+        MethodCallExpression finalExpression = loopThroughEntryExpressions(mapEntryExpressions, fn)
 
         this.visitClosureExpression(fn)
         applyScopeVisitor(finalExpression, sourceUnit)
@@ -81,10 +79,10 @@ class LetmAstTransformer extends MethodCallExpressionTransformer {
         return finalExpression
     }
 
-    private StaticMethodCallExpression loopThroughEntryExpressions(
+    private MethodCallExpression loopThroughEntryExpressions(
         final List<MapEntryExpression> expressions,
         final ClosureExpression fn) {
-        return (StaticMethodCallExpression) expressions.inject(fn, this.&evaluateMapEntryExpression)
+        return (MethodCallExpression) expressions.inject(fn, this.&evaluateMapEntryExpression)
     }
 
     @CompileDynamic
@@ -113,11 +111,11 @@ class LetmAstTransformer extends MethodCallExpressionTransformer {
         return expression.code
     }
 
-    private StaticMethodCallExpression getBindExpression(
+    private MethodCallExpression getBindExpression(
         final Expression value, final ClosureExpression closureWithKey) {
         return value instanceof ClosureExpression ?
-        callX(make(Fnz), BIND_METHOD_NAME, args(callX(value, DO_CALL_METHOD_NAME), closureWithKey)) :
-        callX(make(Fnz), BIND_METHOD_NAME, args(value, closureWithKey))
+            callX(callX(value, DO_CALL_METHOD_NAME), BIND_METHOD_NAME, args(closureWithKey)) :
+            callX(value, BIND_METHOD_NAME, args(closureWithKey))
     }
 
 }
