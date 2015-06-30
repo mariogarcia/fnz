@@ -73,7 +73,7 @@ asciidoctor {
 //
 
 group = 'fnz-site'
-version = '1.0.5'
+version = '1.0.6'
 
 //   _____          _                    _            _
 //  / ____|        | |                  | |          | |
