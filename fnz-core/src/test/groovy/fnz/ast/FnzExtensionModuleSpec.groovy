@@ -202,12 +202,12 @@ class FnzExtensionModuleSpec extends Specification {
     void 'declaring a list monad instance'() {
         when: 'building a new ListMonad instance directly'
             ListMonad<Integer> numbers =
-                List(1,2,3)
+                List(1, 2, 3)
                    .fmap { x -> x + 1 }
                    .fmap { x -> x * 2 }
 
         then: 'you can transform its values'
-                numbers.get() == [4,6,8]
+                numbers.get() == [4, 6, 8]
     }
 
     void 'declaring a list monad instance (II)'() {
@@ -215,7 +215,7 @@ class FnzExtensionModuleSpec extends Specification {
             ListMonad<Integer> numbers = List(1..3)
 
         then: 'you can transform its values'
-            numbers.fmap { x -> x + 1 }.get() == [2,3,4]
+            numbers.fmap { x -> x + 1 }.get() == [2, 3, 4]
     }
 
     void 'convert plain list to a list monad instance'() {
@@ -226,40 +226,40 @@ class FnzExtensionModuleSpec extends Specification {
                     .fmap { x -> x * 2 }
 
         then: 'you can transform its values'
-                numbers.get() == [4,6]
+                numbers.get() == [4, 6]
     }
 
-    void 'convert plain list to a list monad instance'() {
+    void 'convert plain list to a ListMonad'() {
         when: 'building a new ListMonad instance using'
             Function<Integer,Integer> inc = { x -> x + 1 }
-            ListMonad<Integer> numbers = [1,2].fapply(Just(inc))
+            ListMonad<Integer> numbers = [1, 2].fapply(Just(inc))
 
         then: 'you can transform its values'
-            numbers.get() == [2,3]
+            numbers.get() == [2, 3]
     }
 
-    void 'convert range to a list monad instance'() {
+    void 'convert range to a ListMonad'() {
         when: 'building a new ListMonad instance using'
             ListMonad<Integer> numbers =
                 (1..3).fmap { x -> x + 1 }
                       .fmap { x -> x * 2 }
 
         then: 'you can transform its values'
-                numbers.get() == [4,6,8]
+                numbers.get() == [4, 6, 8]
     }
 
     void 'using plain list with do-return (bind2)'() {
         when: 'transforming a list using a do-return block'
             ListMonad<Integer> result =
                 $do {
-                    x = [2,4]
+                    x = [2, 4]
                     y = [x * 2]
 
                     $return y
                 }
 
         then: 'we should get the expected result'
-            result.get() == [4,8]
+            result.get() == [4, 8]
     }
 
 }

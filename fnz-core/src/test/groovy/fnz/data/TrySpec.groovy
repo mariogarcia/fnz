@@ -120,7 +120,6 @@ class TrySpec extends Specification {
             def numbers = ["1", "2a", "11", "24", "4A"]
             def TO_ZERO = { 0 } as Function
             def TO_INT = Integer.&parseInt as Function
-            def SUM = { x, y -> x + y }
         when: 'trying to sum all numbers'
             def total =
                 numbers
