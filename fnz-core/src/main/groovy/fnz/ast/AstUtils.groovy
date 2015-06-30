@@ -30,12 +30,6 @@ final class AstUtils {
         variableScopeVisitor.visitMethodCallExpression(expression)
     }
 
-    static void applyScopeVisitor(final StaticMethodCallExpression expression, final SourceUnit sourceUnit) {
-        VariableScopeVisitor variableScopeVisitor = new VariableScopeVisitor(sourceUnit)
-        variableScopeVisitor.prepareVisit(sourceUnit.AST.scriptClassDummy)
-        variableScopeVisitor.visitStaticMethodCallExpression(expression)
-    }
-
     static Expression callClosureX(final ClosureExpression closure) {
         return callX(closure, DO_CALL_METHOD_NAME)
     }

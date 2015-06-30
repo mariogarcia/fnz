@@ -83,10 +83,6 @@ public final class Fnz {
        return ma.bind(fn);
     }
 
-    public static <A,B,MA extends Monad<A>,MB extends Monad<B>> MB bind2(MA ma, TypeAwareFunction<A,MB> fn) {
-        return ma.bind2(fn);
-    }
-
     public static <A,B, AA extends Applicative<A>, AB extends Applicative<B>> AB fapply(AA fa, Applicative<Function<A,B>> fn) {
         return (AB) fa.fapply(fn);
     }
