@@ -12,6 +12,8 @@ features {
     cache_highlight=false
 }
 
+destination_dir= "../../build/site/"
+
 environments {
     dev {
         log.info 'Development environment is used'

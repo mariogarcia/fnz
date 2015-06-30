@@ -7,7 +7,6 @@
 //                  __/ |
 //                 |___/
 
-
 // tag::buildScript[]
 buildscript {
     repositories {
@@ -17,6 +16,7 @@ buildscript {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
         classpath 'com.tkruse.gradle:gradle-groovysh-plugin:1.0.4'
         classpath 'com.sysgears.grain:grain-gradle-plugin:0.2.0'
+        classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.2'
     }
 }
 // end::buildScript[]
@@ -25,6 +25,7 @@ apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'grain'
 apply plugin: 'com.github.tkruse.groovysh'
+apply plugin: 'org.asciidoctor.convert'
 
 //  _____                            _                 _
 // |  __ \                          | |               (_)
@@ -61,6 +62,15 @@ groovysh {
     groovyVersion = '2.4.0'
 }
 
+asciidoctor {
+    sourceDir 'src/docs'
+    attributes(
+        'icons': 'font',
+        'source-highlighter': 'prettify',
+        'toc': 'left'
+    )
+}
+
 //  _____  _     _        _ _           _   _
 // |  __ \(_)   | |      (_) |         | | (_)
 // | |  | |_ ___| |_ _ __ _| |__  _   _| |_ _  ___  _ __
@@ -80,11 +90,21 @@ version = '1.0.5'
 //  \_____\__,_|___/\__\___/|_| |_| |_|  \__\__,_|___/_|\_\___/
 //
 
-
 task('console', dependsOn:'classes', type: JavaExec) {
-    group = 'help'
-    description 'starts a Groovy console with the classpath of the current project'
+    group = 'fnz-site'
+    description 'starts a Groovy console with FNZ'
     main='groovy.ui.Console'
     project.dependencies.add("compile", 'org.codehaus.groovy:groovy-console:2.4.0')
     classpath = sourceSets.main.runtimeClasspath
 }
+
+task('docs') << {
+    group = 'fnz-site'
+    description 'Moves asciidoctor docs to Grain site folders'
+
+    file("build/asciidoc/html5/").renameTo(file("build/site/docs/"))
+    delete(file("build/asciidoc/"))
+}
+
+docs.dependsOn asciidoctor
+asciidoctor.dependsOn grainGenerate

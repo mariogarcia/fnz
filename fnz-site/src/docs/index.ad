@@ -1,9 +1,9 @@
 = FNZ 
 Mario Garcia <link:https://www.twitter.com/marioggar[@marioggar]>
 :numbered:                                                                                                         
-:testDir: ../../src/test/groovy
-:sourceDir: ../../src/main/groovy
-:sourceDirJava: ../../src/main/java
+:testDir: ../../../fnz-core/src/test/groovy
+:sourceDir: ../../../fnz-core/src/main/groovy
+:sourceDirJava: ../../../fnz-core/src/main/java
 :stem:
 
 Functional Groovy

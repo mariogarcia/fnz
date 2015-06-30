@@ -14,7 +14,6 @@ buildscript {
     }
     dependencies {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
-        classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.2'
         classpath 'net.saliman:gradle-cobertura-plugin:2.2.5'
         classpath 'com.tkruse.gradle:gradle-groovysh-plugin:1.0.4'
     }
@@ -27,7 +26,6 @@ apply plugin: 'cobertura'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
-apply plugin: 'org.asciidoctor.convert'
 apply plugin: 'com.github.tkruse.groovysh'
 
 //  _____                            _                 _
@@ -58,17 +56,6 @@ dependencies {
 //  \_____\___/|_| |_|_| |_|\__, |\__,_|_|  \__,_|\__|_|\___/|_| |_|
 //                           __/ |
 //                          |___/
-
-asciidoctor {
-    sourceDir 'src/docs'
-    attributes(
-        'icons': 'font',
-        'source-highlighter': 'prettify',
-        'toc': 'left'
-    )
-}
-
-asciidoctor.dependsOn clean
 
 codenarc {
    configFile = new File(projectDir, 'src/codenarc/rules.groovy')
