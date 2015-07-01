@@ -107,11 +107,12 @@
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy"><span class="annotation">@Grab</span>(<span class="string"><span class="delimiter">'</span><span class="content">fnz:fnz:1.0.5</span><span class="delimiter">'</span></span>)
+<span class="annotation">@GrabResolver</span>(<span class="string"><span class="delimiter">'</span><span class="content">http://dl.bintray.com/marioggar/maven</span><span class="delimiter">'</span></span>)
 <span class="keyword">def</span> failure = Try(<span class="integer">1</span>) { <span class="predefined-type">Integer</span> x -&gt; x / <span class="integer">0</span> }
 
 <span class="keyword">assert</span> !failure.isSuccess()
 <span class="keyword">assert</span> failure.isFailure()
-<span class="keyword">assert</span> failure.or(Just(<span class="integer">3</span>)).get() == <span class="integer">3</span></code></pre>
+<span class="keyword">assert</span> failure.or(Success(<span class="integer">3</span>)).get() == <span class="integer">3</span></code></pre>
 </div>
 </div>
               </div>
@@ -352,7 +353,7 @@ also pass a method reference</p>
     <div class="container">
         <div class="row">
             <div class="col-lg-12 text-center">
-                <h2>Check out the rest of the <a target="_blank" href="docs/index.htmln">documentation!</a></h2>
+                <h2>Check out the rest of the <a target="_blank" href="docs/index.html">documentation!</a></h2>
             </div>
         </div>
         <div class="row">
