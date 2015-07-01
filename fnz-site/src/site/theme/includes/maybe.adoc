@@ -1,0 +1,61 @@
+All abstractions are available at `fnz.Fnz` as static functions. 
+
+[source,groovy]
+----
+include::../test/groovy/MaybeExampleSpec.groovy[tags=importStaticTry,indent=0]
+----
+
+The following example is really simple, just adding one to a value, only if
+the value is null then use zero instead:
+
+[source,groovy]
+----
+include::../test/groovy/MaybeExampleSpec.groovy[tags=maybeBasic1, indent=0]
+----
+
+**IMPORTANT**: If you use Fnz in Groovy code, you don't have to
+import the `Fnz` class, `Fnz` has an extension module that exposes
+directly all those functions for you.
+
+[source,groovy]
+----
+include::../test/groovy/MaybeExampleSpec.groovy[tags=maybeBasic2, indent=0]
+----
+
+Ok, but... Groovy already has the **Elvis operator**, which is simpler,
+and less verbose.. so why should I use this anyway ?
+
+Well if you're only evaluating a value this may sound overkill, but if
+you would like to concatenate a set of operation over a possible
+`null` value, then it could be very helpful:
+
+[source,groovy]
+----
+include::../test/groovy/MaybeExampleSpec.groovy[tags=maybeBasic3, indent=0]
+----
+
+And the plain Groovy code:
+
+[source,groovy]
+----
+include::../test/groovy/MaybeExampleSpec.groovy[tags=maybeBasic4, indent=0]
+----
+
+**Wait!** plain Groovy is not that bad, I think I stick to **Elvis**,
+Do you have anything else to show ?  **Yes I do!** Can you call a
+method depending on null ?  No right ?  And that makes you whether use
+a **default parameter** or have another conditional statement.
+
+Having a type representing the **null** value enables programmer to
+override methods depending on whether the value was `Nothing` or
+`Just`. It's just not possible to do that with plain Groovy (even
+though null is an instance of
+org.codehaus.groovy.runtime.NullObject). Lets see this subject:
+
+[source,groovy]
+----
+include::../test/groovy/MaybeExampleSpec.groovy[tags=maybeBasic5, indent=0]
+----
+
+No conditionals required... **Elvis** has left the building ?:)
+

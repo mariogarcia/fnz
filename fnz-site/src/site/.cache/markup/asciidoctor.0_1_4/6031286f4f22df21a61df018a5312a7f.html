@@ -1,0 +1,170 @@
+<div class="ulist">
+<ul>
+<li>
+<p>secure</p>
+</li>
+<li>
+<p>one</p>
+</li>
+<li>
+<p>two</p>
+</li>
+<li>
+<p>three</p>
+</li>
+</ul>
+</div>
+<div class="sect1">
+<h2 id="_la">la</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>package fnz</p>
+</div>
+<div class="paragraph">
+<p>import static Fnz.bind
+import static Fnz.fmap
+import static Fnz.Just
+import static Fnz.List
+import static Fnz.wrap
+import static Fnz.val
+import static Fnz.Maybe
+import static Fnz.Failure
+import static Fnz.Success</p>
+</div>
+<div class="paragraph">
+<p>import fnz.data.Try
+import fnz.data.Function
+import fnz.data.Maybe
+import fnz.data.ListMonad</p>
+</div>
+<div class="paragraph">
+<p>import spock.lang.Specification</p>
+</div>
+<div class="paragraph">
+<p>class FnzSpec extends Specification {</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>void 'Fmap'() {
+    given: 'a function (a-&gt;b) using functional interface coertion'
+        Function&lt;String,Integer&gt; fn =
+            { String word -&gt; return word.length() } as Function&lt;String,Integer&gt;
+    when: 'applying fmap::(a-&gt;b) -&gt; fa -&gt; fb'
+        Maybe.Just&lt;Integer&gt; result = fmap(Just("hi"), fn)
+    then: 'result should be the expected'
+        result instanceof Maybe.Just
+        result.isPresent()
+        val(result) == 2
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>void 'Binding'() {
+    when: 'Building a nested binding expression'
+        Maybe.Just&lt;Integer&gt; result =
+            bind(Just(1)) { Integer x -&gt;
+                bind(Just(x + 1)) { Integer y -&gt;
+                    Just(y + 1)
+                }
+            }
+    then: 'Result should be 2 more'
+        result instanceof Maybe.Just
+        result.isPresent()
+        val(result) == 3
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>void 'Using bind with a list monad: looks like comprehensions'() {
+    given: 'a list monad'
+        ListMonad&lt;Integer&gt; numbers = List(1, 2, 3, 4)
+    when: 'applying a function to bind'
+        ListMonad&lt;Integer&gt; result =
+            bind(numbers){ x -&gt; [x, x + 1] as ListMonad }
+    then: 'we should get the expected sequence'
+        result.typedRef.value == [1, 2, 2, 3, 3, 4, 4, 5]
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>void 'using maybe method: monadic value'() {
+    given: 'a function to increment a given number'
+        def inc = { x -&gt;  x + 1 }
+    when: 'trying to apply the computation'
+        def tryResult =
+            val(fmap(Just(value), wrap(inc)))
+    then: 'there could be a result or not'
+        Maybe(tryResult).isPresent() == isPresent
+    and: 'possible final value should be'
+        val(Maybe(tryResult)) == finalValue
+    where: 'possible values are'
+        value | isPresent | finalValue
+        null  | false     | null
+        2     | true      | 3
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>void 'using maybe method: simple value'() {
+    given: 'a function to increment a given number'
+        def inc = { x -&gt;  x + 1 }
+    when:
+        Maybe result = fmap(Maybe(value), inc)
+    then: 'possible final value should be'
+        result.isPresent() == isPresent
+        val(result) == finalValue
+    where: 'possible values are'
+        value | isPresent | finalValue
+        null  | false     | null
+        2     | true      | 3
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>void 'using Failure()'() {
+    when: 'trying to use a failure to compute anything'
+        Try result = fmap(Failure(), { x -&gt; x })
+    then: 'we should not be able'
+        result instanceof Try.Failure
+        val(result) == null
+        result.exception instanceof NullPointerException
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>void 'using Success()'() {
+    when: 'trying to use a success value to compute anything'
+        Try result = fmap(Success(1)) { x -&gt; x + 1 }
+    then:
+        result instanceof Try.Success
+        val(result) == 2
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>void 'using val with null'() {
+    expect: 'a call with null returns null'
+    !val(null)
+}</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>void 'stupid coverage check about creating an instance of final class'() {
+    expect:
+    new Fnz()
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>}</p>
+</div>
+</div>
+</div>
