@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.2">
-<title>Control Flow</title>
+<title>What is FNZ</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -418,319 +418,66 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_control_flow">Control Flow</a>
-<ul class="sectlevel2">
-<li><a href="#_let">Let</a></li>
-<li><a href="#_letm">Letm</a></li>
-<li><a href="#_do">Do</a></li>
-<li><a href="#_unless">Unless</a></li>
-<li><a href="#_where">Where</a></li>
-</ul>
-</li>
+<li><a href="#_what_is_fnz">What is FNZ</a></li>
 </ul>
 </div>
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_control_flow">Control Flow</h2>
+<h2 id="_what_is_fnz">What is FNZ</h2>
 <div class="sectionbody">
-<div class="quoteblock">
-<blockquote>
 <div class="paragraph">
-<p>In computer science, control flow (or alternatively, flow of control) refers to the order in which
-the individual statements, instructions or function calls of an imperative or a declarative program
-are executed or evaluated</p>
-</div>
-</blockquote>
-<div class="attribution">
-&#8212; Wikipedia
-</div>
+<p>This project is a collection of ideas taken from other functional
+languages translated to Groovy.</p>
 </div>
 <div class="paragraph">
-<p>Control flow is one of the most important topics in a programming language. Most languages
-have their own out-of-the-box control structures, and some others can create new ones on-the-fly.
-Although Groovy can&#8217;t create new control structures in the classical sense, it can create control
-structures based on functions and meta-programming.</p>
-</div>
-<div class="paragraph">
-<p>Following up there&#8217;re some control flow structures I&#8217;ve been collecting while sneaking
-in some other programming languages.</p>
-</div>
-<div class="paragraph">
-<p>Let&#8217;s go through them.</p>
-</div>
-<div class="sect2">
-<h3 id="_let">Let</h3>
-<div class="paragraph">
-<p>Initializes a group of variables, makes them available within the scope
-of the closure passed as argument.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">let(Map,Closure)</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Let&#8217;s see some examples.</p>
-</div>
-<div class="listingblock">
-<div class="title">Simple values</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/ast/flow/LetSpecExample.groovy[tags=simpleLet]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Here values provided by the map are accessible within the scope of the closure block.
-What if I wanted to create values depending on previous values ? Let&#8217;s
-see the following example:</p>
-</div>
-<div class="listingblock">
-<div class="title">Dependant expressions</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/ast/flow/LetSpecExample.groovy[tags=computedValues]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>In this example value of <strong>'z'</strong> depends on the values given to <strong>'x'</strong> and <strong>'y'</strong>. Every</p>
-</div>
-<div class="listingblock">
-<div class="title">Nested expressions</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/ast/flow/LetSpecExample.groovy[tags=nestedLet]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Previous <a href="https://code.google.com/p/spock">Spock</a> specification shows how let expressions could be nested.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_letm">Letm</h3>
-<div class="paragraph">
-<p><code>letm</code> works the same way <code>let</code> does but instead of handling plain
-values it works with monadic values and eventually will return an
-instance of type <code>fnz.data.Monad</code>. Why is that ?</p>
-</div>
-<div class="paragraph">
-<p>Well <code>letm</code> is meant to work with monad expressions. So when you&#8217;re
-seeing this:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">letm(x: Just(1), y: { Just(x+1) } ) {
-    Just(y)
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Under the hood the expression will be transformed to:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">bind(Just(1)) { x -&gt;
-  bind({ Just(x+1) }())) { y -&gt;
-     Just(y)
-  }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This way you can play with other flavors of monads. Imagine you want
-to combine let with the <code>Either</code> monad.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/ast/flow/LetmSpecExample.groovy[tags=workingWithOtherMonads]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>You can also combine it with the <code>Try</code> monad. This time there&#8217;s a
-method you want to use, but it could throw some exceptions, you want
-to handle that possibility using <code>Try</code>.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/ast/flow/LetmSpecExample.groovy[tags=combineWithTry]</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_do">Do</h3>
-<div class="paragraph">
-<p>If you have seen Haskell&#8217;s <strong>do</strong> expressions, they look like this:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-haskell" data-lang="haskell">do
-x &lt;- Just 1
-y &lt;- Just (x + 1)
-return x</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>There are a couple of nice things when using this control flow:</p>
+<p>The main objectives of this library are:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>You don&#8217;t have to unwrapped/wrap monadic values. In the example when
-assigning <strong>Just 1</strong> to <strong>x</strong> the value inside (1) it&#8217;s unwrapped and make it
-available for the next expression to use it.</p>
+<p>Create more control structures (let, letm, where&#8230;&#8203;)</p>
 </li>
 <li>
-<p>In the end using the <strong>return</strong> expression make it easier for the programmer
-to wrap the final value in the proper monadic value without having to do it
-explicitly. It is assumed by the expression flow.</p>
+<p>Understand persistent collections (TODO)</p>
+</li>
+<li>
+<p>Ways of enforce immutability</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Well, <strong>Fnz</strong> has tried to mimic the behavior of this expression using both
-methods <strong>$do</strong> and <strong>$return</strong>:</p>
+<p>If you have a copy of the code and you want to start playing with the
+examples writen along the documentation. You can use both
+<code>groovyshell</code> and <code>groovyConsole</code>. Both are accessible through two
+<code>gradle</code> tasks.</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/ast/flow/DoSpec.groovy[tags=simpleExample]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Although in Haskell <strong>do</strong> notation you can be using assignments as long
-as other types of expressions, here is not possible. Only assignment
-expressions are allowed by design.</p>
-</div>
-<div class="paragraph">
-<p>So you may be wondering&#8230;&#8203; How can I use an expression not returning
-any value within the $do/$return statement ?</p>
-</div>
-<div class="paragraph">
-<p>Well for that purpose a special rule has been added to the <strong>do</strong> notation
-expression. Whenever you wan to use an expression not returning anything
-you should assign that expression to <strong>_</strong>.</p>
-</div>
-<div class="paragraph">
-<p>The <strong>_</strong> variable name means that you don&#8217;t care about the returning
-type.  In fact every time you use that name a unique identifier is
-created underneath.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/ast/flow/DoSpec.groovy[tags=wildcard1]</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_unless">Unless</h3>
-<div class="paragraph">
-<p>The rationale behind <strong>Unless</strong> is that sometimes is just a pain to create <strong>negative</strong>
-conditional expressions.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">unless(Boolean,Closure)</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">Unless structure</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/ast/flow/UnlessSpecExample.groovy[tags=simpleUnless]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This expression will allow the code block to be executed unless the condition
-evaluates to true.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_where">Where</h3>
-<div class="paragraph">
-<p>I would say <strong>Where</strong> control belongs to the family of <strong>switch statements</strong> or <strong>multiway branches</strong>.
-I first read about the <strong>Where</strong> clause while I was reading Haskell.</p>
-</div>
-<div class="paragraph">
-<p>This version of Haskell&#8217;s Where expressions has:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">check(Map) { <i class="conum" data-value="1"></i><b>(1)</b>
-    when { /evaluates to boolean/ } then { /returns a value/ } <i class="conum" data-value="2"></i><b>(2)</b>
-    otherwise { /returns a value/ } <i class="conum" data-value="3"></i><b>(3)</b>
-    where { /some constants/ } <i class="conum" data-value="4"></i><b>(4)</b>
-}</code></pre>
-</div>
-</div>
-<div class="colist arabic">
+<div class="admonitionblock important">
 <table>
 <tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>A <strong>check</strong> method is the entry point to this expression</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td><strong>When-Then</strong> are evaluated in two different phases. First all when clauses are evaluated
-until one of them is evaluated to true. Then the related then clause is evaluated.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>The <strong>otherwise</strong> block is executed only if no when-then block has been evaluated successfully
-before.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>The <strong>where</strong> block is a perfect place to initializate constants used in any of the other mentioned
-blocks.</td>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Of course you should have at least installed JDK 7 in your
+machine. Otherwise <code>gradle</code> won&#8217;t work.
+</td>
 </tr>
 </table>
 </div>
-<div class="paragraph">
-<p>There are different ways of using this control depending on the use
-of when-then expressions</p>
-</div>
 <div class="listingblock">
-<div class="title">Simple Where</div>
+<div class="title">using FNZ in groovysh</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/flow/WhereSpec.groovy[tags=simpleWhere]</code></pre>
+<pre class="prettyprint highlight"><code class="language-bash" data-lang="bash">./gradlew -q shell</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>This is a simple example about how to use the where expression. You can also omit
-some of the parts mentioned before</p>
+<p>or</p>
 </div>
 <div class="listingblock">
-<div class="title">Ommiting Where</div>
+<div class="title">using FNZ in groovyConsole</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/flow/WhereSpec.groovy[tags=whereWithNoWhere]</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">Only When-Then clauses</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/flow/WhereSpec.groovy[tags=whereOnlyWithWhenThen]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The when-then clauses use closures to evaluate their content.
-But thanks to Groovy&#8217;s objects method isCase() we can create switch-like statements</p>
-</div>
-<div class="listingblock">
-<div class="title">Switch-case Where (Class)</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/flow/WhereSpec.groovy[tags=whereSwitchLike1]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Instead of passing a map you can evaluate a single value against some conditions. Those
-conditions are the same you would be using in a switch-case block in Groovy.</p>
-</div>
-<div class="listingblock">
-<div class="title">Switch-case Where (Collections)</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/flow/WhereSpec.groovy[tags=whereSwitchLike2]</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">Switch-case Where (Number)</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in control.ad - include::{testdir}/fnz/flow/WhereSpec.groovy[tags=whereSwitchLike3]</code></pre>
-</div>
+<pre class="prettyprint highlight"><code class="language-bash" data-lang="bash">./gradlew console</code></pre>
 </div>
 </div>
 </div>
@@ -738,7 +485,7 @@ conditions are the same you would be using in a switch-case block in Groovy.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-04-26 17:38:02 CEST
+Last updated 2015-07-01 02:04:09 CEST
 </div>
 </div>
 </body>

@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.2">
-<title>Types</title>
+<title>Data</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -418,9 +418,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_types">Types</a>
+<li><a href="#_data">Data</a>
 <ul class="sectlevel2">
-<li><a href="#_func">func</a></li>
+<li><a href="#_maybe">Maybe</a></li>
+<li><a href="#_fn">Fn</a></li>
+<li><a href="#_either">Either</a></li>
+<li><a href="#_listmonad">ListMonad</a></li>
+<li><a href="#_try">Try</a></li>
 </ul>
 </li>
 </ul>
@@ -428,198 +432,523 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_types">Types</h2>
+<h2 id="_data">Data</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This chapter has to do with other ways of creating/using/extending types with Groovy.</p>
+<p>This chapter will go through some monadic types implementations.</p>
 </div>
 <div class="sect2">
-<h3 id="_func">func</h3>
+<h3 id="_maybe">Maybe</h3>
+<div class="paragraph">
+<p>The Maybe is normally used to avoid asking whether the value is null or it
+can contain any value. That&#8217;s why the Maybe object has two children:
+Maybe.Just and Maybe.Nothing.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+In the JDK 8 you can find the Optional type. Sometimes is also called
+Option.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>As we&#8217;ll be seeing along this chapter is that monads like Maybe, Either or
+ListMonad will allow to apply functions over the wrapped value, only if the
+wrapped value is considered <strong>valid</strong>. Otherwise the wrapped value will be
+returned.</p>
+</div>
+<div class="paragraph">
+<p>To see how to use Maybe lets use it in a simple exercise:</p>
+</div>
 <div class="quoteblock">
 <blockquote>
 <div class="paragraph">
-<p>A functional interface is an interface that has just one abstract method (aside from the methods of Object), and thus represents a single function contract</p>
+<p>Given a number, I want to divide it by half two times, and then if still
+not decimal, multiplied by three.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>Because all even numbers will become decimals as soon as I try to dividing them
+by half I want to stop the process as soon as the process detects that number
+is no longer eligible to success.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/MaybeSpec.groovy[tags=maybebind,indent=0]</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>tries to divide, if not even returns nothing otherwise returns division result.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>tries again to divide the number under the same premises.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>If division ended successfully only then applies multiplication.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The nice thing about this plan is that if any of the previous steps ended with
+a Maybe.Nothing instance the process won&#8217;t go any further.</p>
+</div>
+<div class="paragraph">
+<p>In order to understand what happens underneath, why process doesn&#8217;t continue,
+I would like to show you both implementation of Maybe.Just and Maybe.Nothing.</p>
+</div>
+<div class="paragraph">
+<p>While Maybe.Just applies the function:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Unresolved directive in data.ad - include::{sourceDirJava}/fnz/data/Maybe.java[tags=justbind,indent=0]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Maybe.Nothing like its name, <strong>does nothing</strong> but to return the current value :P</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Unresolved directive in data.ad - include::{sourceDirJava}/fnz/data/Maybe.java[tags=nothingbind,indent=0]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Sometimes it would be useful to have an alternative when there&#8217;s no value. That&#8217;s
+what the method or does. It makes the monad to return the alternative value in
+case there was no value. Otherwise the current value is returned.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/MaybeSpec.groovy[tags=maybeor1,indent=0]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It&#8217;s pretty clear in the previous example, but it is even clearer when you do
+something ( a transformation for example) with the current inner value.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/MaybeSpec.groovy[tags=maybeor2,indent=0]</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_or_expressions">Or expressions</h4>
+<div class="paragraph">
+<p>Of course you can always use the <code>|</code> operator when thinking about <code>or</code> expressions:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/MaybeSpec.groovy[tags=usingOrAsValue,indent=0]</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The operation ends with and empty string. Using Maybe('') returns
+Nothing()</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>In case partial returns Nothing() we would like to use
+Just('anybody') instead</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Using <code>|</code> makes expressions much more readable&#8230;&#8203; and fun :)</p>
+</div>
+<div class="paragraph">
+<p>Last example used an <code>OR</code> expression. That expression was a simple
+value. Sometimes we would like to use <code>lazy</code> expressions we only want
+to be evaluated <code>just in case</code>.  When executed those <code>lazy
+expressions</code> will be returning a valid value.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/MaybeSpec.groovy[tags=usingOrAsLazyExpression,indent=0]</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The operation ends with and empty string. Using Maybe('') returns
+Nothing()</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>In case partial returns Nothing() we would like to use
+Just('anybody') instead. In this case the value is not computed until
+we made sure the previous computation returned Nothing()</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_the_maybe_code_truth_code">The maybe <code>truth</code></h4>
+<div class="paragraph">
+<p>Sometimes you just don&#8217;t know whether the value is going to be valid
+or not. Then it could come handy to use the <code>maybe</code> method.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/MaybeSpec.groovy[tags=maybetruth,indent=0]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>So expressions could become easier to understand when using <code>maybe</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/MaybeSpec.groovy[tags=maybetruthexample1,indent=0]</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>We are using a possible <code>not valid</code> value</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>We build an expression that in case the left hand value is not valid we
+will be using the right hand side value instead</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Because the value of the left was not valid then we used the right hand one, hence
+there is a present value</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The value used was 'me'</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If there had been a valid value at the right hand side, then that
+value would have been used instead:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/MaybeSpec.groovy[tags=maybetruthexample2,indent=0]</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_fn">Fn</h3>
+<div class="paragraph">
+<p><strong>fnz.data.Fn</strong> is a class that can be used as a shorcut for all data structures
+explained in this chapter. Depending on the style of your code you could be
+either chaining actions over a monad using method-chaining or using the
+Haskell-like public methods in an in-out style.</p>
+</div>
+<div class="paragraph">
+<p>Lets compare the Maybe monad using the Haskell-like style with <strong>Fn</strong></p>
+</div>
+<div class="listingblock">
+<div class="title">fapply (method-chain) imports</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/MaybeSpec.groovy[tags=imports,indent=0]</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">fapply (method-chain)</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/MaybeSpec.groovy[tags=fapplyspec,indent=0]</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">fapply (Fn) imports</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/MaybeSpec.groovy[tags=fnimports,indent=0]</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">fapply (Fn)</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/MaybeSpec.groovy[tags=fapplyspechaskell,indent=0]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_either">Either</h3>
+<div class="paragraph">
+<p>Either monad is also one of the classics. The Either monad instance can
+represent correct or error.</p>
+</div>
+<div class="paragraph">
+<p>As imperative programmer I&#8217;m used to choose between branches in my code using
+conditional structures such as if. As Groovy programmer I&#8217;ve gone one step
+further and I&#8217;ve met the Groovy Truth that helps me a lot classifying
+instances between those which could be seen as a false statement and those
+which can be taken as a true statement.</p>
+</div>
+<div class="paragraph">
+<p>But what if we go beyond ? What if we had a type saying it could be right or
+wrong depending on its own but still having content ?.</p>
+</div>
+<div class="paragraph">
+<p>The following example tries to search certain type of people from a given list.
+The search will stop once a person has been found with any of the given rules.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Unresolved directive in data.ad - include::{testDir}/fnz/data/EitherSpec.groovy[tags=eithermonadsearch,indent=0]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>First of all, I need to apologise because in this example It seems I&#8217;ve used Either just
+to do the opposite. This time think Either.Left as something telling us to
+stop looking because we&#8217;ve found what we were looking for.</p>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>baseSearch is a function that returns another function.
+That inner function returns an Either.Left instance with the result inside
+if the search function passed as parameter succeeded. I want the function to
+return Either.Left because I know when an Either.Left is returned no further
+action is done. And because I&#8217;ve found what I was looking for, I don&#8217;t want the
+search to go any further.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>I&#8217;ve created three different functions valid to be used in an fmap function. That
+means they receive an unwrapped value but they will return a wrapped value.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Given the source we will try to apply three types of search in order to find
+someone. Because the rules of the monad, I know if the first search fails the
+second will be triggered, and so on. In case any of them succeed the value will be
+return immediately.</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_or">Or</h4>
+<div class="paragraph">
+<p>The same way we used <code>or</code> in Maybe to express an alternative to
+<code>wrong</code> values we can use it in <code>Either</code>.</p>
+</div>
+<div class="listingblock">
+<div class="title">value</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Unresolved directive in data.ad - include::{testDir}/fnz/data/EitherSpec.groovy[tags=eitherorvalue,indent=0]</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">lazy expression</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-java" data-lang="java">Unresolved directive in data.ad - include::{testDir}/fnz/data/EitherSpec.groovy[tags=eitherorcomputation,indent=0]</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_listmonad">ListMonad</h3>
+<div class="paragraph">
+<p>Collections in general are one of the most used data structures ever.
+Some languages use collections only as data structures and some others make
+them implement monadic semantics in order to be able to do things like
+list comprehensions.</p>
+</div>
+<div class="paragraph">
+<p>According to <strong>Wikipedia</strong> a list comprehension is:</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>A list comprehension is a syntactic construct available in some programming
+languages for creating a list based on existing lists</p>
 </div>
 </blockquote>
 <div class="attribution">
-&#8212; Java(TM) spec
+&#8212; Wikipedia
 </div>
 </div>
 <div class="paragraph">
-<p><strong>func</strong> allows you to declare and create a <a href="http://docs.oracle.com/javase/specs/jls/se8/html/jls-9.html#jls-9.8"><strong>functional interface</strong></a>
-in one line without the verbosity of having to write a full Java interface.</p>
+<p>I would add that implementations differ in which are capable of handling
+streams and those which don&#8217;t.</p>
 </div>
 <div class="paragraph">
-<p>Normally if you wanted to create a <strong>functional interface</strong> and use it you should be doing something
-like this:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class A {
-
-    interface Fx {
-        Integer apply(String word)
-    }
-
-    Integer applyFunction(String word, Fx function) {
-        return function.apply(word)
-    }
-
-}</code></pre>
-</div>
+<p>First of all I&#8217;m would like to start with a basic finite example. Like we
+did before, lets sneak a little bit on how <strong>Haskell</strong> does it ;)</p>
 </div>
 <div class="paragraph">
-<p>With <strong>func</strong> you can create in one line the same interface:</p>
+<p>(TODO)</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in type.ad - include::{testDir}/fnz/ast/type/FuncSpec.groovy[tags=simpleTypeAlias,indent=0]</code></pre>
 </div>
+<div class="sect2">
+<h3 id="_try">Try</h3>
+<div class="paragraph">
+<p>Nowadays JVM languages deal with exceptions using <strong>try-catch</strong> blocks. The
+problem is that these constructions force programmers to build their code in
+a certain way.</p>
 </div>
 <div class="paragraph">
-<p>In general the use cases are:</p>
+<p><strong>Try</strong> monad wraps the result of a given computation. That computation could
+either end on a desired value, having an instance of <strong>Success</strong>,
+or could throw an exception, having an instance of <strong>Failure</strong> instead.</p>
 </div>
 <div class="sect3">
-<h4 id="_simple_types">Simple types</h4>
+<h4 id="_try_2">Try()</h4>
+<div class="paragraph">
+<p>Instead of using a typical try/catch expression we could handle an expression
+as a safe execution but with a possible failure value.</p>
+</div>
+<div class="paragraph">
+<p>We can execute directly an unsafe function using:</p>
+</div>
 <div class="listingblock">
+<div class="title">Using Try directly with a initial value</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class OuterClass {
-    static {
-        func InterfaceType &gt;= ParameterType &gt;&gt; ReturnType
-    }
-}</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Try(A a, Function&lt;A,B&gt;)</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Of course you can declare as many interfaces as you want:</p>
+<p>Of course a <strong>Function</strong> could be changed by a closure. Lets see the
+following example.</p>
 </div>
 <div class="listingblock">
+<div class="title">Using Try directly with a initial value</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class A {
-    static {
-        func Fa &gt;= String &gt;&gt; Integer
-        func Fb &gt;= String &gt;&gt; String
-        func Fb &gt;= String &gt;&gt; Date
-    }
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_using_generics">Using generics</h4>
-<div class="paragraph">
-<p>You can also use generics:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class OuterClass {
-    static {
-        func InterfaceType(A,B) &gt;= A &gt;&gt; B
-    }
-}</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/TrySpec.groovy[tags=tryFunction1,indent=0]</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>You first should to declare the name of the type and maybe generic
-types used in the <code>Functional Inteface</code> signature as a parameter or as
-return type.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">InterfaceType(A,B)</code></pre>
-</div>
+<p>In this example we should be expecting whether a <strong>Try.Success</strong> value
+containing the expected result or a <strong>Try.Failure</strong> with the exception
+thrown (if any) and the initial value used to trigger the execution.</p>
 </div>
 <div class="paragraph">
-<p>And then you should declare the signature of the function:</p>
+<p>There could be some cases where you don&#8217;t care about passing an
+initial value to the <strong>Try</strong> execution.</p>
 </div>
 <div class="listingblock">
+<div class="title">Using Try directly without a initial value</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">A &gt;&gt; B</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Try(Function&lt;A,B&gt;)</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>In this case it means that we will be having a method like this:</p>
 </div>
 <div class="listingblock">
+<div class="title">Using Try directly without a initial value</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">B apply(A a)</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/TrySpec.groovy[tags=tryFunction2,indent=0]</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>So as a whole it will be the same as writing:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">interface InterfaceType&lt;A,B&gt; {
-    public B apply(A a)
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The parameters and the return type can both use the generic types
-declared by the interface type:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class OuterClass {
-    static {
-        InterfaceType(A,B) &gt;= ParameterType(A) &gt;&gt; ReturnType(B)
-    }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The following example declares some generic type used at return type:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in type.ad - include::{testDir}/fnz/ast/type/FuncSpec.groovy[tags=genericsBasicReturnType,indent=0]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Now the example uses generics both as parameter and return type</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in type.ad - include::{testDir}/fnz/ast/type/FuncSpec.groovy[tags=fullGenericsExample,indent=0]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>And mixing generics with other types:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in type.ad - include::{testDir}/fnz/ast/type/FuncSpec.groovy[tags=fullGenericsWithType,indent=0]</code></pre>
-</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>We can receive a Success or a Failure but we cannot expect to get
+the initial value because it never was provided in the first place.</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_multiple_parameters">Multiple parameters</h4>
+<h4 id="_wrap">wrap</h4>
 <div class="paragraph">
-<p>So far we&#8217;ve been showing functions with just one parameter or at most
-a parameter making use of generics, but wouldn&#8217;t be great to have a
-way of declaring a function with two or more arguments ?</p>
+<p>In order to get a <strong>Try</strong> result we could also <strong>wrap</strong> the computation we
+think could fail within a function which returns a <strong>Try</strong> instance with
+the result of the computation (Try.Success or Try.Failure).</p>
 </div>
 <div class="paragraph">
-<p>It turns out you can. The syntax to acomplish this is to use the
-Groovy syntax for lists.</p>
+<p>Like <strong>Either</strong>, composition has a special importance here, due to
+the fact that when having a <strong>Failure</strong> instance all possible actions
+applied over it will always return the same failure.</p>
+</div>
+<div class="paragraph">
+<p>This first example tries to parse an invalid number and add one to it.</p>
 </div>
 <div class="listingblock">
+<div class="title">Parse a possible number</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">func SUM(X) &gt;= [X,X] &gt;&gt; X</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/TrySpec.groovy[tags=basic1,indent=0]</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Here we had a funcion <code>SUM</code> which takes two parameters of the same
-type and returns a value of the same type. It makes sense right ?</p>
+<p>Here we can see both behaviors.</p>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>First of all the given function fails and
+the instance returned is an instance of <strong>Failure</strong> we know that because only
+<strong>Failure</strong> instances return <strong>true</strong> when calling to <strong>isFailure()</strong> method.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Besides that we can also notice that using a failure instance to create
+further function composition will end returning the same failure, which is the
+same as saying that no further function will ever succeed using that failure.</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
-<p>In the following example we&#8217;re using this feature just to show how
-parameters can be parametrized (use generics) as well.</p>
+<p>When having a <strong>Failure</strong> instance, the exception that caused it is also wrapped
+within the instance, and you could whether get it to inspect it, or throw it
+like any other exception.</p>
 </div>
 <div class="listingblock">
+<div class="title">throwException</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in type.ad - include::{testDir}/fnz/ast/type/FuncSpec.groovy[tags=multipleParameters,indent=0]</code></pre>
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/TrySpec.groovy[tags=exception1,indent=0]</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>You can get the wrapped exception</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Or throw the exception instead</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_recover">Recover</h4>
+<div class="paragraph">
+<p>Normally when having an exception we would like to have some
+alternative. Sometimes we may want to set, for example a default value
+in case something went wrong.</p>
+</div>
+<div class="paragraph">
+<p>In our example I would like to get zero in case the number was not
+valid.  Then I would like to add one to that given number.</p>
+</div>
+<div class="paragraph">
+<p>What if we want a fallback behavior when something went wrong ?</p>
+</div>
+<div class="paragraph">
+<p>Well there is the <strong>recover()</strong> method. This method has two arguments the
+possible <strong>Failure</strong> instance, and the <strong>Success</strong> instance to use instead.</p>
+</div>
+<div class="listingblock">
+<div class="title">recover()</div>
+<div class="content">
+<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Unresolved directive in data.ad - include::{testDir}/fnz/data/TrySpec.groovy[tags=recover,indent=0]</code></pre>
 </div>
 </div>
 </div>
@@ -629,7 +958,7 @@ parameters can be parametrized (use generics) as well.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-04-26 17:38:02 CEST
+Last updated 2015-07-01 02:04:09 CEST
 </div>
 </div>
 </body>

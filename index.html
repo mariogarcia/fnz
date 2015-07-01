@@ -1,2627 +1,414 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 1.5.2">
-<meta name="author" content="Mario Garcia">
-<title>FNZ</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
-<style>
-/* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
-/* Remove the comments around the @import statement below when using this as a custom stylesheet */
-/*@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400";*/
-article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary{display:block}
-audio,canvas,video{display:inline-block}
-audio:not([controls]){display:none;height:0}
-[hidden],template{display:none}
-script{display:none!important}
-html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}
-body{margin:0}
-a{background:transparent}
-a:focus{outline:thin dotted}
-a:active,a:hover{outline:0}
-h1{font-size:2em;margin:.67em 0}
-abbr[title]{border-bottom:1px dotted}
-b,strong{font-weight:bold}
-dfn{font-style:italic}
-hr{-moz-box-sizing:content-box;box-sizing:content-box;height:0}
-mark{background:#ff0;color:#000}
-code,kbd,pre,samp{font-family:monospace;font-size:1em}
-pre{white-space:pre-wrap}
-q{quotes:"\201C" "\201D" "\2018" "\2019"}
-small{font-size:80%}
-sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}
-sup{top:-.5em}
-sub{bottom:-.25em}
-img{border:0}
-svg:not(:root){overflow:hidden}
-figure{margin:0}
-fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}
-legend{border:0;padding:0}
-button,input,select,textarea{font-family:inherit;font-size:100%;margin:0}
-button,input{line-height:normal}
-button,select{text-transform:none}
-button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:button;cursor:pointer}
-button[disabled],html input[disabled]{cursor:default}
-input[type="checkbox"],input[type="radio"]{box-sizing:border-box;padding:0}
-input[type="search"]{-webkit-appearance:textfield;-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box}
-input[type="search"]::-webkit-search-cancel-button,input[type="search"]::-webkit-search-decoration{-webkit-appearance:none}
-button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}
-textarea{overflow:auto;vertical-align:top}
-table{border-collapse:collapse;border-spacing:0}
-*,*:before,*:after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}
-html,body{font-size:100%}
-body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto}
-a:hover{cursor:pointer}
-img,object,embed{max-width:100%;height:auto}
-object,embed{height:100%}
-img{-ms-interpolation-mode:bicubic}
-#map_canvas img,#map_canvas embed,#map_canvas object,.map_canvas img,.map_canvas embed,.map_canvas object{max-width:none!important}
-.left{float:left!important}
-.right{float:right!important}
-.text-left{text-align:left!important}
-.text-right{text-align:right!important}
-.text-center{text-align:center!important}
-.text-justify{text-align:justify!important}
-.hide{display:none}
-.antialiased,body{-webkit-font-smoothing:antialiased}
-img{display:inline-block;vertical-align:middle}
-textarea{height:auto;min-height:50px}
-select{width:100%}
-p.lead,.paragraph.lead>p,#preamble>.sectionbody>.paragraph:first-of-type p{font-size:1.21875em;line-height:1.6}
-.subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#7a2518;font-weight:400;margin-top:0;margin-bottom:.25em}
-div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,pre,form,p,blockquote,th,td{margin:0;padding:0;direction:ltr}
-a{color:#2156a5;text-decoration:underline;line-height:inherit}
-a:hover,a:focus{color:#1d4b8f}
-a img{border:none}
-p{font-family:inherit;font-weight:400;font-size:1em;line-height:1.6;margin-bottom:1.25em;text-rendering:optimizeLegibility}
-p aside{font-size:.875em;line-height:1.35;font-style:italic}
-h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight:300;font-style:normal;color:#ba3925;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
-h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{font-size:60%;color:#e99b8f;line-height:0}
-h1{font-size:2.125em}
-h2{font-size:1.6875em}
-h3,#toctitle,.sidebarblock>.content>.title{font-size:1.375em}
-h4,h5{font-size:1.125em}
-h6{font-size:1em}
-hr{border:solid #ddddd8;border-width:1px 0 0;clear:both;margin:1.25em 0 1.1875em;height:0}
-em,i{font-style:italic;line-height:inherit}
-strong,b{font-weight:bold;line-height:inherit}
-small{font-size:60%;line-height:inherit}
-code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;color:rgba(0,0,0,.9)}
-ul,ol,dl{font-size:1em;line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
-ul,ol,ul.no-bullet,ol.no-bullet{margin-left:1.5em}
-ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0;font-size:1em}
-ul.square li ul,ul.circle li ul,ul.disc li ul{list-style:inherit}
-ul.square{list-style-type:square}
-ul.circle{list-style-type:circle}
-ul.disc{list-style-type:disc}
-ul.no-bullet{list-style:none}
-ol li ul,ol li ol{margin-left:1.25em;margin-bottom:0}
-dl dt{margin-bottom:.3125em;font-weight:bold}
-dl dd{margin-bottom:1.25em}
-abbr,acronym{text-transform:uppercase;font-size:90%;color:rgba(0,0,0,.8);border-bottom:1px dotted #ddd;cursor:help}
-abbr{text-transform:none}
-blockquote{margin:0 0 1.25em;padding:.5625em 1.25em 0 1.1875em;border-left:1px solid #ddd}
-blockquote cite{display:block;font-size:.9375em;color:rgba(0,0,0,.6)}
-blockquote cite:before{content:"\2014 \0020"}
-blockquote cite a,blockquote cite a:visited{color:rgba(0,0,0,.6)}
-blockquote,blockquote p{line-height:1.6;color:rgba(0,0,0,.85)}
-@media only screen and (min-width:768px){h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2}
-h1{font-size:2.75em}
-h2{font-size:2.3125em}
-h3,#toctitle,.sidebarblock>.content>.title{font-size:1.6875em}
-h4{font-size:1.4375em}}table{background:#fff;margin-bottom:1.25em;border:solid 1px #dedede}
-table thead,table tfoot{background:#f7f8f7;font-weight:bold}
-table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:.5em .625em .625em;font-size:inherit;color:rgba(0,0,0,.8);text-align:left}
-table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
-table tr.even,table tr.alt,table tr:nth-of-type(even){background:#f8f8f7}
-table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{display:table-cell;line-height:1.6}
-h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
-h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
-.clearfix:before,.clearfix:after,.float-group:before,.float-group:after{content:" ";display:table}
-.clearfix:after,.float-group:after{clear:both}
-*:not(pre)>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background-color:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
-pre,pre>code{line-height:1.45;color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;text-rendering:optimizeSpeed}
-.keyseq{color:rgba(51,51,51,.8)}
-kbd{display:inline-block;color:rgba(0,0,0,.8);font-size:.75em;line-height:1.4;background-color:#f7f7f7;border:1px solid #ccc;-webkit-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em white inset;box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em #fff inset;margin:-.15em .15em 0 .15em;padding:.2em .6em .2em .5em;vertical-align:middle;white-space:nowrap}
-.keyseq kbd:first-child{margin-left:0}
-.keyseq kbd:last-child{margin-right:0}
-.menuseq,.menu{color:rgba(0,0,0,.8)}
-b.button:before,b.button:after{position:relative;top:-1px;font-weight:400}
-b.button:before{content:"[";padding:0 3px 0 2px}
-b.button:after{content:"]";padding:0 2px 0 3px}
-p a>code:hover{color:rgba(0,0,0,.9)}
-#header,#content,#footnotes,#footer{width:100%;margin-left:auto;margin-right:auto;margin-top:0;margin-bottom:0;max-width:62.5em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
-#header:before,#header:after,#content:before,#content:after,#footnotes:before,#footnotes:after,#footer:before,#footer:after{content:" ";display:table}
-#header:after,#content:after,#footnotes:after,#footer:after{clear:both}
-#content{margin-top:1.25em}
-#content:before{content:none}
-#header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
-#header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #ddddd8}
-#header>h1:only-child,body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #ddddd8;padding-bottom:8px}
-#header .details{border-bottom:1px solid #ddddd8;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:-ms-flexbox;display:-webkit-flex;display:flex;-ms-flex-flow:row wrap;-webkit-flex-flow:row wrap;flex-flow:row wrap}
-#header .details span:first-child{margin-left:-.125em}
-#header .details span.email a{color:rgba(0,0,0,.85)}
-#header .details br{display:none}
-#header .details br+span:before{content:"\00a0\2013\00a0"}
-#header .details br+span.author:before{content:"\00a0\22c5\00a0";color:rgba(0,0,0,.85)}
-#header .details br+span#revremark:before{content:"\00a0|\00a0"}
-#header #revnumber{text-transform:capitalize}
-#header #revnumber:after{content:"\00a0"}
-#content>h1:first-child:not([class]){color:rgba(0,0,0,.85);border-bottom:1px solid #ddddd8;padding-bottom:8px;margin-top:0;padding-top:1rem;margin-bottom:1.25rem}
-#toc{border-bottom:1px solid #efefed;padding-bottom:.5em}
-#toc>ul{margin-left:.125em}
-#toc ul.sectlevel0>li>a{font-style:italic}
-#toc ul.sectlevel0 ul.sectlevel1{margin:.5em 0}
-#toc ul{font-family:"Open Sans","DejaVu Sans",sans-serif;list-style-type:none}
-#toc a{text-decoration:none}
-#toc a:active{text-decoration:underline}
-#toctitle{color:#7a2518;font-size:1.2em}
-@media only screen and (min-width:768px){#toctitle{font-size:1.375em}
-body.toc2{padding-left:15em;padding-right:0}
-#toc.toc2{margin-top:0!important;background-color:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #efefed;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
-#toc.toc2 #toctitle{margin-top:0;font-size:1.2em}
-#toc.toc2>ul{font-size:.9em;margin-bottom:0}
-#toc.toc2 ul ul{margin-left:0;padding-left:1em}
-#toc.toc2 ul.sectlevel0 ul.sectlevel1{padding-left:0;margin-top:.5em;margin-bottom:.5em}
-body.toc2.toc-right{padding-left:0;padding-right:15em}
-body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #efefed;left:auto;right:0}}@media only screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
-#toc.toc2{width:20em}
-#toc.toc2 #toctitle{font-size:1.375em}
-#toc.toc2>ul{font-size:.95em}
-#toc.toc2 ul ul{padding-left:1.25em}
-body.toc2.toc-right{padding-left:0;padding-right:20em}}#content #toc{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
-#content #toc>:first-child{margin-top:0}
-#content #toc>:last-child{margin-bottom:0}
-#footer{max-width:100%;background-color:rgba(0,0,0,.8);padding:1.25em}
-#footer-text{color:rgba(255,255,255,.8);line-height:1.44}
-.sect1{padding-bottom:.625em}
-@media only screen and (min-width:768px){.sect1{padding-bottom:1.25em}}.sect1+.sect1{border-top:1px solid #efefed}
-#content h1>a.anchor,h2>a.anchor,h3>a.anchor,#toctitle>a.anchor,.sidebarblock>.content>.title>a.anchor,h4>a.anchor,h5>a.anchor,h6>a.anchor{position:absolute;z-index:1001;width:1.5ex;margin-left:-1.5ex;display:block;text-decoration:none!important;visibility:hidden;text-align:center;font-weight:400}
-#content h1>a.anchor:before,h2>a.anchor:before,h3>a.anchor:before,#toctitle>a.anchor:before,.sidebarblock>.content>.title>a.anchor:before,h4>a.anchor:before,h5>a.anchor:before,h6>a.anchor:before{content:"\00A7";font-size:.85em;display:block;padding-top:.1em}
-#content h1:hover>a.anchor,#content h1>a.anchor:hover,h2:hover>a.anchor,h2>a.anchor:hover,h3:hover>a.anchor,#toctitle:hover>a.anchor,.sidebarblock>.content>.title:hover>a.anchor,h3>a.anchor:hover,#toctitle>a.anchor:hover,.sidebarblock>.content>.title>a.anchor:hover,h4:hover>a.anchor,h4>a.anchor:hover,h5:hover>a.anchor,h5>a.anchor:hover,h6:hover>a.anchor,h6>a.anchor:hover{visibility:visible}
-#content h1>a.link,h2>a.link,h3>a.link,#toctitle>a.link,.sidebarblock>.content>.title>a.link,h4>a.link,h5>a.link,h6>a.link{color:#ba3925;text-decoration:none}
-#content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
-.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
-.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{text-rendering:optimizeLegibility;text-align:left;font-family:"Noto Serif","DejaVu Serif",serif;font-size:1rem;font-style:italic}
-table.tableblock>caption.title{white-space:nowrap;overflow:visible;max-width:0}
-.paragraph.lead>p,#preamble>.sectionbody>.paragraph:first-of-type p{color:rgba(0,0,0,.85)}
-table.tableblock #preamble>.sectionbody>.paragraph:first-of-type p{font-size:inherit}
-.admonitionblock>table{border-collapse:separate;border:0;background:none;width:100%}
-.admonitionblock>table td.icon{text-align:center;width:80px}
-.admonitionblock>table td.icon img{max-width:none}
-.admonitionblock>table td.icon .title{font-weight:bold;font-family:"Open Sans","DejaVu Sans",sans-serif;text-transform:uppercase}
-.admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #ddddd8;color:rgba(0,0,0,.6)}
-.admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
-.exampleblock>.content{border-style:solid;border-width:1px;border-color:#e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;-webkit-border-radius:4px;border-radius:4px}
-.exampleblock>.content>:first-child{margin-top:0}
-.exampleblock>.content>:last-child{margin-bottom:0}
-.sidebarblock{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
-.sidebarblock>:first-child{margin-top:0}
-.sidebarblock>:last-child{margin-bottom:0}
-.sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
-.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
-.literalblock pre,.listingblock pre:not(.highlight),.listingblock pre[class="highlight"],.listingblock pre[class^="highlight "],.listingblock pre.CodeRay,.listingblock pre.prettyprint{background:#f7f7f8}
-.sidebarblock .literalblock pre,.sidebarblock .listingblock pre:not(.highlight),.sidebarblock .listingblock pre[class="highlight"],.sidebarblock .listingblock pre[class^="highlight "],.sidebarblock .listingblock pre.CodeRay,.sidebarblock .listingblock pre.prettyprint{background:#f2f1f1}
-.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{-webkit-border-radius:4px;border-radius:4px;word-wrap:break-word;padding:1em;font-size:.8125em}
-.literalblock pre.nowrap,.literalblock pre[class].nowrap,.listingblock pre.nowrap,.listingblock pre[class].nowrap{overflow-x:auto;white-space:pre;word-wrap:normal}
-@media only screen and (min-width:768px){.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{font-size:.90625em}}@media only screen and (min-width:1280px){.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{font-size:1em}}.literalblock.output pre{color:#f7f7f8;background-color:rgba(0,0,0,.9)}
-.listingblock pre.highlightjs{padding:0}
-.listingblock pre.highlightjs>code{padding:1em;-webkit-border-radius:4px;border-radius:4px}
-.listingblock pre.prettyprint{border-width:0}
-.listingblock>.content{position:relative}
-.listingblock code[data-lang]:before{display:none;content:attr(data-lang);position:absolute;font-size:.75em;top:.425rem;right:.5rem;line-height:1;text-transform:uppercase;color:#999}
-.listingblock:hover code[data-lang]:before{display:block}
-.listingblock.terminal pre .command:before{content:attr(data-prompt);padding-right:.5em;color:#999}
-.listingblock.terminal pre .command:not([data-prompt]):before{content:"$"}
-table.pyhltable{border-collapse:separate;border:0;margin-bottom:0;background:none}
-table.pyhltable td{vertical-align:top;padding-top:0;padding-bottom:0}
-table.pyhltable td.code{padding-left:.75em;padding-right:0}
-pre.pygments .lineno,table.pyhltable td:not(.code){color:#999;padding-left:0;padding-right:.5em;border-right:1px solid #ddddd8}
-pre.pygments .lineno{display:inline-block;margin-right:.25em}
-table.pyhltable .linenodiv{background:none!important;padding-right:0!important}
-.quoteblock{margin:0 1em 1.25em 1.5em;display:table}
-.quoteblock>.title{margin-left:-1.5em;margin-bottom:.75em}
-.quoteblock blockquote,.quoteblock blockquote p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
-.quoteblock blockquote{margin:0;padding:0;border:0}
-.quoteblock blockquote:before{content:"\201c";float:left;font-size:2.75em;font-weight:bold;line-height:.6em;margin-left:-.6em;color:#7a2518;text-shadow:0 1px 2px rgba(0,0,0,.1)}
-.quoteblock blockquote>.paragraph:last-child p{margin-bottom:0}
-.quoteblock .attribution{margin-top:.5em;margin-right:.5ex;text-align:right}
-.quoteblock .quoteblock{margin-left:0;margin-right:0;padding:.5em 0;border-left:3px solid rgba(0,0,0,.6)}
-.quoteblock .quoteblock blockquote{padding:0 0 0 .75em}
-.quoteblock .quoteblock blockquote:before{display:none}
-.verseblock{margin:0 1em 1.25em 1em}
-.verseblock pre{font-family:"Open Sans","DejaVu Sans",sans;font-size:1.15rem;color:rgba(0,0,0,.85);font-weight:300;text-rendering:optimizeLegibility}
-.verseblock pre strong{font-weight:400}
-.verseblock .attribution{margin-top:1.25rem;margin-left:.5ex}
-.quoteblock .attribution,.verseblock .attribution{font-size:.9375em;line-height:1.45;font-style:italic}
-.quoteblock .attribution br,.verseblock .attribution br{display:none}
-.quoteblock .attribution cite,.verseblock .attribution cite{display:block;letter-spacing:-.05em;color:rgba(0,0,0,.6)}
-.quoteblock.abstract{margin:0 0 1.25em 0;display:block}
-.quoteblock.abstract blockquote,.quoteblock.abstract blockquote p{text-align:left;word-spacing:0}
-.quoteblock.abstract blockquote:before,.quoteblock.abstract blockquote p:first-of-type:before{display:none}
-table.tableblock{max-width:100%;border-collapse:separate}
-table.tableblock td>.paragraph:last-child p>p:last-child,table.tableblock th>p:last-child,table.tableblock td>p:last-child{margin-bottom:0}
-table.spread{width:100%}
-table.tableblock,th.tableblock,td.tableblock{border:0 solid #dedede}
-table.grid-all th.tableblock,table.grid-all td.tableblock{border-width:0 1px 1px 0}
-table.grid-all tfoot>tr>th.tableblock,table.grid-all tfoot>tr>td.tableblock{border-width:1px 1px 0 0}
-table.grid-cols th.tableblock,table.grid-cols td.tableblock{border-width:0 1px 0 0}
-table.grid-all *>tr>.tableblock:last-child,table.grid-cols *>tr>.tableblock:last-child{border-right-width:0}
-table.grid-rows th.tableblock,table.grid-rows td.tableblock{border-width:0 0 1px 0}
-table.grid-all tbody>tr:last-child>th.tableblock,table.grid-all tbody>tr:last-child>td.tableblock,table.grid-all thead:last-child>tr>th.tableblock,table.grid-rows tbody>tr:last-child>th.tableblock,table.grid-rows tbody>tr:last-child>td.tableblock,table.grid-rows thead:last-child>tr>th.tableblock{border-bottom-width:0}
-table.grid-rows tfoot>tr>th.tableblock,table.grid-rows tfoot>tr>td.tableblock{border-width:1px 0 0 0}
-table.frame-all{border-width:1px}
-table.frame-sides{border-width:0 1px}
-table.frame-topbot{border-width:1px 0}
-th.halign-left,td.halign-left{text-align:left}
-th.halign-right,td.halign-right{text-align:right}
-th.halign-center,td.halign-center{text-align:center}
-th.valign-top,td.valign-top{vertical-align:top}
-th.valign-bottom,td.valign-bottom{vertical-align:bottom}
-th.valign-middle,td.valign-middle{vertical-align:middle}
-table thead th,table tfoot th{font-weight:bold}
-tbody tr th{display:table-cell;line-height:1.6;background:#f7f8f7}
-tbody tr th,tbody tr th p,tfoot tr th,tfoot tr th p{color:rgba(0,0,0,.8);font-weight:bold}
-p.tableblock>code:only-child{background:none;padding:0}
-p.tableblock{font-size:1em}
-td>div.verse{white-space:pre}
-ol{margin-left:1.75em}
-ul li ol{margin-left:1.5em}
-dl dd{margin-left:1.125em}
-dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
-ol>li p,ul>li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
-ul.unstyled,ol.unnumbered,ul.checklist,ul.none{list-style-type:none}
-ul.unstyled,ol.unnumbered,ul.checklist{margin-left:.625em}
-ul.checklist li>p:first-child>.fa-square-o:first-child,ul.checklist li>p:first-child>.fa-check-square-o:first-child{width:1em;font-size:.85em}
-ul.checklist li>p:first-child>input[type="checkbox"]:first-child{width:1em;position:relative;top:1px}
-ul.inline{margin:0 auto .625em auto;margin-left:-1.375em;margin-right:0;padding:0;list-style:none;overflow:hidden}
-ul.inline>li{list-style:none;float:left;margin-left:1.375em;display:block}
-ul.inline>li>*{display:block}
-.unstyled dl dt{font-weight:400;font-style:normal}
-ol.arabic{list-style-type:decimal}
-ol.decimal{list-style-type:decimal-leading-zero}
-ol.loweralpha{list-style-type:lower-alpha}
-ol.upperalpha{list-style-type:upper-alpha}
-ol.lowerroman{list-style-type:lower-roman}
-ol.upperroman{list-style-type:upper-roman}
-ol.lowergreek{list-style-type:lower-greek}
-.hdlist>table,.colist>table{border:0;background:none}
-.hdlist>table>tbody>tr,.colist>table>tbody>tr{background:none}
-td.hdlist1{padding-right:.75em;font-weight:bold}
-td.hdlist1,td.hdlist2{vertical-align:top}
-.literalblock+.colist,.listingblock+.colist{margin-top:-.5em}
-.colist>table tr>td:first-of-type{padding:0 .75em;line-height:1}
-.colist>table tr>td:last-of-type{padding:.25em 0}
-.thumb,.th{line-height:0;display:inline-block;border:solid 4px #fff;-webkit-box-shadow:0 0 0 1px #ddd;box-shadow:0 0 0 1px #ddd}
-.imageblock.left,.imageblock[style*="float: left"]{margin:.25em .625em 1.25em 0}
-.imageblock.right,.imageblock[style*="float: right"]{margin:.25em 0 1.25em .625em}
-.imageblock>.title{margin-bottom:0}
-.imageblock.thumb,.imageblock.th{border-width:6px}
-.imageblock.thumb>.title,.imageblock.th>.title{padding:0 .125em}
-.image.left,.image.right{margin-top:.25em;margin-bottom:.25em;display:inline-block;line-height:0}
-.image.left{margin-right:.625em}
-.image.right{margin-left:.625em}
-a.image{text-decoration:none}
-span.footnote,span.footnoteref{vertical-align:super;font-size:.875em}
-span.footnote a,span.footnoteref a{text-decoration:none}
-span.footnote a:active,span.footnoteref a:active{text-decoration:underline}
-#footnotes{padding-top:.75em;padding-bottom:.75em;margin-bottom:.625em}
-#footnotes hr{width:20%;min-width:6.25em;margin:-.25em 0 .75em 0;border-width:1px 0 0 0}
-#footnotes .footnote{padding:0 .375em;line-height:1.3;font-size:.875em;margin-left:1.2em;text-indent:-1.2em;margin-bottom:.2em}
-#footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none}
-#footnotes .footnote:last-of-type{margin-bottom:0}
-#content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
-.gist .file-data>table{border:0;background:#fff;width:100%;margin-bottom:0}
-.gist .file-data>table td.line-data{width:99%}
-div.unbreakable{page-break-inside:avoid}
-.big{font-size:larger}
-.small{font-size:smaller}
-.underline{text-decoration:underline}
-.overline{text-decoration:overline}
-.line-through{text-decoration:line-through}
-.aqua{color:#00bfbf}
-.aqua-background{background-color:#00fafa}
-.black{color:#000}
-.black-background{background-color:#000}
-.blue{color:#0000bf}
-.blue-background{background-color:#0000fa}
-.fuchsia{color:#bf00bf}
-.fuchsia-background{background-color:#fa00fa}
-.gray{color:#606060}
-.gray-background{background-color:#7d7d7d}
-.green{color:#006000}
-.green-background{background-color:#007d00}
-.lime{color:#00bf00}
-.lime-background{background-color:#00fa00}
-.maroon{color:#600000}
-.maroon-background{background-color:#7d0000}
-.navy{color:#000060}
-.navy-background{background-color:#00007d}
-.olive{color:#606000}
-.olive-background{background-color:#7d7d00}
-.purple{color:#600060}
-.purple-background{background-color:#7d007d}
-.red{color:#bf0000}
-.red-background{background-color:#fa0000}
-.silver{color:#909090}
-.silver-background{background-color:#bcbcbc}
-.teal{color:#006060}
-.teal-background{background-color:#007d7d}
-.white{color:#bfbfbf}
-.white-background{background-color:#fafafa}
-.yellow{color:#bfbf00}
-.yellow-background{background-color:#fafa00}
-span.icon>.fa{cursor:default}
-.admonitionblock td.icon [class^="fa icon-"]{font-size:2.5em;text-shadow:1px 1px 2px rgba(0,0,0,.5);cursor:default}
-.admonitionblock td.icon .icon-note:before{content:"\f05a";color:#19407c}
-.admonitionblock td.icon .icon-tip:before{content:"\f0eb";text-shadow:1px 1px 2px rgba(155,155,0,.8);color:#111}
-.admonitionblock td.icon .icon-warning:before{content:"\f071";color:#bf6900}
-.admonitionblock td.icon .icon-caution:before{content:"\f06d";color:#bf3400}
-.admonitionblock td.icon .icon-important:before{content:"\f06a";color:#bf0000}
-.conum[data-value]{display:inline-block;color:#fff!important;background-color:rgba(0,0,0,.8);-webkit-border-radius:100px;border-radius:100px;text-align:center;font-size:.75em;width:1.67em;height:1.67em;line-height:1.67em;font-family:"Open Sans","DejaVu Sans",sans-serif;font-style:normal;font-weight:bold}
-.conum[data-value] *{color:#fff!important}
-.conum[data-value]+b{display:none}
-.conum[data-value]:after{content:attr(data-value)}
-pre .conum[data-value]{position:relative;top:-.125em}
-b.conum *{color:inherit!important}
-.conum:not([data-value]):empty{display:none}
-h1,h2{letter-spacing:-.01em}
-dt,th.tableblock,td.content{text-rendering:optimizeLegibility}
-p,td.content{letter-spacing:-.01em}
-p strong,td.content strong{letter-spacing:-.005em}
-p,blockquote,dt,td.content{font-size:1.0625rem}
-p{margin-bottom:1.25rem}
-.sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
-.exampleblock>.content{background-color:#fffef7;border-color:#e0e0dc;-webkit-box-shadow:0 1px 4px #e0e0dc;box-shadow:0 1px 4px #e0e0dc}
-.print-only{display:none!important}
-@media print{@page{margin:1.25cm .75cm}
-*{-webkit-box-shadow:none!important;box-shadow:none!important;text-shadow:none!important}
-a{color:inherit!important;text-decoration:underline!important}
-a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
-a[href^="http:"]:not(.bare):after,a[href^="https:"]:not(.bare):after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
-abbr[title]:after{content:" (" attr(title) ")"}
-pre,blockquote,tr,img{page-break-inside:avoid}
-thead{display:table-header-group}
-img{max-width:100%!important}
-p,blockquote,dt,td.content{font-size:1em;orphans:3;widows:3}
-h2,h3,#toctitle,.sidebarblock>.content>.title{page-break-after:avoid}
-#toc,.sidebarblock,.exampleblock>.content{background:none!important}
-#toc{border-bottom:1px solid #ddddd8!important;padding-bottom:0!important}
-.sect1{padding-bottom:0!important}
-.sect1+.sect1{border:0!important}
-#header>h1:first-child{margin-top:1.25rem}
-body.book #header{text-align:center}
-body.book #header>h1:first-child{border:0!important;margin:2.5em 0 1em 0}
-body.book #header .details{border:0!important;display:block;padding:0!important}
-body.book #header .details span:first-child{margin-left:0!important}
-body.book #header .details br{display:block}
-body.book #header .details br+span:before{content:none!important}
-body.book #toc{border:0!important;text-align:left!important;padding:0!important;margin:0!important}
-body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-break-before:always}
-.listingblock code[data-lang]:before{display:block}
-#footer{background:none!important;padding:0 .9375em}
-#footer-text{color:rgba(0,0,0,.6)!important;font-size:.9em}
-.hide-on-print{display:none!important}
-.print-only{display:block!important}
-.hide-for-print{display:none!important}
-.show-for-print{display:inherit!important}}
-</style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
-<script>document.addEventListener('DOMContentLoaded', prettyPrint)</script>
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-  tex2jax: {
-    inlineMath: [["\\(", "\\)"]],
-    displayMath: [["\\[", "\\]"]],
-    ignoreClass: "nostem|nolatexmath"
-  },
-  asciimath2jax: {
-    delimiters: [["\\$", "\\$"]],
-    ignoreClass: "nostem|noasciimath"
-  },
-  TeX: { equationNumbers: { autoNumber: "none" } }
-});
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.4.0/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
+    <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Stylish Portfolio Theme</title>
+
+        <link href="stylesheets/syntax.css" rel="stylesheet">
+    <!-- Bootstrap Core CSS -->
+    <link href="stylesheets/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="stylesheets/stylish-portfolio.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.javascripts/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
 </head>
-<body class="article toc2 toc-left">
-<div id="header">
-<h1>FNZ</h1>
-<div class="details">
-<span id="author" class="author">Mario Garcia</span><br>
-<span id="email" class="email"><a href="https://www.twitter.com/marioggar">@marioggar</a></span><br>
-</div>
-<div id="toc" class="toc2">
-<div id="toctitle">Table of Contents</div>
-<ul class="sectlevel1">
-<li><a href="#_what_is_fnz">1. What is FNZ</a></li>
-<li><a href="#_functional_abstractions">2. Functional Abstractions</a>
-<ul class="sectlevel2">
-<li><a href="#_introduction">2.1. Introduction</a></li>
-<li><a href="#_functor">2.2. Functor</a></li>
-<li><a href="#_applicative_functor">2.3. Applicative Functor</a></li>
-<li><a href="#_monad">2.4. Monad</a></li>
-</ul>
-</li>
-<li><a href="#_types">3. Types</a>
-<ul class="sectlevel2">
-<li><a href="#_func">3.1. func</a></li>
-</ul>
-</li>
-<li><a href="#_data">4. Data</a>
-<ul class="sectlevel2">
-<li><a href="#_maybe">4.1. Maybe</a></li>
-<li><a href="#_fn">4.2. Fn</a></li>
-<li><a href="#_either">4.3. Either</a></li>
-<li><a href="#_listmonad">4.4. ListMonad</a></li>
-<li><a href="#_try">4.5. Try</a></li>
-</ul>
-</li>
-<li><a href="#_control_flow">5. Control Flow</a>
-<ul class="sectlevel2">
-<li><a href="#_let">5.1. Let</a></li>
-<li><a href="#_letm">5.2. Letm</a></li>
-<li><a href="#_do">5.3. Do</a></li>
-<li><a href="#_unless">5.4. Unless</a></li>
-<li><a href="#_where">5.5. Where</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</div>
-<div id="content">
-<div id="preamble">
-<div class="sectionbody">
-<div class="paragraph">
-<p>Functional Groovy</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_what_is_fnz">1. What is FNZ</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>This project is a collection of ideas taken from other functional
-languages translated to Groovy.</p>
-</div>
-<div class="paragraph">
-<p>The main objectives of this library are:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Create more control structures (let, letm, where&#8230;&#8203;)</p>
-</li>
-<li>
-<p>Understand persistent collections (TODO)</p>
-</li>
-<li>
-<p>Ways of enforce immutability</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>If you have a copy of the code and you want to start playing with the
-examples writen along the documentation. You can use both
-<code>groovyshell</code> and <code>groovyConsole</code>. Both are accessible through two
-<code>gradle</code> tasks.</p>
-</div>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-Of course you should have at least installed JDK 7 in your
-machine. Otherwise <code>gradle</code> won&#8217;t work.
-</td>
-</tr>
-</table>
-</div>
-<div class="listingblock">
-<div class="title">using FNZ in groovysh</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-bash" data-lang="bash">./gradlew -q shell</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>or</p>
-</div>
-<div class="listingblock">
-<div class="title">using FNZ in groovyConsole</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-bash" data-lang="bash">./gradlew console</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_functional_abstractions">2. Functional Abstractions</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_introduction">2.1. Introduction</h3>
-<div class="paragraph">
-<p>Category Theory is a huge topic not related <strong>per se</strong> to programming, but
-nowadays is the basis of what functional programming has become today.</p>
-</div>
-<div class="paragraph">
-<p>In this chapter I&#8217;ll try to explain and give examples of some terms
-taken from Category Theory and why they could be useful to us as programmers
-in our daily work.</p>
-</div>
-<div class="paragraph">
-<p>Many of the examples are based on Haskell programming language.
-As a pure functional language is the best place if you want to learn
-the basis of functional programming, and also because there aren&#8217;t
-much documentation out there other than Haskell. Here you have
-my two cents :)</p>
-</div>
-<div class="paragraph">
-<p>I&#8217;m aware that terms like Functor, Monad&#8230;&#8203;etc seem to be something
-strange, odd, difficult for most of the programmers born in the OOP era
-(including myself by the way).</p>
-</div>
-<div class="paragraph">
-<p>I know it&#8217;s difficult&#8230;&#8203; bad news: it becomes harder along the way, good news
-&#8230;&#8203; there is no good news. I&#8217;m jocking good news is that the more you
-learn about Category Theory applied to functional programming the more
-you understand how to use functional programming at work&#8230;&#8203; but stop!
-it&#8217;s about time&#8230;&#8203; <strong>LETS DO THIS</strong></p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_functor">2.2. Functor</h3>
-<div class="paragraph">
-<p>In Category Theory a Functor is a mapping between categories&#8230;&#8203;WHaAaAAAaaTT?? O_o</p>
-</div>
-<div class="paragraph">
-<p>A Functor represents a container/wrapper of some sort, along with the ability
-to apply a function to elements wrapped in the container.</p>
-</div>
-<div class="paragraph">
-<p>Ok, so a Functor is like a container, like a box. It contains a value.
-That value can be transformed by functions applied to the container,
-not to the value directly.</p>
-</div>
-<div class="paragraph">
-<p>The formal definition of a Functor in Haskell is:</p>
-</div>
-<div class="listingblock">
-<div class="title">Functor definition</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-haskell" data-lang="haskell">class Functor f where
-    fmap :: (a -&gt; b) -&gt; f a -&gt; f b</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>What does it mean ? Well it means that in order to build a new instance of a
-Functor type the type should implement a fmap method.</p>
-</div>
-<div class="paragraph">
-<p>The fmap method receives a function (a -&gt; b) which transforms an object
-of type a in another object of type b, it also receives a Functor of type a
-and finally returns a functor of type b.</p>
-</div>
-<div class="paragraph">
-<p>How could we implement this ?</p>
-</div>
-<div class="sect3">
-<h4 id="_example">2.2.1. Example</h4>
-<div class="listingblock">
-<div class="title">Functor (Java)</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">package fnz.data;
 
-/**
- *
- * @param &lt;A&gt;
- */
-public interface Functor&lt;A&gt; {
-    public &lt;B, F extends Functor&lt;B&gt;&gt; F fmap(Function&lt;A,B&gt; fn);
-}</code></pre>
-</div>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Some of the interfaces or classes shown here are implemented in plain
-Java&#8482;. I&#8217;m planning to migrate them to Groovy 2.3+ with @CompileStatic any time
-soon.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>So basically a functor allows us to transform the contained value applying a function.
-There&#8217;re some differences between the Java&#8482; implementation and the Haskell one.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>(a-&gt;b) becomes Function&lt;A,B&gt;</p>
-</li>
-<li>
-<p>fa parameter will be the instance of the functor itself</p>
-</li>
-<li>
-<p>fb becomes Functor&lt;B&gt;</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Now imagine we had a function adding 3 to any number. In Haskell we would be seeing this:</p>
-</div>
-<div class="listingblock">
-<div class="title">Haskell example</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-haskell" data-lang="haskell">fmap (+3) (Just 1)</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>I&#8217;ll try to reproduce the same behavior, this time with Groovy :) We will be following
-these steps:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>We need a function receiving a number and returning a number (a-&gt;b)</p>
-</li>
-<li>
-<p>Then the functor will receive the function and will know how to unwrap the
-value and after applying the function how to wrap it again.</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_function_a_b">2.2.2. Function (a&#8594;b)</h4>
-<div class="paragraph">
-<p>A function represents a transformation applied to a given input, giving
-a certain result.</p>
-</div>
-<div class="paragraph">
-<p>We need a function adding 3 to any given number. Here is a simple java interface
-defining a function:</p>
-</div>
-<div class="listingblock">
-<div class="title">Function (Java)</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">package fnz.data;
+    <body>
+      <!-- Navigation -->
+<a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
+<nav id="sidebar-wrapper">
+    <ul class="sidebar-nav">
+        <a id="menu-close" href="#" class="btn btn-light btn-lg pull-right toggle"><i class="fa fa-times"></i></a>
+        <li class="sidebar-brand">
+            <a href="#top" class="transition-link">FNZ</a>
+        </li>
+        
+        <li>
+            <a href="#top" class="transition-link">Home</a>
+        </li>
+        
+        <li>
+            <a href="#about" class="transition-link">About</a>
+        </li>
+        
+        <li>
+            <a href="#examples" class="transition-link">Getting Started</a>
+        </li>
+        
+        <li>
+            <a href="#checkdocs" class="transition-link">Show me the code!</a>
+        </li>
+        
+    </ul>
+</nav>
 
-/**
- *
- */
-public interface Function&lt;A,B&gt; {
-    B apply(A input);
+      <!-- Header -->
+<header id="top" class="header">
+    <div class="text-vertical-center">
+        <h1>F&#955;Z</h1>
+        <h3>Groovy functional library</h3>
+        <div class="service-item" style="margin-top:20px">
+          <a href="https://github.com/mariogarcia/fnz">
+          <span class="fa-stack fa-2x">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-github fa-stack-1x text-primary"></i>
+          </span>
+          </a>
+        </div>
+        <br>
+        <a href="#about" class="btn btn-dark btn-lg transition-link">Find Out More</a>
+    </div>
+</header>
+
+      
+      <!-- About -->
+<section id="about" class="about">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2>FNZ adds functional abstractions to Groovy language!</h2>
+                <p class="lead">Use functional abstractions such as Maybe, Either, handling exception cases with Try... <br>Keep reading or go to <a target="_blank" href="docs/index.html">docs</a>.</p>
+            </div>
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container -->
+</section>
+
+      <!-- Services -->
+<!-- The circle icons use Font Awesome's stacked icon classes. For more information, visit http://fontawesome.io/examples/ -->
+<section id="services" class="services bg-primary">
+    <div class="container">
+        <div class="row">
+          <div class="col-lg-10 col-lg-offset-1">
+            <h2>Grab</h2>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="paragraph">
+<p>Try your <strong>Hello world</strong> with <strong>Grab</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="annotation">@Grab</span>(<span class="string"><span class="delimiter">'</span><span class="content">fnz:fnz:1.0.5</span><span class="delimiter">'</span></span>)
+<span class="keyword">def</span> failure = Try(<span class="integer">1</span>) { <span class="predefined-type">Integer</span> x -&gt; x / <span class="integer">0</span> }
+
+<span class="keyword">assert</span> !failure.isSuccess()
+<span class="keyword">assert</span> failure.isFailure()
+<span class="keyword">assert</span> failure.or(Just(<span class="integer">3</span>)).get() == <span class="integer">3</span></code></pre>
+</div>
+</div>
+              </div>
+            </div>
+            <!-- /.row (nested) -->
+          </div>
+          <!-- /.col-lg-10 -->
+        </div>
+        <div class="row">
+          <div class="col-lg-10 col-lg-offset-1">
+            <h2>Gradle</h2>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="paragraph">
+<p><strong>Fnz</strong> is available at <strong>jcenter</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">repositories {
+    jcenter()
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Because this interface is in fact a functional interface, it could be
-substituted by a Closure expression. So instead of building a new class or
-building a verbose inner class implementation we will be using a closure
-to define a new implementation of the <strong>Function</strong> interface.</p>
+<p>and then add the latest <strong>Fnz</strong> dependency:</p>
 </div>
 <div class="listingblock">
-<div class="title">Function&lt;Integer,Integer&gt;</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void 'Building a simple function'() {
-    given: 'a function instance using closures'
-        Function&lt;Integer,Integer&gt; plus_3 = { Integer v -&gt;
-            v + 3
-        } as Function&lt;Integer,Integer&gt;
-    when:  'using it'
-        Integer result = plus_3.apply(5)
-    then: 'the value to be the number plus 3'
-        result == 8
-}</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy">compile <span class="string"><span class="delimiter">'</span><span class="content">fnz:fnz:1.0.5</span><span class="delimiter">'</span></span></code></pre>
 </div>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Be aware that because closures only declare the return type you should add
-the type to the closure parameter if you care about input type.
-</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_functor_a">2.2.3. Functor&lt;A&gt;</h4>
-<div class="paragraph">
-<p>Well now we need an instance of a functor of type <strong>A</strong>, pass to the functor
-our previously created function and expect to receive a certain value with
-a certain type.</p>
+              </div>
+            </div>
+            <!-- /.row (nested) -->
+          </div>
+          <!-- /.col-lg-10 -->
+        </div>
+        <div class="row">
+          <div class="col-lg-10 col-lg-offset-1 text-vertical-center">
+            <br/>
+            <a href="#examples" class="btn btn-dark btn-lg transition-link">Check the examples</a>
+          </div>
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container -->
+</section>
+
+      <!-- About -->
+<section id="examples" class="about">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2>Getting Started</h2>
+                <p class="lead">Let's review some basic examples:</p>
+            </div>
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container -->
+</section>
+
+      <!-- Services -->
+<!-- The circle icons use Font Awesome's stacked icon classes. For more information, visit http://fontawesome.io/examples/ -->
+<section id="examples-body" class="services bg-primary">
+    <div class="container">
+        <div class="row">
+          <div class="col-lg-10 col-lg-offset-1">
+            <h2>Maybe</h2>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="paragraph">
+<p>All abstractions are available at <code>fnz.Fnz</code> as static functions.</p>
 </div>
 <div class="listingblock">
-<div class="title">Functor&lt;Integer&gt;</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void 'applying a given function to a functor'() {
-    given: 'a function'
-        Function&lt;Integer,Integer&gt; plus_3 = { Integer v -&gt; v + 3 }
-    and: 'a functor implementation. This time Maybe.Just implements functor'
-        Functor&lt;Integer&gt; boxOfFive = Maybe.just(5)
-    when: 'applying the function to functor to get another functor'
-        Functor&lt;Integer&gt; result = boxOfFive.fmap(plus_3)
-    then: 'the result should be the expected'
-        result.typedRef.value == 8
-}</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">fnz.Fnz</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Ok but how Maybe.Just gets something and transform it to another functor. Lets see
-what the fmap implementation does:</p>
+<p>The following example is really simple, just adding one to a value, only if
+the value is null then use zero instead:</p>
 </div>
 <div class="listingblock">
-<div class="title">Maybe Functor#fmap implementation</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">@Override
-public &lt;B, F extends Functor&lt;B&gt;&gt; F fmap(Function&lt;JUST, B&gt; fn) {
-    return (F) just(fn.apply(this.getTypedRef().getValue()));
-}</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">assert</span> <span class="integer">1</span> == Fnz.Maybe(<span class="predefined-constant">null</span>).or(Fnz.Just(<span class="integer">0</span>)).get() + <span class="integer">1</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>First I&#8217;ll try to describe which types are involved:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>JUST is the value contained by the Maybe instance (which among other things is a functor).</p>
-</li>
-<li>
-<p>&lt;B&gt; is the type of the function applied. Then
-the Maybe implementation wraps that value into another instance of a functor
-(this time another Just instance).</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Basically here the fmap method takes as an argument a function transforming
-the contained value in the source functor and then wraps it again in another
-functor instance.</p>
-</div>
-<div class="paragraph">
-<p>By the way, althought <strong>fmap</strong> is implemented in <strong>Functor</strong> in languages
-like Haskell, you won&#8217;t see <strong>fmap</strong> being invoked like "myObject.fmap(&#8230;&#8203;)" but instead
-you will find something like <strong>fmap(functor, function)</strong></p>
-</div>
-<div class="paragraph">
-<p>In the source code you will see that there&#8217;re several methods adding
-some syntactic sugar to inner functors/applicative/monads methods mimicking the way
-Haskell does it.</p>
+<p><strong>IMPORTANT</strong>: If you use Fnz in Groovy code, you don&#8217;t have to
+import the <code>Fnz</code> class, <code>Fnz</code> has an extension module that exposes
+directly all those functions for you.</p>
 </div>
 <div class="listingblock">
-<div class="title">Public API</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import static fnz.Fnz.val
-import static fnz.Fnz.fmap</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">Functor&lt;Integer&gt;</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void 'applying a given function to a functor with public api'() {
-    when: 'using fmap function to execute the fmap method from Just'
-        Functor&lt;Integer&gt; result =
-            fmap(Maybe.just(5)) { Integer x -&gt;
-                x + 3
-            }
-    then: 'executing val() to get Just inner value'
-        val(result) == 8
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_plain_groovy">2.2.4. Plain Groovy</h4>
-<div class="paragraph">
-<p>Well under the hood many of the methods added to the Groovy API (api, gapi, gdk) resemble
-monadic behaviors. For example there is the <strong>with</strong> method all Groovy objects have. Although
-it could be seen more like a <strong>bind</strong> action (we&#8217;ll cover it later on) we can create a lighter
-version of <strong>fmap</strong> with this <strong>with</strong>.</p>
-</div>
-<div class="listingblock">
-<div class="title">Groovy map</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def map(Object o, Closure function) {
-    o?.with(function)
-}</code></pre>
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">assert</span> <span class="integer">1</span> == Maybe(<span class="predefined-constant">null</span>).or(Just(<span class="integer">0</span>)).get() + <span class="integer">1</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>As we&#8217;ll see later on, many monadic estructures don&#8217;t execute functions when they detect
-something went wrong, or the type at a hand means nothing can be executed (a Maybe.Nothing ,
-Either.Left value, or a Try.Failure values could be an example for that)</p>
+<p>Ok, but&#8230;&#8203; Groovy already has the <strong>Elvis operator</strong>, which is simpler,
+and less verbose.. so why should I use this anyway ?</p>
 </div>
 <div class="paragraph">
-<p>This <strong>with</strong> on steroids executes the closure (function) passed as parameter when
-the value exists (and represents a Groovy truth of couse ;) ). Notice was achieved
-by using the <strong>safe</strong> operator from Groovy (foo?.unsafeMethod()).</p>
+<p>Well if you&#8217;re only evaluating a value this may sound overkill, but if
+you would like to concatenate a set of operation over a possible
+<code>null</code> value, then it could be very helpful:</p>
 </div>
 <div class="listingblock">
-<div class="title">Groovy map</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void 'Groovy light version of fmap'() {
-    when: 'using fmap function to execute the fmap method from Just'
-        def result = map(input) { Integer x -&gt;
-            map(x + 3) { Integer y -&gt;
-                y
-            }
-        }
-    then: 'executing val() to get Just inner value'
-        result == expected // 8 and null
-    where:
-        input    | expected
-            5    | 8
-            null | null
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">assert</span> Maybe(<span class="predefined-constant">null</span>)
+       .or(Just(<span class="integer">0</span>))
+       .fmap { x -&gt; x + <span class="integer">1</span> }
+       .fmap { y -&gt; y + <span class="integer">1</span> }
+       .get() == <span class="integer">2</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And the plain Groovy code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">assert</span> (<span class="predefined-constant">null</span> ?: <span class="integer">0</span>)
+    .collect { x -&gt; x + <span class="integer">1</span> }
+    .collect { y -&gt; y + <span class="integer">1</span> }
+    .find() == <span class="integer">2</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Wait!</strong> plain Groovy is not that bad, I think I stick to <strong>Elvis</strong>,
+Do you have anything else to show ?  <strong>Yes I do!</strong> Can you call a
+method depending on null ?  No right ?  And that makes you whether use
+a <strong>default parameter</strong> or have another conditional statement.</p>
+</div>
+<div class="paragraph">
+<p>Having a type representing the <strong>null</strong> value enables programmer to
+override methods depending on whether the value was <code>Nothing</code> or
+<code>Just</code>. It&#8217;s just not possible to do that with plain Groovy (even
+though null is an instance of
+org.codehaus.groovy.runtime.NullObject). Lets see this subject:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">void</span> <span class="string"><span class="delimiter">'</span><span class="content">invoking a method depending on Maybe</span><span class="delimiter">'</span></span>() {
+    <span class="key">when</span>: <span class="string"><span class="delimiter">'</span><span class="content">having a null reference</span><span class="delimiter">'</span></span>
+    <span class="keyword">def</span> number = Maybe(<span class="predefined-constant">null</span>) <span class="comment">// == Nothing()</span>
+    <span class="keyword">def</span> result = execute(number)
+
+    <span class="key">then</span>: <span class="string"><span class="delimiter">'</span><span class="content">we should get a bad result</span><span class="delimiter">'</span></span>
+    result == <span class="string"><span class="delimiter">'</span><span class="content">bad</span><span class="delimiter">'</span></span>
+}
+
+<span class="predefined-type">String</span> execute(fnz.data.Maybe.Nothing nothing) {
+    <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">bad</span><span class="delimiter">'</span></span>
+}
+
+<span class="predefined-type">String</span> execute(fnz.data.Maybe.Just value) {
+    <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="content">good</span><span class="delimiter">'</span></span>
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>And I can&#8217;t finish this section without talking about <strong>collect</strong>.
-<a href="http://groovy.codehaus.org/groovy-jdk/java/util/Collection.html#collect(groovy.lang.Closure)"><strong>Collect</strong></a>
-is the closest version of fmap I can think about within Groovy. Collect transforms each item in a collection
-into something else.</p>
+<p>No conditionals required&#8230;&#8203; <strong>Elvis</strong> has left the building ?:)</p>
+</div>
+              </div>
+            </div>
+            <!-- /.row (nested) -->
+          </div>
+          <!-- /.col-lg-10 -->
+        </div>
+        <div class="row">
+          <div class="col-lg-10 col-lg-offset-1">
+            <h2>Try</h2>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="paragraph">
+<p>The <code>Try</code> abstraction is a different way of dealing with exceptions in
+your apps. Instead of writing a <strong>try-catch</strong> block just make your
+computation to return a value. Basically if an exception is thrown
+you&#8217;ll get a <code>fnz.data.Try.Failure</code> instance that will contain both
+<strong>the value</strong> that produced the exception and <strong>the exception</strong> itself.</p>
 </div>
 <div class="paragraph">
-<p>Same way our <strong>map</strong> method was safe so is <strong>collect</strong>.</p>
+<p>On the other hand if everything goes ok you&#8217;ll get a
+<code>fnz.data.Try.Success</code> instance with the value produced by the
+computation.</p>
+</div>
+<div class="paragraph">
+<p>In the following example we&#8217;re using the <code>Try(T,Function&lt;A,B&gt;)</code> from
+class <strong>fnz.Fnz</strong> function.  This function receives a value and a
+function. Because the example is Groovy we normally use a <code>Closure</code> but if
+you&#8217;re using Java you could be using an instance of
+<code>fnz.data.Function</code>.</p>
 </div>
 <div class="listingblock">
-<div class="title">Groovy collect</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void 'Groovy collect is "similar" to fmap'() {
-    when: 'Applying a function to collect'
-        def result =
-            input.collect { Integer x -&gt;
-                x + 1
-            }
-    then: 'checking'
-        result == expected
-    where: 'possible messy values'
-        input      | expected
-            [1, 2] | [2, 3]
-            null   | []
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">void</span> <span class="string"><span class="delimiter">'</span><span class="content">get result from an unsafe operation</span><span class="delimiter">'</span></span>() {
+    <span class="key">when</span>: <span class="string"><span class="delimiter">'</span><span class="content">trying to apply a value to an unsafe operation</span><span class="delimiter">'</span></span>
+        <span class="comment">// 'two' and 'four' will throw an Exception!</span>
+        <span class="keyword">def</span> numbers = [<span class="string"><span class="delimiter">'</span><span class="content">1</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">two</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">3</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">four</span><span class="delimiter">'</span></span>]
+           .collect { <span class="predefined-type">String</span> n -&gt; Try(n) { <span class="local-variable">it</span>.toInteger() }  }
+           .findAll() <span class="comment">// Using Groovy Truth</span>
+
+    <span class="key">then</span>: <span class="string"><span class="delimiter">'</span><span class="content">we should get the successful values</span><span class="delimiter">'</span></span>
+        numbers*.get() == [<span class="integer">1</span>, <span class="integer">3</span>] <span class="comment">// Failure results have been filtered</span>
+
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>So&#8230;&#8203; why don&#8217;t we make a better world and use both ideas combined ?</p>
+<p>Please notice that the second parameter of a <strong>Try</strong> function is a
+function itself (A closure representing a function) so you can
+also pass a method reference</p>
 </div>
 <div class="listingblock">
-<div class="title">Groovy collect</div>
 <div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void 'Groovy light version of fmap and collect combined'() {
-    when: 'Making the world a safer place'
-        def result =
-            input.collect { Integer x -&gt;
-                map(x) { Integer y -&gt;
-                    (y + 1) * 2
+<pre class="CodeRay highlight"><code data-lang="groovy">.collect { <span class="predefined-type">String</span> n -&gt; Try(n, <span class="predefined-type">Integer</span>.&amp;parseInt) }</code></pre>
+</div>
+</div>
+              </div>
+            </div>
+            <!-- /.row (nested) -->
+          </div>
+          <!-- /.col-lg-10 -->
+        </div>
+        <div class="row">
+          <div class="col-lg-10 col-lg-offset-1 text-vertical-center">
+            <br/>
+            <a href="#checkdocs" class="btn btn-dark btn-lg transition-link">Still interested ?</a>
+          </div>
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container -->
+</section>
+
+      <!-- About -->
+<section id="checkdocs" class="about">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2>Check out the rest of the <a target="_blank" href="docs/index.htmln">documentation!</a></h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-10 col-lg-offset-1 text-center">
+                <h4>Or checkout the code at Github</h4>
+                <ul class="list-inline">
+                    <li>
+                        <a target="_blank" href="https://github.com/mariogarcia/fnz"><i class="fa fa-github fa-fw fa-3x"></i></a>
+                    </li>
+                </ul>
+                <hr class="small">
+                <p class="text-muted">FNZ 2015</p>
+            </div>
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container -->
+</section>
+
+      <!-- jQuery -->
+<script src="javascripts/jquery.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="javascripts/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script>
+    // Closes the sidebar menu
+    $("#menu-close").click(function(e) {
+        e.preventDefault();
+        $("#sidebar-wrapper").toggleClass("active");
+    });
+
+    // Opens the sidebar menu
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#sidebar-wrapper").toggleClass("active");
+    });
+
+    // Scrolls to the selected menu item on the page
+    $(function() {
+        $('a[href*=#].transition-link:not([href=#])').click(function() {
+            if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') || location.hostname == this.hostname) {
+
+                var target = $(this.hash);
+                target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                if (target.length) {
+                    $('html,body').animate({
+                        scrollTop: target.offset().top
+                    }, 1000);
+                    return false;
                 }
             }
-    then: 'checking'
-        result == expected
-    where: 'possible messy values are'
-        input         | expected
-            [1, 2]    | [4, 6]
-            [1, null] | [4, null]
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_applicative_functor">2.3. Applicative Functor</h3>
-<div class="paragraph">
-<p>Remember I was saying a Functor is a container, a box if you like, containing
-a simple value ? You can think about Applicative like a Functor containing
-a Function. This time the box contains a Function.</p>
-</div>
-<div class="paragraph">
-<p>Why then the name of Applicative ? I&#8217;m not quite sure, but
-I think it came from the idea that a function <strong>can be applied</strong>
-to some other values.</p>
-</div>
-<div class="paragraph">
-<p>In Haskell:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-haskell" data-lang="haskell">(&lt;*&gt;) :: Applicative f =&gt; f (a-&gt;b) -&gt; (f a -&gt; f b)</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This time instead of containing a plain value the functor has a function. So
-we can read the Haskell function as a function receiving an applicative f (a-&gt;b) (a
-functor containing a function transforming from a to b) and returns the
-transformation from a functor containing a to a functor containing b (f a -&gt; f b).</p>
-</div>
-<div class="sect3">
-<h4 id="_example_2">2.3.1. Example</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">package fnz.data;
+        });
+    });
+</script>
 
-/**
- *
- * @param &lt;A&gt;
- */
-public interface Applicative&lt;A&gt; extends Functor&lt;A&gt; {
-    public &lt;U extends Type&lt;A&gt;&gt; U getTypedRef();
-    public &lt;B&gt; Applicative&lt;B&gt; fapply(Applicative&lt;Function&lt;A,B&gt;&gt; afn);
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>We have included in our Java&#8482; version a way of accessing the inner value
-forcing any Applicative to implement the getValue() method.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Instead of getValue returning a raw value I&#8217;ve implemented getTypedRef which
-returns a wrapper having the raw instance.
-I did it becauseI didn&#8217;t found a solution to resolve the problem of having the ListMonad sharing
-the same interface with Monads sharing single values and still respecting the
-fmap, fapply and bind methods. I&#8217;m not perfect so I will be very happy if
-someone gives me a better solution :)
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>But the  most important method is fapply which in in charge of receiving another
-applicative and use the value of that applicative and apply it to the inner value
-of the instance of the source applicative.</p>
-</div>
-<div class="paragraph">
-<p>Lets take a look to the implementation of the fapply method in the
-Maybe.Right class we can see how it works.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">@Override
-public &lt;B&gt; Just&lt;B&gt; fapply(Applicative&lt;Function&lt;JUST, B&gt;&gt; afn) {
-    return this.fmap(afn.getTypedRef().getValue());
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>How can we use it ?</p>
-</div>
-<div class="paragraph">
-<p>In this example I&#8217;m using implementations of Maybe. This implementation is not
-only an Applicative but a Functor (which is implied) and a Monad. Instead
-of creating object with new operator every object has a static method to do it.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import static fnz.Fnz.val
-import static Maybe.just
-import static Maybe.nothing
-import static Maybe.maybe</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This is the example:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void 'Applicative: Maybe applicative implementation'() {
-    when: 'combining two closures'
-        def inc = { Integer v -&gt; v + 1 }
-        def byTwo = { Integer v -&gt; v * 2 }
-    and: 'using the combination as a Function'
-        def combination = (inc &gt;&gt; byTwo) as Function
-    then: 'if the value is nothing the function shouldnt be applied'
-        val(nothing().fapply(just(combination))) == null <i class="conum" data-value="1"></i><b>(1)</b>
-    and: 'otherwise if the initial value is correct the function will work'
-        val(just(1).fapply(just(combination))) == 4 <i class="conum" data-value="2"></i><b>(2)</b>
-}</code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>The implementation of the Maybe.Nothing fapply method doesn&#8217;t apply the
-function to the current instance and returns  an instance of new Nothing(null)</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>The implementation of the Maybe.Just fapply method applies current value
-to the function contained within the Applicative passed as parameter.</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_monad">2.4. Monad</h3>
-<div class="paragraph">
-<p>What is a Monad ?</p>
-</div>
-<div class="paragraph">
-<p>While Functor applied a function to a wrapped value, and an Applicative
-applied a wrapped function to a wrapped value, a Monad applies a function
-to a wrapped value and returns a wrapped value.</p>
-</div>
-<div class="paragraph">
-<p>Because Monad is an Applicative and an Applicative is a Functor, likewise
-a Monad has some inherit methods such as fmap or  fapply. But the method
-that makes a Monad a Monad is the bind method (or &gt;&gt;= which is its alias
-in Haskell).</p>
-</div>
-<div class="paragraph">
-<p>How does bind looks like ? Like always , first step, Haskell syntax:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-haskell" data-lang="haskell">class Monad m where
-    (&gt;&gt;=) :: m a -&gt; (a -&gt; m b) -&gt; m b</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>A bind method receives a wrapped value m a then a function (a -&gt; m b) which
-transforms the wrapped value to another wrapped value, and finally returns the
-transformation result m b.</p>
-</div>
-<div class="paragraph">
-<p>In my humble representation of a Monad type in Java&#8482; I came up with the
-following code:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">package fnz.data;
-
-/**
- *
- * @param &lt;A&gt;
- */
-public interface Monad&lt;A&gt; extends Applicative&lt;A&gt; {
-
-    public &lt;B,M extends Monad&lt;B&gt;&gt; M bind(Function&lt;A,M&gt; fn);
-
-    /**
-     * The behavior is the same as the bind(Function&lt;A,M&gt;) method but with type awareness.
-     * &lt;br/&gt;
-     * This method was created exclusively for type inference for the $do/$return expressions.
-     * For instance in an expression like the following:
-     * &lt;br/&gt;
-     * &lt;pre&gt;
-     *     $do {
-     *         x = Just(1)
-     *         y = Just(x + 1)
-     *
-     *         $return x + y
-     *     }
-     * &lt;/pre&gt;
-     * &lt;br/&gt;
-     * &lt;br/&gt;
-     * The expression is translated into this:
-     * &lt;br/&gt;
-     * &lt;pre&gt;
-     *     Just(1).bind { _clazz1231, x -&gt;
-     *         Just(x + 1).bind { _clazz2324, y -&gt;
-     *             _clazz2324.unit(y)
-     *         }
-     *     }
-     * &lt;/pre&gt;
-     * &lt;br/&gt;
-     * That way we don't have to specify the type of the Monad needed to
-     * end the expression, the function itself carries the type.
-     *
-     * @param fn a function aware of the type of the returned monad
-     * @return a monad as a result of the function execution
-     *
-     */
-    public &lt;B,M extends Monad&lt;B&gt;&gt; M bind2(TypeAwareFunction&lt;A,M&gt; fn);
-
-
-
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_types">3. Types</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>This chapter has to do with other ways of creating/using/extending types with Groovy.</p>
-</div>
-<div class="sect2">
-<h3 id="_func">3.1. func</h3>
-<div class="quoteblock">
-<blockquote>
-<div class="paragraph">
-<p>A functional interface is an interface that has just one abstract method (aside from the methods of Object), and thus represents a single function contract</p>
-</div>
-</blockquote>
-<div class="attribution">
-&#8212; Java(TM) spec
-</div>
-</div>
-<div class="paragraph">
-<p><strong>func</strong> allows you to declare and create a <a href="http://docs.oracle.com/javase/specs/jls/se8/html/jls-9.html#jls-9.8"><strong>functional interface</strong></a>
-in one line without the verbosity of having to write a full Java interface.</p>
-</div>
-<div class="paragraph">
-<p>Normally if you wanted to create a <strong>functional interface</strong> and use it you should be doing something
-like this:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class A {
-
-    interface Fx {
-        Integer apply(String word)
-    }
-
-    Integer applyFunction(String word, Fx function) {
-        return function.apply(word)
-    }
-
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>With <strong>func</strong> you can create in one line the same interface:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package fnz.samples.type
-
-class A {
-     static {
-         func Fn &gt;= String &gt;&gt; Integer
-     }
-
-     boolean simpleFunctionalInterface() {
-         Integer result = executeFunction('1') { String x -&gt;
-              x.toInteger()
-         }
-
-         return (result == 1)
-     }
-
-     Integer executeFunction(String number, Fn fn) {
-         return fn.apply(number)
-     }
-
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>In general the use cases are:</p>
-</div>
-<div class="sect3">
-<h4 id="_simple_types">3.1.1. Simple types</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class OuterClass {
-    static {
-        func InterfaceType &gt;= ParameterType &gt;&gt; ReturnType
-    }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Of course you can declare as many interfaces as you want:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class A {
-    static {
-        func Fa &gt;= String &gt;&gt; Integer
-        func Fb &gt;= String &gt;&gt; String
-        func Fb &gt;= String &gt;&gt; Date
-    }
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_using_generics">3.1.2. Using generics</h4>
-<div class="paragraph">
-<p>You can also use generics:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class OuterClass {
-    static {
-        func InterfaceType(A,B) &gt;= A &gt;&gt; B
-    }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>You first should to declare the name of the type and maybe generic
-types used in the <code>Functional Inteface</code> signature as a parameter or as
-return type.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">InterfaceType(A,B)</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>And then you should declare the signature of the function:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">A &gt;&gt; B</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>In this case it means that we will be having a method like this:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">B apply(A a)</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>So as a whole it will be the same as writing:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">interface InterfaceType&lt;A,B&gt; {
-    public B apply(A a)
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The parameters and the return type can both use the generic types
-declared by the interface type:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">class OuterClass {
-    static {
-        InterfaceType(A,B) &gt;= ParameterType(A) &gt;&gt; ReturnType(B)
-    }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The following example declares some generic type used at return type:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package fnz.samples.type
-
-import fnz.Fnz
-import fnz.data.Maybe
-
-import groovy.transform.CompileStatic
-
-@CompileStatic
-class A {
-
-     static {
-         func Fx(X) &gt;= String &gt;&gt; Maybe(X)
-     }
-
-     Maybe&lt;Integer&gt; executeFunction(String number, Fx&lt;Integer&gt; fx) {
-          return fx.apply(number)
-     }
-
-     boolean simpleFunctionalInterface() {
-          Maybe&lt;Integer&gt; result = executeFunction('1') { String x -&gt;
-               Fnz.Just(Integer.parseInt(x))
-          }
-
-          Fnz.val(result) == 1
-     }
-
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Now the example uses generics both as parameter and return type</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package fnz.samples.type
-
-class A {
-    static {
-        func Fx(X,Y) &gt;= X &gt;&gt; Y
-    }
-
-    Integer executeFunction(String source, Fx&lt;String,Integer&gt; fx) {
-        fx.apply(source)
-    }
-
-    String executeAnotherFunction(Integer source, Fx&lt;Integer,String&gt; fx) {
-        fx.apply(source)
-    }
-
-    boolean complexFunctionalInterface() {
-        Integer result1 = executeFunction('1') { String x -&gt;
-            Integer.parseInt(x)
-        }
-
-        String result2 = executeAnotherFunction(1) { Integer x -&gt;
-            x.toString()
-        }
-
-        result1 == 1 &amp;&amp; result2 == '1'
-    }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>And mixing generics with other types:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package fnz.samples.type
-
-import fnz.Fnz
-import fnz.data.Maybe
-
-class A {
-    static {
-        func Fx(X,Y) &gt;= Maybe(X) &gt;&gt; Y
-    }
-
-    Integer executeFunction(String source, Fx&lt;String,Integer&gt; fx) {
-        fx.apply(Fnz.Just(source))
-    }
-
-    boolean complexFunctionalInterface() {
-        Integer result = executeFunction('1') { Maybe&lt;String&gt; x -&gt;
-            Fnz.val(x.fmap { Integer.parseInt(it) })
-        }
-
-        result == 1
-    }
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_multiple_parameters">3.1.3. Multiple parameters</h4>
-<div class="paragraph">
-<p>So far we&#8217;ve been showing functions with just one parameter or at most
-a parameter making use of generics, but wouldn&#8217;t be great to have a
-way of declaring a function with two or more arguments ?</p>
-</div>
-<div class="paragraph">
-<p>It turns out you can. The syntax to acomplish this is to use the
-Groovy syntax for lists.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">func SUM(X) &gt;= [X,X] &gt;&gt; X</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Here we had a funcion <code>SUM</code> which takes two parameters of the same
-type and returns a value of the same type. It makes sense right ?</p>
-</div>
-<div class="paragraph">
-<p>In the following example we&#8217;re using this feature just to show how
-parameters can be parametrized (use generics) as well.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">package fnz.samples.type
-
-import static fnz.Fnz.val
-import fnz.data.*
-
-class A {
-    static {
-        func Fx(X) &gt;= [Maybe(X),Maybe(X)] &gt;&gt; X
-    }
-
-    Integer executeFunction(Fx&lt;Integer&gt; fx) {
-        return fx.apply(Just(1), Just(2))
-    }
-
-    boolean complexFunctionalInterface() {
-        Integer result =
-            executeFunction { Maybe&lt;Integer&gt; a, Maybe&lt;Integer&gt; b -&gt;
-                return val(a) + val(b)
-            }
-
-        result == 3
-    }
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_data">4. Data</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>This chapter will go through some monadic types implementations.</p>
-</div>
-<div class="sect2">
-<h3 id="_maybe">4.1. Maybe</h3>
-<div class="paragraph">
-<p>The Maybe is normally used to avoid asking whether the value is null or it
-can contain any value. That&#8217;s why the Maybe object has two children:
-Maybe.Just and Maybe.Nothing.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-In the JDK 8 you can find the Optional type. Sometimes is also called
-Option.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>As we&#8217;ll be seeing along this chapter is that monads like Maybe, Either or
-ListMonad will allow to apply functions over the wrapped value, only if the
-wrapped value is considered <strong>valid</strong>. Otherwise the wrapped value will be
-returned.</p>
-</div>
-<div class="paragraph">
-<p>To see how to use Maybe lets use it in a simple exercise:</p>
-</div>
-<div class="quoteblock">
-<blockquote>
-<div class="paragraph">
-<p>Given a number, I want to divide it by half two times, and then if still
-not decimal, multiplied by three.</p>
-</div>
-</blockquote>
-</div>
-<div class="paragraph">
-<p>Because all even numbers will become decimals as soon as I try to dividing them
-by half I want to stop the process as soon as the process detects that number
-is no longer eligible to success.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void 'Monad: using maybe to shortcircuit a process'() {
-    given: 'a function dividing only even numbers'
-        def half = { BigDecimal possible -&gt;
-            return possible.intValue() % 2 == 0 ?
-                Maybe.just(possible.div(2)) :
-                Maybe.nothing()
-        }
-    and: 'another function multiplying by three'
-        def threeTimes = { BigDecimal possible -&gt;
-            return Maybe.just(possible * 3)
-        }
-    when: 'starting the process'
-        Maybe&lt;Integer&gt; result =
-            Maybe.just(sampleNumber)
-                .bind(half) <i class="conum" data-value="1"></i><b>(1)</b>
-                .bind(half) <i class="conum" data-value="2"></i><b>(2)</b>
-                .bind(threeTimes) <i class="conum" data-value="3"></i><b>(3)</b>
-    then: 'checking the result'
-        val(result) == expected
-    where: 'sample numbers and expectations are'
-        sampleNumber | expected
-            100      |    75
-            200      |   150
-             50      |   null
-}</code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>tries to divide, if not even returns nothing otherwise returns division result.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>tries again to divide the number under the same premises.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>If division ended successfully only then applies multiplication.</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>The nice thing about this plan is that if any of the previous steps ended with
-a Maybe.Nothing instance the process won&#8217;t go any further.</p>
-</div>
-<div class="paragraph">
-<p>In order to understand what happens underneath, why process doesn&#8217;t continue,
-I would like to show you both implementation of Maybe.Just and Maybe.Nothing.</p>
-</div>
-<div class="paragraph">
-<p>While Maybe.Just applies the function:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">@Override
-public &lt;B, M extends Monad&lt;B&gt;&gt; M bind(Function&lt;JUST, M&gt; fn) {
-    return fn.apply(getTypedRef().getValue());
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Maybe.Nothing like its name, <strong>does nothing</strong> but to return the current value :P</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">@Override
-public &lt;B, F extends Functor&lt;B&gt;&gt; F fmap(Function&lt;NOTHING, B&gt; fn) {
-    return (F) new Nothing();
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Sometimes it would be useful to have an alternative when there&#8217;s no value. That&#8217;s
-what the method or does. It makes the monad to return the alternative value in
-case there was no value. Otherwise the current value is returned.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void 'testing maybe alternatives (I)'() {
-    when: 'something has no value and adding an alternative'
-        Maybe&lt;String&gt; name = nothing().or(just("john"))
-    then: 'we should get the alternative'
-        val(name) == 'john'
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>It&#8217;s pretty clear in the previous example, but it is even clearer when you do
-something ( a transformation for example) with the current inner value.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void 'testing maybe alternatives (III)'() {
-    when: 'something has value and adding an alternative'
-        Maybe&lt;Integer&gt; nameLength =
-            just("mario")
-                .bind { nothing() } // some fancy logic here
-                .or(just(0))
-    then: 'we should get first value'
-        val(nameLength) == 0
-}</code></pre>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_or_expressions">4.1.1. Or expressions</h4>
-<div class="paragraph">
-<p>Of course you can always use the <code>|</code> operator when thinking about <code>or</code> expressions:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Maybe&lt;String&gt; partial = just('mario').bind { String st -&gt; maybe(st - 'mario') } <i class="conum" data-value="1"></i><b>(1)</b>
-Maybe&lt;String&gt; result = partial | just('anybody') <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>The operation ends with and empty string. Using Maybe('') returns
-Nothing()</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>In case partial returns Nothing() we would like to use
-Just('anybody') instead</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Using <code>|</code> makes expressions much more readable&#8230;&#8203; and fun :)</p>
-</div>
-<div class="paragraph">
-<p>Last example used an <code>OR</code> expression. That expression was a simple
-value. Sometimes we would like to use <code>lazy</code> expressions we only want
-to be evaluated <code>just in case</code>.  When executed those <code>lazy
-expressions</code> will be returning a valid value.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Maybe&lt;String&gt; partial = just('mario').bind { st -&gt; maybe(st - value) } <i class="conum" data-value="1"></i><b>(1)</b>
-Maybe&lt;String&gt; result = partial | { just('anybody') } <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>The operation ends with and empty string. Using Maybe('') returns
-Nothing()</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>In case partial returns Nothing() we would like to use
-Just('anybody') instead. In this case the value is not computed until
-we made sure the previous computation returned Nothing()</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_the_maybe_code_truth_code">4.1.2. The maybe <code>truth</code></h4>
-<div class="paragraph">
-<p>Sometimes you just don&#8217;t know whether the value is going to be valid
-or not. Then it could come handy to use the <code>maybe</code> method.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Unroll
-void 'using maybe() like the Groovy-Truth'() {
-    when:
-        Maybe&lt;?&gt; result = maybe(value)
-    then:
-        result.isPresent() == valid
-    where:
-        value | valid
-     //---------------//
-        null  | false
-        []    | false
-        ''    | false
-        [:]   | false
-     //---------------//
-        false | true
-        0     | true
-        1     | true
-        [1]   | true
-        [0]   | true
-        [a:1] | true
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>So expressions could become easier to understand when using <code>maybe</code>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void 'using maybe() simple example (I)'() {
-    when:
-        String unknown = '' <i class="conum" data-value="1"></i><b>(1)</b>
-        Maybe&lt;String&gt; result = maybe(unknown) | just('me') <i class="conum" data-value="2"></i><b>(2)</b>
-    then:
-        result.isPresent() <i class="conum" data-value="3"></i><b>(3)</b>
-        result.typedRef.value == 'me' <i class="conum" data-value="4"></i><b>(4)</b>
-}</code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>We are using a possible <code>not valid</code> value</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>We build an expression that in case the left hand value is not valid we
-will be using the right hand side value instead</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>Because the value of the left was not valid then we used the right hand one, hence
-there is a present value</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>The value used was 'me'</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>If there had been a valid value at the right hand side, then that
-value would have been used instead:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void 'using maybe() simple example (II)'() {
-    when:
-        String unknown = 'valid' <i class="conum" data-value="1"></i><b>(1)</b>
-        Maybe&lt;String&gt; result = maybe(unknown) | just('me') <i class="conum" data-value="2"></i><b>(2)</b>
-    then:
-        result.isPresent() <i class="conum" data-value="3"></i><b>(3)</b>
-        result.typedRef.value == 'valid' <i class="conum" data-value="4"></i><b>(4)</b>
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_fn">4.2. Fn</h3>
-<div class="paragraph">
-<p><strong>fnz.data.Fn</strong> is a class that can be used as a shorcut for all data structures
-explained in this chapter. Depending on the style of your code you could be
-either chaining actions over a monad using method-chaining or using the
-Haskell-like public methods in an in-out style.</p>
-</div>
-<div class="paragraph">
-<p>Lets compare the Maybe monad using the Haskell-like style with <strong>Fn</strong></p>
-</div>
-<div class="listingblock">
-<div class="title">fapply (method-chain) imports</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import static fnz.Fnz.val
-import static Maybe.just
-import static Maybe.nothing
-import static Maybe.maybe</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">fapply (method-chain)</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void 'Applicative: Maybe applicative implementation'() {
-    when: 'combining two closures'
-        def inc = { Integer v -&gt; v + 1 }
-        def byTwo = { Integer v -&gt; v * 2 }
-    and: 'using the combination as a Function'
-        def combination = (inc &gt;&gt; byTwo) as Function
-    then: 'if the value is nothing the function shouldnt be applied'
-        val(nothing().fapply(just(combination))) == null <i class="conum" data-value="1"></i><b>(1)</b>
-    and: 'otherwise if the initial value is correct the function will work'
-        val(just(1).fapply(just(combination))) == 4 <i class="conum" data-value="2"></i><b>(2)</b>
-}</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">fapply (Fn) imports</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">import static fnz.Fnz.Just
-import static fnz.Fnz.Nothing
-import static fnz.Fnz.fapply
-import static fnz.Fnz.bind</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">fapply (Fn)</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">void 'Applicative: Maybe applicative implementation (Fn)'() {
-    when: 'combining two closures'
-        def inc = { Integer v -&gt; v + 1 }
-        def byTwo = { Integer v -&gt; v * 2 }
-    and: 'using the combination as a Function'
-        def combination = (inc &gt;&gt; byTwo) as Function
-    then: 'if the value is nothing the function shouldnt be applied'
-        val(fapply(Nothing(), Just(combination))) == null
-    and: 'otherwise if the initial value is correct the function will work'
-        val(fapply(Just(1), Just(combination))) == 4
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_either">4.3. Either</h3>
-<div class="paragraph">
-<p>Either monad is also one of the classics. The Either monad instance can
-represent correct or error.</p>
-</div>
-<div class="paragraph">
-<p>As imperative programmer I&#8217;m used to choose between branches in my code using
-conditional structures such as if. As Groovy programmer I&#8217;ve gone one step
-further and I&#8217;ve met the Groovy Truth that helps me a lot classifying
-instances between those which could be seen as a false statement and those
-which can be taken as a true statement.</p>
-</div>
-<div class="paragraph">
-<p>But what if we go beyond ? What if we had a type saying it could be right or
-wrong depending on its own but still having content ?.</p>
-</div>
-<div class="paragraph">
-<p>The following example tries to search certain type of people from a given list.
-The search will stop once a person has been found with any of the given rules.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">void 'using Either to chain failback searchs'() {
-    given:'a base function to search by a certain criteria'
-        def baseSearch = { Closure&lt;Boolean&gt; search -&gt; <i class="conum" data-value="1"></i><b>(1)</b>
-            return { List sample -&gt;
-                def pr = sample.find(search)
-                // if found then return left to shortcircuit further
-                // searchs
-                Either(pr).isLeft() ? Either.right(sample) : Either.left(pr)
-            }
-        }
-    and: 'composed criterias on top of the base function'
-        // they become Function&lt;A,Monad&lt;B&gt;&gt;
-        def lookByNameJohn = baseSearch { it.name == 'john' } <i class="conum" data-value="2"></i><b>(2)</b>
-        def lookByAgeGreaterThan = baseSearch { it.age &gt; 50 }
-        def lookByCity = baseSearch { it.city == 'dublin' }
-    when: 'chaining all search criterias'
-        Either result = <i class="conum" data-value="3"></i><b>(3)</b>
-            Either.right(sample)
-                .bind(lookByNameJohn)
-                .bind(lookByAgeGreaterThan)
-                .bind(lookByCity)
-    then: 'there should be only one item'
-        result.isLeft()
-        !result.isRight()
-        result.typedRef.value.name == name_of_the_result
-    where: 'samples used in this spec are'
-        sample          |   name_of_the_result
-        firstSample     |       'john'
-        secondSample    |       'peter'
-        thirdSample     |       'rob'
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>First of all, I need to apologise because in this example It seems I&#8217;ve used Either just
-to do the opposite. This time think Either.Left as something telling us to
-stop looking because we&#8217;ve found what we were looking for.</p>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>baseSearch is a function that returns another function.
-That inner function returns an Either.Left instance with the result inside
-if the search function passed as parameter succeeded. I want the function to
-return Either.Left because I know when an Either.Left is returned no further
-action is done. And because I&#8217;ve found what I was looking for, I don&#8217;t want the
-search to go any further.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>I&#8217;ve created three different functions valid to be used in an fmap function. That
-means they receive an unwrapped value but they will return a wrapped value.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>Given the source we will try to apply three types of search in order to find
-someone. Because the rules of the monad, I know if the first search fails the
-second will be triggered, and so on. In case any of them succeed the value will be
-return immediately.</td>
-</tr>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_or">4.3.1. Or</h4>
-<div class="paragraph">
-<p>The same way we used <code>or</code> in Maybe to express an alternative to
-<code>wrong</code> values we can use it in <code>Either</code>.</p>
-</div>
-<div class="listingblock">
-<div class="title">value</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">void 'using OR as an alternative value'() {
-    when: 'a non valid expression'
-        Either&lt;Integer&gt; possible = Either(value) | Right(0)
-    then: 'we should get what we expected'
-        val(possible) == expected
-    and: 'eventually it will be right'
-        possible.isRight()
-    where: 'possible values are'
-        value | expected
-        null  | 0
-        1     | 1
-}</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">lazy expression</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-java" data-lang="java">void 'using OR for a lazy computation alternative'() {
-    when: 'a non valid expression'
-        Either&lt;Integer&gt; possible = Either(value) | { Right(0) }
-    then: 'we should get what we expected'
-        val(possible) == expected
-    and: 'rules must apply'
-        possible.isRight()
-    where: 'possible values are'
-        value | expected
-        null  | 0
-        1     | 1
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_listmonad">4.4. ListMonad</h3>
-<div class="paragraph">
-<p>Collections in general are one of the most used data structures ever.
-Some languages use collections only as data structures and some others make
-them implement monadic semantics in order to be able to do things like
-list comprehensions.</p>
-</div>
-<div class="paragraph">
-<p>According to <strong>Wikipedia</strong> a list comprehension is:</p>
-</div>
-<div class="quoteblock">
-<blockquote>
-<div class="paragraph">
-<p>A list comprehension is a syntactic construct available in some programming
-languages for creating a list based on existing lists</p>
-</div>
-</blockquote>
-<div class="attribution">
-&#8212; Wikipedia
-</div>
-</div>
-<div class="paragraph">
-<p>I would add that implementations differ in which are capable of handling
-streams and those which don&#8217;t.</p>
-</div>
-<div class="paragraph">
-<p>First of all I&#8217;m would like to start with a basic finite example. Like we
-did before, lets sneak a little bit on how <strong>Haskell</strong> does it ;)</p>
-</div>
-<div class="paragraph">
-<p>(TODO)</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_try">4.5. Try</h3>
-<div class="paragraph">
-<p>Nowadays JVM languages deal with exceptions using <strong>try-catch</strong> blocks. The
-problem is that these constructions force programmers to build their code in
-a certain way.</p>
-</div>
-<div class="paragraph">
-<p><strong>Try</strong> monad wraps the result of a given computation. That computation could
-either end on a desired value, having an instance of <strong>Success</strong>,
-or could throw an exception, having an instance of <strong>Failure</strong> instead.</p>
-</div>
-<div class="sect3">
-<h4 id="_try_2">4.5.1. Try()</h4>
-<div class="paragraph">
-<p>Instead of using a typical try/catch expression we could handle an expression
-as a safe execution but with a possible failure value.</p>
-</div>
-<div class="paragraph">
-<p>We can execute directly an unsafe function using:</p>
-</div>
-<div class="listingblock">
-<div class="title">Using Try directly with a initial value</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Try(A a, Function&lt;A,B&gt;)</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Of course a <strong>Function</strong> could be changed by a closure. Lets see the
-following example.</p>
-</div>
-<div class="listingblock">
-<div class="title">Using Try directly with a initial value</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Unroll
-def 'check Try with a value and a function'() {
-    when: 'executing an unsafe action'
-        Try result   = Try(value) { x -&gt; 1 / x }
-        Try computed = result.fmap { y -&gt; y + 1 }
-    then: 'asking if it is a failure or a success'
-        computed.isSuccess() == isSuccess
-        computed.isFailure() == !isSuccess
-    and: 'getting value'
-        val(computed) == resultExpected
-    where: 'possible values are'
-        value | isSuccess | resultExpected
-          1   |   true   |       2
-          0   |   false  |       0
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>In this example we should be expecting whether a <strong>Try.Success</strong> value
-containing the expected result or a <strong>Try.Failure</strong> with the exception
-thrown (if any) and the initial value used to trigger the execution.</p>
-</div>
-<div class="paragraph">
-<p>There could be some cases where you don&#8217;t care about passing an
-initial value to the <strong>Try</strong> execution.</p>
-</div>
-<div class="listingblock">
-<div class="title">Using Try directly without a initial value</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">Try(Function&lt;A,B&gt;)</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">Using Try directly without a initial value</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">@Unroll
-def 'check Try only with a function'() {
-    when: 'executing an unsafe action'
-        Try result = Try { value / 0 } <i class="conum" data-value="1"></i><b>(1)</b>
-    then: 'asking if it is a failure or a success'
-        result.isSuccess() == isSuccess
-        result.isFailure() == !isSuccess
-    where: 'possible values are'
-        value | isSuccess
-          1   |   false
-          0   |   false
-}</code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>We can receive a Success or a Failure but we cannot expect to get
-the initial value because it never was provided in the first place.</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_wrap">4.5.2. wrap</h4>
-<div class="paragraph">
-<p>In order to get a <strong>Try</strong> result we could also <strong>wrap</strong> the computation we
-think could fail within a function which returns a <strong>Try</strong> instance with
-the result of the computation (Try.Success or Try.Failure).</p>
-</div>
-<div class="paragraph">
-<p>Like <strong>Either</strong>, composition has a special importance here, due to
-the fact that when having a <strong>Failure</strong> instance all possible actions
-applied over it will always return the same failure.</p>
-</div>
-<div class="paragraph">
-<p>This first example tries to parse an invalid number and add one to it.</p>
-</div>
-<div class="listingblock">
-<div class="title">Parse a possible number</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def 'parsing a non valid number: Try'() {
-    when: 'trying to parse a non valid number'
-        Function unwrapped = { x -&gt; x + 1 }
-        Function wrappedfn = wrap { v -&gt; Integer.parseInt(v) } <i class="conum" data-value="1"></i><b>(1)</b>
-        Try result1 = bind(Just('2a'), wrappedfn) <i class="conum" data-value="2"></i><b>(2)</b>
-        Try result2 = bind(result1, unwrapped)
-    then: 'computation failed'
-        result1.isFailure()
-    and: 'any possible composition will return the same failure'
-        result2.isFailure()
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Here we can see both behaviors.</p>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>First of all the given function fails and
-the instance returned is an instance of <strong>Failure</strong> we know that because only
-<strong>Failure</strong> instances return <strong>true</strong> when calling to <strong>isFailure()</strong> method.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Besides that we can also notice that using a failure instance to create
-further function composition will end returning the same failure, which is the
-same as saying that no further function will ever succeed using that failure.</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>When having a <strong>Failure</strong> instance, the exception that caused it is also wrapped
-within the instance, and you could whether get it to inspect it, or throw it
-like any other exception.</p>
-</div>
-<div class="listingblock">
-<div class="title">throwException</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def 'throwing an exception'() {
-    when: 'wrapping something that "could" fail :P'
-        Function failure = wrap { 0.div(0) }
-        <i class="conum" data-value="1"></i><b>(1)</b>
-        Try&lt;Integer&gt; result = bind(Just(1), failure)
-
-        assert result.exception instanceof ArithmeticException
-    and: 'wants to propagate the exception'
-        result.throwException() <i class="conum" data-value="2"></i><b>(2)</b>
-    then:'the exception will be thrown as usual'
-        thrown(ArithmeticException)
-}</code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>You can get the wrapped exception</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Or throw the exception instead</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_recover">4.5.3. Recover</h4>
-<div class="paragraph">
-<p>Normally when having an exception we would like to have some
-alternative. Sometimes we may want to set, for example a default value
-in case something went wrong.</p>
-</div>
-<div class="paragraph">
-<p>In our example I would like to get zero in case the number was not
-valid.  Then I would like to add one to that given number.</p>
-</div>
-<div class="paragraph">
-<p>What if we want a fallback behavior when something went wrong ?</p>
-</div>
-<div class="paragraph">
-<p>Well there is the <strong>recover()</strong> method. This method has two arguments the
-possible <strong>Failure</strong> instance, and the <strong>Success</strong> instance to use instead.</p>
-</div>
-<div class="listingblock">
-<div class="title">recover()</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">def 'using recover()'() {
-    when: 'you cant always get what you want'
-        def someFnChain =
-            recover (
-                { 0.div(0) } as Function, // WRONG
-                recover(
-                    { new Date() + "1" } as Function,
-                    { throw new IllegalArgumentException("Something bad") } as Function,
-                    { 0 } as Function
-                ) // WORST
-            )
-        def anything = bind(Just(1), someFnChain)
-    then: 'you might find you get what you need :P'
-        val(val(anything)) == 0 // TODO recover(Function... nFunctions)
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_control_flow">5. Control Flow</h2>
-<div class="sectionbody">
-<div class="quoteblock">
-<blockquote>
-<div class="paragraph">
-<p>In computer science, control flow (or alternatively, flow of control) refers to the order in which
-the individual statements, instructions or function calls of an imperative or a declarative program
-are executed or evaluated</p>
-</div>
-</blockquote>
-<div class="attribution">
-&#8212; Wikipedia
-</div>
-</div>
-<div class="paragraph">
-<p>Control flow is one of the most important topics in a programming language. Most languages
-have their own out-of-the-box control structures, and some others can create new ones on-the-fly.
-Although Groovy can&#8217;t create new control structures in the classical sense, it can create control
-structures based on functions and meta-programming.</p>
-</div>
-<div class="paragraph">
-<p>Following up there&#8217;re some control flow structures I&#8217;ve been collecting while sneaking
-in some other programming languages.</p>
-</div>
-<div class="paragraph">
-<p>Let&#8217;s go through them.</p>
-</div>
-<div class="sect2">
-<h3 id="_let">5.1. Let</h3>
-<div class="paragraph">
-<p>Initializes a group of variables, makes them available within the scope
-of the closure passed as argument.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">let(Map,Closure)</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Let&#8217;s see some examples.</p>
-</div>
-<div class="listingblock">
-<div class="title">Simple values</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">    Integer simpleLetExample() {
-        let(x:1, y:2, z:3) {
-            x + y + z
-        }
-    }</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Here values provided by the map are accessible within the scope of the closure block.
-What if I wanted to create values depending on previous values ? Let&#8217;s
-see the following example:</p>
-</div>
-<div class="listingblock">
-<div class="title">Dependant expressions</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">    Integer computedValues() {
-        let(x:1, y:2, z:{ x + y }) {
-            x + y + z
-        }
-    }</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>In this example value of <strong>'z'</strong> depends on the values given to <strong>'x'</strong> and <strong>'y'</strong>. Every</p>
-</div>
-<div class="listingblock">
-<div class="title">Nested expressions</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">    Integer nestedLetExample() {
-        let(a:5, b:15) {
-            let(c:15, d:{ a + 25 }) {
-                b + c + d
-            }
-        }
-    }</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Previous <a href="https://code.google.com/p/spock">Spock</a> specification shows how let expressions could be nested.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_letm">5.2. Letm</h3>
-<div class="paragraph">
-<p><code>letm</code> works the same way <code>let</code> does but instead of handling plain
-values it works with monadic values and eventually will return an
-instance of type <code>fnz.data.Monad</code>. Why is that ?</p>
-</div>
-<div class="paragraph">
-<p>Well <code>letm</code> is meant to work with monad expressions. So when you&#8217;re
-seeing this:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">letm(x: Just(1), y: { Just(x+1) } ) {
-    Just(y)
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Under the hood the expression will be transformed to:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">bind(Just(1)) { x -&gt;
-  bind({ Just(x+1) }())) { y -&gt;
-     Just(y)
-  }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This way you can play with other flavors of monads. Imagine you want
-to combine let with the <code>Either</code> monad.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">    Either&lt;Integer&gt; workingWithOtherMonads(final Integer first, final Integer second) {
-        return letm(x:Just(first),
-                    y:Just(second)) {
-                    letm(result: Just(first + second)) {
-                        result == 3 ? Right(result) : Left()
-                    }
-               }
-    }</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>You can also combine it with the <code>Try</code> monad. This time there&#8217;s a
-method you want to use, but it could throw some exceptions, you want
-to handle that possibility using <code>Try</code>.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">    Try&lt;Integer&gt; combineWithTry(Integer first, Integer second) {
-        letm(x:Just(first),
-             y:Just(second)) {
-              bind(Just(second), wrap(this.&amp;dangerousMethod.curry(first)))
-        }
-    }
-
-    Integer dangerousMethod(Integer x, Integer y) {
-        return x / y
-    }</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_do">5.3. Do</h3>
-<div class="paragraph">
-<p>If you have seen Haskell&#8217;s <strong>do</strong> expressions, they look like this:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-haskell" data-lang="haskell">do
-x &lt;- Just 1
-y &lt;- Just (x + 1)
-return x</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>There are a couple of nice things when using this control flow:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>You don&#8217;t have to unwrapped/wrap monadic values. In the example when
-assigning <strong>Just 1</strong> to <strong>x</strong> the value inside (1) it&#8217;s unwrapped and make it
-available for the next expression to use it.</p>
-</li>
-<li>
-<p>In the end using the <strong>return</strong> expression make it easier for the programmer
-to wrap the final value in the proper monadic value without having to do it
-explicitly. It is assumed by the expression flow.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Well, <strong>Fnz</strong> has tried to mimic the behavior of this expression using both
-methods <strong>$do</strong> and <strong>$return</strong>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">               import fnz.data.Maybe
-
-               class A {
-                    Integer returningDoWithReturn() {
-                          Maybe&lt;Integer&gt; result =
-                              $do {
-                                  x = Just(1)
-                                  y = Just(x + 1)
-                                  z = Just(y)
-
-                                  $return z + 1
-                              }
-
-                         return val(result)
-                    }
-               }</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Although in Haskell <strong>do</strong> notation you can be using assignments as long
-as other types of expressions, here is not possible. Only assignment
-expressions are allowed by design.</p>
-</div>
-<div class="paragraph">
-<p>So you may be wondering&#8230;&#8203; How can I use an expression not returning
-any value within the $do/$return statement ?</p>
-</div>
-<div class="paragraph">
-<p>Well for that purpose a special rule has been added to the <strong>do</strong> notation
-expression. Whenever you wan to use an expression not returning anything
-you should assign that expression to <strong>_</strong>.</p>
-</div>
-<div class="paragraph">
-<p>The <strong>_</strong> variable name means that you don&#8217;t care about the returning
-type.  In fact every time you use that name a unique identifier is
-created underneath.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">               import fnz.data.Maybe
-
-               class A {
-
-                    Maybe.Just PrintStrLn(Object val) {
-                        println val
-                        return Just(val)
-                    }
-
-                    Integer returningDoWithReturn() {
-                          Maybe&lt;Integer&gt; result =
-                              $do {
-                                  x = Just(1)
-                                  _ = PrintStrLn("x: $x")
-                                  y = Just(x + 1)
-                                  _ = PrintStrLn("y: $y")
-                                  z = { Just(y + 1) }
-
-                                  $return z + 1
-                              }
-
-                         return val(result)
-                    }
-               }</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_unless">5.4. Unless</h3>
-<div class="paragraph">
-<p>The rationale behind <strong>Unless</strong> is that sometimes is just a pain to create <strong>negative</strong>
-conditional expressions.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">unless(Boolean,Closure)</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">Unless structure</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">        Maybe&lt;Integer&gt; result =
-            unless(xparam &lt;= 0) {
-                return 3 + xparam
-            }</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This expression will allow the code block to be executed unless the condition
-evaluates to true.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_where">5.5. Where</h3>
-<div class="paragraph">
-<p>I would say <strong>Where</strong> control belongs to the family of <strong>switch statements</strong> or <strong>multiway branches</strong>.
-I first read about the <strong>Where</strong> clause while I was reading Haskell.</p>
-</div>
-<div class="paragraph">
-<p>This version of Haskell&#8217;s Where expressions has:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">check(Map) { <i class="conum" data-value="1"></i><b>(1)</b>
-    when { /evaluates to boolean/ } then { /returns a value/ } <i class="conum" data-value="2"></i><b>(2)</b>
-    otherwise { /returns a value/ } <i class="conum" data-value="3"></i><b>(3)</b>
-    where { /some constants/ } <i class="conum" data-value="4"></i><b>(4)</b>
-}</code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>A <strong>check</strong> method is the entry point to this expression</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td><strong>When-Then</strong> are evaluated in two different phases. First all when clauses are evaluated
-until one of them is evaluated to true. Then the related then clause is evaluated.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>The <strong>otherwise</strong> block is executed only if no when-then block has been evaluated successfully
-before.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>The <strong>where</strong> block is a perfect place to initializate constants used in any of the other mentioned
-blocks.</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>There are different ways of using this control depending on the use
-of when-then expressions</p>
-</div>
-<div class="listingblock">
-<div class="title">Simple Where</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">            Maybe&lt;String&gt; result = check(weight: value) {
-                when { weight &lt;= underweight } then { "You're underweight" }
-                when { weight &lt;= normal }      then { throw new Exception("You're normal") }
-                when { weight &lt;= fat }         then { "You're fat" }
-                otherwise { "You have a strange composition" }
-                where {
-                    underweight = 50
-                    normal      = 70
-                    fat         = 90
-                }
-            }</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This is a simple example about how to use the where expression. You can also omit
-some of the parts mentioned before</p>
-</div>
-<div class="listingblock">
-<div class="title">Ommiting Where</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">            Maybe&lt;String&gt; result = check(weight: value) {
-                when { weight &lt;= 51 } then { "You're underweight cause you weight $weight" }
-                when { weight &lt;= 90 } then { "You're fat" }
-                otherwise { "Default" }
-            }</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">Only When-Then clauses</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">            Maybe&lt;String&gt; result = check(weight: value) {
-                when { weight &lt;= 51 } then { "You're underweight" }
-                when { weight &lt;= 90 } then { "You're fat" }
-            }</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The when-then clauses use closures to evaluate their content.
-But thanks to Groovy&#8217;s objects method isCase() we can create switch-like statements</p>
-</div>
-<div class="listingblock">
-<div class="title">Switch-case Where (Class)</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">            Maybe&lt;String&gt; result = check(value) {
-                when String then { stringMessage }
-                when Integer then { bigIntegerMessage }
-                otherwise { otherwiseMessage }
-                where {
-                    stringMessage     = "Is a String"
-                    bigIntegerMessage = "Is a Integer"
-                    otherwiseMessage  = "No Idea"
-                }
-            }</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Instead of passing a map you can evaluate a single value against some conditions. Those
-conditions are the same you would be using in a switch-case block in Groovy.</p>
-</div>
-<div class="listingblock">
-<div class="title">Switch-case Where (Collections)</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">            Maybe&lt;String&gt; result = check(value) {
-                when 10..20 then { SMALL }
-                when 20..30 then { MEDIUM }
-                otherwise { BIG }
-                where {
-                    SMALL   = "Small"
-                    MEDIUM  = "Medium"
-                    BIG     = "No Idea"
-                }
-            }</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">Switch-case Where (Number)</div>
-<div class="content">
-<pre class="prettyprint highlight"><code class="language-groovy" data-lang="groovy">            Maybe&lt;String&gt; result = check(value) {
-                when 15 then { SMALL }
-                when 25 then { MEDIUM }
-                otherwise { BIG }
-                where {
-                    SMALL   = "Small"
-                    MEDIUM  = "Medium"
-                    BIG     = "No Idea"
-                }
-            }</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div id="footer">
-<div id="footer-text">
-Last updated 2015-04-04 19:26:54 CEST
-</div>
-</div>
-</body>
+    </body>
 </html>
