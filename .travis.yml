@@ -1,7 +1,5 @@
 language: groovy
 jdk:
-  - oraclejdk7
-before_install:
- - chmod +x gradlew
+  - oraclejdk8
 script:
   - ./gradlew check codenarcMain
