@@ -11,6 +11,6 @@ and then add the latest **Fnz** dependency:
 
 [source,groovy]
 ----
-compile 'fnz:fnz:1.0.5'
+compile 'fnz:fnz:1.0.7'
 ----
 

@@ -88,16 +88,27 @@ groovysh {
 //
 
 group = 'fnz'
-version = '1.0.6'
+version = '1.0.7'
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives sourcesJar
+}
 
 publishing {
     publications {
         mavenCustom(MavenPublication) {
             groupId 'fnz'
             artifactId 'fnz'
-            version '1.0.6'
+            version '1.0.7'
 
             from components.java
+
+            artifact sourcesJar
         }
     }
 }
@@ -112,7 +123,7 @@ bintray {
         name = 'fnz'
         repo = "maven"
         version {
-            name = '1.0.6'
+            name = '1.0.7'
         }
     }
 

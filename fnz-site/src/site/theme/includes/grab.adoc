@@ -2,8 +2,7 @@ Try your **Hello world** with **Grab**
 
 [source, groovy]
 ----
-@Grab('fnz:fnz:1.0.5')
-@GrabResolver('http://dl.bintray.com/marioggar/maven')
+@Grab('fnz:fnz:1.0.7')
 def failure = Try(1) { Integer x -> x / 0 }
 
 assert !failure.isSuccess()
